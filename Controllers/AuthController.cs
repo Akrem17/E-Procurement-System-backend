@@ -17,6 +17,9 @@ namespace E_proc.Controllers
     {
         private readonly IUserService _repos;
         private readonly IUserRepository _Userrepos;
+        IConfiguration config = new ConfigurationBuilder()
+         .AddJsonFile("appsettings.json")
+         .Build();
 
         public AuthController(IUserService repos, IUserRepository Userrepos)
         {
@@ -42,7 +45,28 @@ namespace E_proc.Controllers
 
                 if (status == 409) return Results.Conflict("This email is already exists");
 
-                return Results.Ok(user);
+                var claims = new[]
+                                  {
+                                    new Claim(ClaimTypes.Email,user.Email),
+                                    new Claim(ClaimTypes.GivenName,user.FirstName),
+                                    new Claim(ClaimTypes.Surname,user.LastName),
+                                    new Claim(ClaimTypes.Role,user.Type)
+                    };
+                var token = new JwtSecurityToken(
+                                     issuer: config["Jwt:Issuer"],
+                                     audience: config["Jwt:Audience"],
+                                     claims: claims,
+                                     expires: DateTime.UtcNow.AddDays(60),
+                                    notBefore: DateTime.UtcNow,
+                                     signingCredentials: new SigningCredentials(
+                                         new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"])), SecurityAlgorithms.HmacSha256
+                                        )
+                                     );
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+              
+
+
+                return Results.Ok(new { tokenString, user });
             }
 
 
@@ -56,10 +80,7 @@ namespace E_proc.Controllers
 
         public async Task<IResult> Login([FromBody] UserLogin? user)
         {
-            IConfiguration config = new ConfigurationBuilder()
-           .AddJsonFile("appsettings.json")
-           .Build();
-
+           
             if (user != null)
             {
 
