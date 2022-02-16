@@ -6,7 +6,8 @@ namespace E_proc.Services
     {
 
         public Task<User> GetByEmailAndPassword(UserLogin userLogin);
-        public Task<int> Signup(User user);  
-        
+        public Task<int> Signup(User user);
+        public Task<Citizen> SignupCitizen(Citizen user);
+
     }
 }

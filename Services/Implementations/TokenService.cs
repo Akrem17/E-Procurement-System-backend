@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using E_proc.Models;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -8,14 +9,20 @@ namespace E_proc.Services
     public class TokenService : ITokenService
     {
 		private readonly IHttpContextAccessor _context;
-        public TokenService(IHttpContextAccessor context )
+		IConfiguration config = new ConfigurationBuilder()
+ .AddJsonFile("appsettings.json")
+ .Build();
+
+		public TokenService(IHttpContextAccessor context )
         {
 
 				_context = context;
 			
 
         }
-		public string? ValidateJwtToken(string token)
+
+     
+        public string? ValidateJwtToken(string token)
         {
 
 			var mySecret = "?v=f2IdQqpjR0c&ab_channel=CodewithJulian";
@@ -45,5 +52,32 @@ namespace E_proc.Services
 				return null;
 			}
 		}
-    }
+
+		public string GenerateTokenString(User user)
+		{
+			var claims = new[]
+								{
+									new Claim(ClaimTypes.Email,user.Email),
+									new Claim(ClaimTypes.GivenName,user.FirstName),
+									new Claim(ClaimTypes.Surname,user.LastName),
+									new Claim(ClaimTypes.Role,user.Type)
+					};
+			var token = new JwtSecurityToken(
+								 issuer: config["Jwt:Issuer"],
+								 audience: config["Jwt:Audience"],
+								 claims: claims,
+								 expires: DateTime.UtcNow.AddDays(60),
+								notBefore: DateTime.UtcNow,
+								 signingCredentials: new SigningCredentials(
+									 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"])), SecurityAlgorithms.HmacSha256
+									)
+								 );
+			var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+			return tokenString;
+		}
+
+
+
+	}
 }
