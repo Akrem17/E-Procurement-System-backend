@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using E_proc;
 using System.Text.Json;
 using E_proc.Services.Repositories;
+using E_proc.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +70,7 @@ builder.Services.AddDbContext<AuthContext>(options =>
 
 );
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ICitizenRepository, CitizenRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();

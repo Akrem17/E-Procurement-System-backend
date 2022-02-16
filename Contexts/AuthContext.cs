@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using E_proc.Models;
 
 namespace E_proc.Models
 {
@@ -18,5 +19,6 @@ namespace E_proc.Models
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserLogin> UsersLogin { get; set; }
+        public DbSet<E_proc.Models.Citizen> Citizen { get; set; }
     }
 }
