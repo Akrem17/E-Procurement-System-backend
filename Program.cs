@@ -57,6 +57,9 @@ IConfiguration config = new ConfigurationBuilder()
 var options = new DbContextOptionsBuilder<AuthContext>()
              .UseSqlServer(config.GetConnectionString("EprocDB"))
              .Options;
+
+var emailConfig = config.GetSection("EmailConfiguration").Get<EmailConfig>();
+
 builder.Services.AddDbContext<AuthContext>(options =>
 {
     //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -67,6 +70,10 @@ builder.Services.AddDbContext<AuthContext>(options =>
 );
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
 builder.Services.AddControllers()
@@ -119,18 +126,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
-//app.MapPost("/user", (UserLogin user, IUserService service) => AddUser(user, service));
 
-
-//app.MapPost("/login", (UserLogin user, IUserService service) => Login(user, service));
-
-//IResult AddUser(UserLogin user, IUserService service)
-//{
-//    var addUser = service.Post(db);
-//    return Results.Ok(addUser);
-
-//}
-//IResult Login(UserLogin user, IUserService service)
-//{
-//}
 app.Run();

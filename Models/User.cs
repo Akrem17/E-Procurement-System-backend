@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
@@ -20,6 +21,10 @@ namespace E_proc.Models
         public string Password { get; set; }
  
         public string Type { get; set; }
+        [DefaultValue(false)]
+        public bool EmailConfirmed  { get; set; } 
+
+
 
 
 

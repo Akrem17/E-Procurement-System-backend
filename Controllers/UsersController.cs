@@ -47,19 +47,14 @@ namespace E_proc.Controllers
             if (user != null)
             {
 
-                //JsonSerializerOptions options = new()
-                //{
-                //    ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                //    WriteIndented = true
-                //};
-                //string tylerJson = JsonSerializer.Serialize(user, options);
-                //User tylerDeserialized =
-                //JsonSerializer.Deserialize<User>(tylerJson, options);
-                //Console.WriteLine(x.Id);
 
                 int status = await _repos.CreateAsync(user);
 
                 if (status == 409) return Results.Conflict("This email is already exists");
+
+
+
+
 
                 return Results.Ok(user);
             }
