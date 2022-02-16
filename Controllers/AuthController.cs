@@ -17,14 +17,20 @@ namespace E_proc.Controllers
     {
         private readonly IUserService _repos;
         private readonly IUserRepository _Userrepos;
+        private readonly ITokenService _tokenService;
+        private readonly IEmailSender _emailSender;
+
         IConfiguration config = new ConfigurationBuilder()
          .AddJsonFile("appsettings.json")
          .Build();
 
-        public AuthController(IUserService repos, IUserRepository Userrepos)
+        public AuthController(IUserService repos, IUserRepository Userrepos,ITokenService tokenService, IEmailSender emailSender)
         {
             _repos = repos;
            _Userrepos = Userrepos;
+            _tokenService = tokenService;
+            _emailSender = emailSender;
+
 
         }
 
@@ -63,8 +69,10 @@ namespace E_proc.Controllers
                                         )
                                      );
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-              
 
+
+                var message = new Mail(new string[] { "akrem.hammami041798@gmail.com" }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + user.Id+"/"+ tokenString);
+                _emailSender.SendEmail(message);
 
                 return Results.Ok(new { tokenString, user });
             }
@@ -86,34 +94,33 @@ namespace E_proc.Controllers
 
                var userFound= await _repos.GetByEmailAndPassword(user);
 
-               if (userFound != null)
+                if (userFound != null)
                 {
 
                     var loggedUser = await _Userrepos.Read(userFound.Id);
-                  
-                     if (loggedUser == null) return Results.NotFound("User not found");
+
+                    if (loggedUser == null) return Results.NotFound("User not found");
 
 
-                                    var claims = new[]
-                                    {
+                    var claims = new[]
+                    {
                                     new Claim(ClaimTypes.Email,loggedUser.Email),
                                     new Claim(ClaimTypes.GivenName,loggedUser.FirstName),
                                     new Claim(ClaimTypes.Surname,loggedUser.LastName),
                                     new Claim(ClaimTypes.Role,loggedUser.Type)
                     };
-                                    var token = new JwtSecurityToken(
-                                        issuer: config["Jwt:Issuer"],
-                                        audience: config["Jwt:Audience"],
-                                        claims: claims,
-                                        expires: DateTime.UtcNow.AddDays(60),
-                                       notBefore: DateTime.UtcNow,
-                                        signingCredentials: new SigningCredentials(
-                                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"])), SecurityAlgorithms.HmacSha256
-                                           )
-                                        );
-                                    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+                    var token = new JwtSecurityToken(
+                        issuer: config["Jwt:Issuer"],
+                        audience: config["Jwt:Audience"],
+                        claims: claims,
+                        expires: DateTime.UtcNow.AddDays(60),
+                       notBefore: DateTime.UtcNow,
+                        signingCredentials: new SigningCredentials(
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"])), SecurityAlgorithms.HmacSha256
+                           ));
+                    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-                    return Results.Ok(tokenString);
+                    return Results.Ok(new {tokenString, loggedUser });
                 
 
                 }
@@ -131,5 +138,39 @@ namespace E_proc.Controllers
 
 
         }
-    }
+        // verify Email
+        [HttpGet("Verify/{id}/{token}")]
+
+        public async Task<IResult> VerifyConfirmation(int id,string token)
+        {
+
+            var email = _tokenService.ValidateJwtToken(token);
+            if (email != null) { 
+                
+                var user = await _Userrepos.Read(id);
+                if (user != null)
+
+                {   
+                    if(user.Email== email) { 
+
+                    user.EmailConfirmed = true;
+                    var updatedUser = await _Userrepos.UpdateAsync(id, user);
+
+                   
+                    return Results.Ok("Email confirmed ");
+                    }
+                   
+                     return Results.Problem("Token didn't match with user");
+                    
+                }
+                return Results.NotFound("User not found");
+
+            }
+
+
+            return Results.Problem("Token Invalid");
+
+        }
+
+        }
 }
