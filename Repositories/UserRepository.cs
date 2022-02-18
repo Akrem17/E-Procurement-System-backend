@@ -31,6 +31,7 @@ namespace E_proc.Services.Repositories
                
 
         }
+     
 
         public async Task<int> Delete(int id)
         {
@@ -54,8 +55,14 @@ namespace E_proc.Services.Repositories
 
         public async Task<User> Read(int id)
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
+       
+            
+
+              return  await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id );
+            
         }
+
+
 
         public async Task<User> UpdateAsync(int id, User user)
         {
@@ -85,6 +92,18 @@ namespace E_proc.Services.Repositories
                 }
             };
             return oldUser;
+        }
+
+       
+
+        public async Task<List<User>> FindBy(string email)
+        {
+            if(email == null) return null;
+            var users = await _dbContext.Users.Where(u=>u.Email == email).ToListAsync();    
+            return users;
+
+
+
         }
     }
 }

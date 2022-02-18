@@ -22,22 +22,41 @@ namespace E_proc.Controllers
         }
         // get all users
         [HttpGet]
-        public async Task<IResult> Get()
+        public async Task<IResult> Get(string? email = null)
         {
-            var users = await _repos.ReadAsync();
-            if (users == null) return Results.NotFound();
-            return Results.Ok(users);
+           
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                Console.WriteLine("x");
+
+                var users = await _repos.ReadAsync();
+                if (users == null) return Results.NotFound();
+                return Results.Ok(users);
+            }
+            else
+            {
+
+                var user = await _repos.FindBy(email);
+                return Results.Ok(user);
+
+            }
         }
 
         // get user by id
         [HttpGet("{id}")]
-        public async Task<IResult> Get(int id)
+        public async Task<IResult> Get(int id, string email= null)
         {
+            Console.WriteLine(email);
+
 
             var user = await _repos.Read(id);
             if (user == null) return Results.NotFound("User not found");
             return Results.Ok(user);
         }
+
+  
+
+
 
         // add a user
         [HttpPost]

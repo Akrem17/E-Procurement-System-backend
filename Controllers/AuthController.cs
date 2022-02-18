@@ -109,7 +109,7 @@ namespace E_proc.Controllers
         // POST login
         [HttpPost("/login")]
 
-        public async Task<IResult> Login([FromBody] UserLogin? user)
+        public async Task<IActionResult> Login([FromBody] UserLogin? user)
         {
            
             if (user != null)
@@ -124,24 +124,28 @@ namespace E_proc.Controllers
 
                     var loggedUser = await _Userrepos.Read(userFound.Id);
 
-                    if (loggedUser == null) return Results.NotFound("User not found");
+                    if (loggedUser == null) return NotFound("User not found");
                     if (loggedUser.EmailConfirmed == true) {
                         _tokenService.GenerateTokenString(loggedUser);
                 
                     var tokenString = _tokenService.GenerateTokenString(loggedUser);
 
-                    return Results.Ok(new {tokenString, loggedUser });
+                    return Ok(new {tokenString, loggedUser });
 
                     }
                     else
                     {
-                        return Results.NotFound("account not verified, check your email");
+                        var tokenString = _tokenService.GenerateTokenString(loggedUser);
+                        //verify if token expired
+                        var message = new Mail(new string[] { "akrem.hammami041798@gmail.com" }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + loggedUser.Id + "/" + tokenString);
+                        _emailSender.SendEmail(message);
+                        return NotFound("account not verified, check your email");
 
                     }
                 }
               
 
-                return Results.NotFound("Email or password is wrong");
+                return Unauthorized();
 
                
 
@@ -150,7 +154,7 @@ namespace E_proc.Controllers
             }
 
 
-            return Results.Problem("User is empty");
+            return Problem("User is empty");
 
 
         }

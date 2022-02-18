@@ -12,6 +12,7 @@ using E_proc;
 using System.Text.Json;
 using E_proc.Services.Repositories;
 using E_proc.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +78,9 @@ builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
+builder.Services.AddCors();
+builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -115,7 +119,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
-
+app.UseCors(builder => builder
+     .AllowAnyOrigin()
+     .AllowAnyMethod()
+     .AllowAnyHeader());   
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
