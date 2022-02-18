@@ -13,6 +13,8 @@ using System.Text.Json;
 using E_proc.Services.Repositories;
 using E_proc.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using E_proc.Repositories.Interfaces;
+using E_proc.Repositories.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +67,7 @@ var emailConfig = config.GetSection("EmailConfiguration").Get<EmailConfig>();
 builder.Services.AddDbContext<AuthContext>(options =>
 {
     //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.UseLazyLoadingProxies();
     options.UseSqlServer(
         config.GetConnectionString("EprocDB"));
 }
@@ -72,6 +75,8 @@ builder.Services.AddDbContext<AuthContext>(options =>
 );
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICitizenRepository, CitizenRepository>();
+builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
+
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
