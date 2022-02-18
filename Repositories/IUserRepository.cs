@@ -9,5 +9,8 @@ namespace E_proc.Services.Repositories
         Task<int> CreateAsync(User user);
         Task<User> UpdateAsync(int id, User user);
         Task<int> Delete(int id);
+        Task<List<User>> FindBy(string email);
+
+
     }
 }
