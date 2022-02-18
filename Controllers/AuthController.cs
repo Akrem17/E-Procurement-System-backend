@@ -58,7 +58,7 @@ namespace E_proc.Controllers
 
 
 
-                var message = new Mail(new string[] { "akrem.hammami041798@gmail.com" }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + status.Id + "/" + tokenString);
+                var message = new Mail(new string[] { status.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + status.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
 
                 return Results.Ok(new { tokenString, status });
@@ -94,7 +94,7 @@ namespace E_proc.Controllers
                    
 
 
-                var message = new Mail(new string[] { "akrem.hammami041798@gmail.com" }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + user.Id+"/"+ tokenString);
+                var message = new Mail(new string[] { user.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + user.Id+"/"+ tokenString);
                 _emailSender.SendEmail(message);
 
                 return Results.Ok(new { tokenString, user });
@@ -137,7 +137,8 @@ namespace E_proc.Controllers
                     {
                         var tokenString = _tokenService.GenerateTokenString(loggedUser);
                         //verify if token expired
-                        var message = new Mail(new string[] { "akrem.hammami041798@gmail.com" }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + loggedUser.Id + "/" + tokenString);
+                       
+                        var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + loggedUser.Id + "/" + tokenString);
                         _emailSender.SendEmail(message);
                         return NotFound("account not verified, check your email");
 
