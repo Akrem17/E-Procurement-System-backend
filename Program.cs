@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using E_proc;
 using System.Text.Json;
-using E_proc.Services.Repositories;
 using E_proc.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using E_proc.Repositories.Interfaces;
 using E_proc.Repositories.Implementations;
+using E_proc.Services.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +23,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
