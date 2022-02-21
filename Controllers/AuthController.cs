@@ -1,4 +1,5 @@
 ﻿using E_proc.Models;
+using E_proc.Repositories.Interfaces;
 using E_proc.Services;
 using E_proc.Services.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -18,17 +19,19 @@ namespace E_proc.Controllers
         private readonly IUserRepository _Userrepos;
         private readonly ITokenService _tokenService;
         private readonly IEmailSender _emailSender;
+        private readonly ISupplierRepository _reposSupplier;
 
         IConfiguration config = new ConfigurationBuilder()
          .AddJsonFile("appsettings.json")
          .Build();
 
-        public AuthController(IUserService repos, IUserRepository Userrepos,ITokenService tokenService, IEmailSender emailSender)
+        public AuthController(IUserService repos, IUserRepository Userrepos, ITokenService tokenService, IEmailSender emailSender,ISupplierRepository reposSupplier)
         {
             _repos = repos;
            _Userrepos = Userrepos;
             _tokenService = tokenService;
             _emailSender = emailSender;
+            _reposSupplier = reposSupplier;
 
 
         }
@@ -66,42 +69,37 @@ namespace E_proc.Controllers
 
 
         }
+        // singup a citizen route
+        [HttpPost("/signup/supplier")]
+
+        public async Task<IResult> Signup([FromBody] Supplier? user)
+        {
 
 
-        //// POST login
-        //[HttpPost("/signup")]
+            if (user != null)
+            {
+                Supplier supplier = await _reposSupplier.CreateAsync(user);
 
-        //public async Task<IResult> Signup([FromBody] User? user)
-        //{
-       
-       
-
-        //    if (user != null)
-        //    {
-
-           
-
-        //        int status = await _repos.Signup(user);
-
-        //        if (status == 409) return Results.Conflict("This email is already exists");
-
-             
-        //        var tokenString = _tokenService.GenerateTokenString(user);
-                    
-                   
+                if (supplier == null) return Results.Conflict("This email is already exists");
 
 
-        //        var message = new Mail(new string[] { user.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + user.Id+"/"+ tokenString);
-        //        _emailSender.SendEmail(message);
-
-        //        return Results.Ok(new { tokenString, user });
-        //    }
+                var tokenString = _tokenService.GenerateTokenString(supplier);
 
 
-        //    return Results.Problem("User is empty");
+
+                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + supplier.Id + "/" + tokenString);
+                _emailSender.SendEmail(message);
+
+                return Results.Ok(new { tokenString, supplier });
+            }
 
 
-        //}
+            return Results.Problem("User is empty");
+
+
+        }
+
+
 
         //  login a user
         [HttpPost("/login")]
@@ -135,7 +133,7 @@ namespace E_proc.Controllers
                       
                         var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + loggedUser.Id + "/" + tokenString);
                         _emailSender.SendEmail(message);
-                        return Forbid("account not verified, check your email");
+                        return Unauthorized("account not verified, check your email");
 
                     }
                 }            
