@@ -18,11 +18,6 @@ using E_proc.Services.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-
-
-
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -66,17 +61,14 @@ var emailConfig = config.GetSection("EmailConfiguration").Get<EmailConfig>();
 
 builder.Services.AddDbContext<AuthContext>(options =>
 {
-    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     options.UseLazyLoadingProxies();
     options.UseSqlServer(
         config.GetConnectionString("EprocDB"));
-}
+});
 
-);
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICitizenRepository, CitizenRepository>();
 builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
-
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
@@ -91,8 +83,6 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
 
     {
-
-
         options.JsonSerializerOptions.Converters.Add(new CustomJsonConverterForType());
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.WriteIndented = true;
@@ -100,10 +90,8 @@ builder.Services.AddControllers()
 
 
 using var db = new AuthContext(options);
-//db.Database.EnsureDeleted();
-db.Database.EnsureCreated();
 
-//builder.Services.AddSingleton<IUserService, UserService>();
+db.Database.EnsureCreated();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

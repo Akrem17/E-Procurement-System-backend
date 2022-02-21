@@ -1,8 +1,11 @@
-﻿namespace E_proc.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace E_proc.Models
 {
     public class Address
     {
-          public int Id { get; set; }
+        [Key]
+        public int Id { get; set; }
         public string countryName { get; set; }
         public string postalCode { get; set; }
         public string city { get; set; }
