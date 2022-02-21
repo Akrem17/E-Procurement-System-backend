@@ -1,4 +1,6 @@
-﻿namespace E_proc.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace E_proc.Models
 {
     public class Supplier:User
     {
@@ -10,6 +12,8 @@
         public string CNSSId { get; set; }
         public string BuisnessClassification { get; set; }
         public string BuisnessType { get; set; }
+        [EmailAddress(ErrorMessage = "email not validated")]
+
         public string ReplyEmail { get; set; }
         public string CompanyName { get; set; }
 

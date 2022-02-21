@@ -22,7 +22,7 @@ namespace E_proc.Controllers
             _reposCitizen = reposCitizen;
         }
 
-        // GET: api/Citizens
+        // get all citizens
         [HttpGet]
         public async Task<IResult> GetCitizen()
 
@@ -33,7 +33,7 @@ namespace E_proc.Controllers
         }
 
 
-        //// GET: api/Citizens/5
+        //// get citizenById
         [HttpGet("{id}")]
         public async Task<IResult> Get(int id)
         {
@@ -43,8 +43,7 @@ namespace E_proc.Controllers
             return Results.Ok(citizen);
         }
 
-        //// PUT: api/Citizens/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //// update citizen
         [HttpPut("{id}")]
         public async Task<IResult> Put(int id, [FromBody] Citizen user)
         {
@@ -57,8 +56,7 @@ namespace E_proc.Controllers
 
         }
 
-        // POST: api/Citizens
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // create citizen
         [HttpPost]
 
         public async Task<IResult> PostCitizen([FromBody] Citizen? citizen)
@@ -82,7 +80,7 @@ namespace E_proc.Controllers
 
         }
 
-        // DELETE: api/Citizens/5
+        // delete citizen
         [HttpDelete("{id}")]
         public async Task<IResult> Delete(int id)
         {

@@ -20,15 +20,13 @@ namespace E_proc.Controllers
         {
             _repos = repos;
         }
-        // get all users
+        // get all users or find users by email
         [HttpGet]
         public async Task<IResult> Get(string? email = null)
         {
            
             if (string.IsNullOrWhiteSpace(email))
             {
-                Console.WriteLine("x");
-
                 var users = await _repos.ReadAsync();
                 if (users == null) return Results.NotFound();
                 return Results.Ok(users);
@@ -48,7 +46,6 @@ namespace E_proc.Controllers
         {
             Console.WriteLine(email);
 
-
             var user = await _repos.Read(id);
             if (user == null) return Results.NotFound("User not found");
             return Results.Ok(user);
@@ -66,25 +63,19 @@ namespace E_proc.Controllers
             if (user != null)
             {
 
-
                 int status = await _repos.CreateAsync(user);
 
                 if (status == 409) return Results.Conflict("This email is already exists");
 
-
-
-
-
                 return Results.Ok(user);
             }
-
 
             return Results.Problem("User is empty");
 
 
         }
 
-        // PUT api/<ValuesController>/5
+        // update user
         [HttpPut("{id}")]
         public async Task<IResult> Put(int id, [FromBody] User user)
         {
@@ -97,7 +88,7 @@ namespace E_proc.Controllers
 
         }
 
-        // DELETE api/<ValuesController>/5
+        // delete a user
         [HttpDelete("{id}")]
         public async Task<IResult> Delete(int id)
         {
@@ -106,8 +97,6 @@ namespace E_proc.Controllers
             if (res == 200)
            return Results.Ok("User deleted successfully ");
            return Results.NotFound("User not found");
-
-
 
         }
     }

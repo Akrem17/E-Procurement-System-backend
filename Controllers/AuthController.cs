@@ -7,7 +7,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace E_proc.Controllers
 {
@@ -37,7 +36,7 @@ namespace E_proc.Controllers
 
 
 
-        // POST login
+        // singup a citizen route
         [HttpPost("/signup/citizen")]
 
         public async Task<IResult> Signup([FromBody] Citizen? user)
@@ -46,8 +45,6 @@ namespace E_proc.Controllers
 
             if (user != null)
             {
-
-
 
                 Citizen status = await _repos.SignupCitizen(user);
 
@@ -71,42 +68,42 @@ namespace E_proc.Controllers
         }
 
 
-        // POST login
-        [HttpPost("/signup")]
+        //// POST login
+        //[HttpPost("/signup")]
 
-        public async Task<IResult> Signup([FromBody] User? user)
-        {
+        //public async Task<IResult> Signup([FromBody] User? user)
+        //{
        
        
 
-            if (user != null)
-            {
+        //    if (user != null)
+        //    {
 
            
 
-                int status = await _repos.Signup(user);
+        //        int status = await _repos.Signup(user);
 
-                if (status == 409) return Results.Conflict("This email is already exists");
+        //        if (status == 409) return Results.Conflict("This email is already exists");
 
              
-                var tokenString = _tokenService.GenerateTokenString(user);
+        //        var tokenString = _tokenService.GenerateTokenString(user);
                     
                    
 
 
-                var message = new Mail(new string[] { user.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + user.Id+"/"+ tokenString);
-                _emailSender.SendEmail(message);
+        //        var message = new Mail(new string[] { user.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + user.Id+"/"+ tokenString);
+        //        _emailSender.SendEmail(message);
 
-                return Results.Ok(new { tokenString, user });
-            }
-
-
-            return Results.Problem("User is empty");
+        //        return Results.Ok(new { tokenString, user });
+        //    }
 
 
-        }
+        //    return Results.Problem("User is empty");
 
-        // POST login
+
+        //}
+
+        //  login a user
         [HttpPost("/login")]
 
         public async Task<IActionResult> Login([FromBody] UserLogin? user)
@@ -120,43 +117,33 @@ namespace E_proc.Controllers
                 if (userFound != null)
                 {
 
-                 
-
                     var loggedUser = await _Userrepos.Read(userFound.Id);
 
                     if (loggedUser == null) return NotFound("User not found");
+                    var tokenString = _tokenService.GenerateTokenString(loggedUser);
+
                     if (loggedUser.EmailConfirmed == true) {
                         _tokenService.GenerateTokenString(loggedUser);
                 
-                    var tokenString = _tokenService.GenerateTokenString(loggedUser);
 
                     return Ok(new {tokenString, loggedUser });
 
                     }
                     else
                     {
-                        var tokenString = _tokenService.GenerateTokenString(loggedUser);
                         //verify if token expired
-                       
+                      
                         var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + loggedUser.Id + "/" + tokenString);
                         _emailSender.SendEmail(message);
-                        return NotFound("account not verified, check your email");
+                        return Forbid("account not verified, check your email");
 
                     }
-                }
-              
-
+                }            
                 return Unauthorized();
-
-               
-
-
 
             }
 
-
             return Problem("User is empty");
-
 
         }
         // verify Email
@@ -181,7 +168,7 @@ namespace E_proc.Controllers
                     return Results.Ok("Email confirmed ");
                     }
                    
-                     return Results.Problem("Token didn't match with user");
+                     return Results.BadRequest("Token didn't match with user");
                     
                 }
                 return Results.NotFound("User not found");
