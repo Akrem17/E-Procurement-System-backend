@@ -1,5 +1,6 @@
 ﻿using E_proc.Models;
 using E_proc.Repositories.Interfaces;
+using E_proc.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_proc.Repositories.Implementations
@@ -8,20 +9,26 @@ namespace E_proc.Repositories.Implementations
     {
 
         private readonly AuthContext _dbContext;
-        public SupplierRepository( AuthContext dbContext)
+        private readonly IEncryptionService _encryptionService;
+
+        public SupplierRepository( AuthContext dbContext, IEncryptionService encryptionService)
         {
 
             _dbContext = dbContext;
+            _encryptionService = encryptionService;
 
         }
         public async Task<Supplier> CreateAsync(Supplier supplier)
 
         {
 
-            Console.WriteLine("hii");
+            
             var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == supplier.Email);
             if (foundedUser == null)
             {
+
+                supplier.Password = _encryptionService.Encrypt(supplier.Password);
+
                 Representative representative = new Representative { 
                     Name = supplier.representative.Name,
                     Email = supplier.representative.Email,  
@@ -74,7 +81,8 @@ namespace E_proc.Repositories.Implementations
                     
                 
                 };
-            
+
+                
                 var user = await _dbContext.Supplier.AddAsync(x);
                 _dbContext.SaveChanges();
 
@@ -125,6 +133,8 @@ namespace E_proc.Repositories.Implementations
 
                 if (foundedUser?.Id == id || foundedUser == null)
                 {
+                    supplier.Password = _encryptionService.Encrypt(supplier.Password);
+
 
                     oldUser.licence.Category = supplier.licence.Category;
                     oldUser.licence.AcquisitionDate = supplier.licence.AcquisitionDate;

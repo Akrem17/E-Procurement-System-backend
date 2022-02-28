@@ -1,4 +1,5 @@
 ﻿using E_proc.Models;
+using E_proc.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_proc.Repositories
@@ -7,11 +8,13 @@ namespace E_proc.Repositories
     {
 
         private readonly AuthContext _dbContext;
+        private readonly IEncryptionService _encryptionService;
 
 
-        public CitizenRepository(AuthContext dbContext)
+        public CitizenRepository(AuthContext dbContext, IEncryptionService encryptionService)
         {
             _dbContext = dbContext;
+            _encryptionService = encryptionService;
         }
         public async Task<Citizen> CreateAsync(Citizen citizen)
         {
@@ -19,6 +22,8 @@ namespace E_proc.Repositories
             var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == citizen.Email);
             if (foundedUser == null)
             {
+                citizen.Password= _encryptionService.Encrypt(citizen.Password);
+               
                 Citizen x = new Citizen { Email = citizen.Email, FirstName = citizen.FirstName, LastName = citizen.LastName, Password = citizen.Password, Type = citizen.Type,CIN= citizen.CIN,Phone=citizen.Phone };
 
                var user= await _dbContext.Citizen.AddAsync(x);
@@ -54,8 +59,10 @@ namespace E_proc.Repositories
             {
                 var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
 
+
                 if (foundedUser?.Id == id || foundedUser == null)
                 {
+                    user.Password = _encryptionService.Encrypt(user.Password);
 
 
                     oldUser.Email = user.Email;

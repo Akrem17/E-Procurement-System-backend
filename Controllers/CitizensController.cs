@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using E_proc.Models;
 using E_proc.Repositories;
 using E_proc.Models.StatusModel;
+using E_proc.Services.Interfaces;
 
 namespace E_proc.Controllers
 {
@@ -17,15 +18,17 @@ namespace E_proc.Controllers
     public class CitizensController : ControllerBase
     {
         private readonly ICitizenRepository _reposCitizen;
+        private readonly IEncryptionService _encryptionService;
 
-        public CitizensController(ICitizenRepository reposCitizen)
+        public CitizensController(ICitizenRepository reposCitizen, IEncryptionService encryptionService)
         {
             _reposCitizen = reposCitizen;
+            _encryptionService = encryptionService;
         }
 
         // get all citizens
         [HttpGet]
-        public async Task<Success> GetCitizen(string? email=null, bool? confirmed=null, string? cin = null)
+        public async Task<Success> GetCitizen(string? email=null, bool? confirmed=null, string? cin = null,string? phone=null)
 
         {
                 
@@ -34,14 +37,18 @@ namespace E_proc.Controllers
                 var citizens = await _reposCitizen.ReadAsync();
 
                 if (citizens == null) return new Success(false, "message.UserNotFound", new { });
+
+                
                 return new Success(true, "message.sucess", citizens);
+
+
             }
             else  {
-                var citizens = await _reposCitizen.FindBy(email, confirmed,cin);
+                var citizens = await _reposCitizen.FindBy(email, confirmed,cin,phone);
                 return new Success(true, "message.sucess", citizens);
             }
 
-
+                
        
 
 

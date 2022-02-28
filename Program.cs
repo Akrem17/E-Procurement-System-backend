@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using E_proc.Repositories.Interfaces;
 using E_proc.Services.Repositories;
 using E_proc.Repositories.Implementations;
+using E_proc.Services.Interfaces;
+using E_proc.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +73,8 @@ builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IInstituteRepository, InstituteRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IEncryptionService, EncryptionService>();
+
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
