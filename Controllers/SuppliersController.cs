@@ -44,8 +44,14 @@ namespace E_proc.Controllers
             }
             else
             {
-                var citizens = await _reposSuuplier.FindBy(email, confirmed, phone);
-                return new Success(true, "message.sucess", citizens);
+                var suppliers = await _reposSuuplier.FindBy(email, confirmed, phone);
+                
+                if (suppliers.Count() != 0)
+                {
+                    return new Success(true, "message.sucess", suppliers);
+
+                }
+                return new Success(false, "message.not found");
             }
 
 

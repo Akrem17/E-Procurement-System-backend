@@ -1,4 +1,5 @@
 ﻿using E_proc.Models;
+using E_proc.Models.StatusModel;
 using E_proc.Services.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,12 +30,14 @@ namespace E_proc.Controllers
             {
                 var users = await _repos.ReadAsync();
                 if (users == null) return NotFound();
-                return Ok(users);
+                return new Success(true, "message.sucess", users);
             }
             else
             {
                 var user = await _repos.FindBy(email, confirmed);
-                return Ok(user);
+                if (user.Count()==0) return new Success(false, "message.notFound", user);
+                return new Success(true, "message.sucess", user);
+
 
             }
         }

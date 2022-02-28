@@ -9,9 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using E_proc.Models;
 using E_proc.Repositories.Interfaces;
 using E_proc.Models.StatusModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace E_proc.Controllers
 {
+
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
     [Route("api/[controller]")]
     [ApiController]
     public class InstitutesController : ControllerBase
@@ -43,7 +47,13 @@ namespace E_proc.Controllers
             else
             {
                 var citizens = await _reposInstit.FindBy(email, confirmed, phone);
-                return new Success(true, "message.sucess", citizens);
+                if (citizens.Count()!=0)
+                {
+                    return new Success(true, "message.sucess", citizens);
+
+                }
+                return new Success(false, "message.not found");
+
             }
 
         }

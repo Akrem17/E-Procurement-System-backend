@@ -1,5 +1,6 @@
 ﻿using E_proc.Models;
 using E_proc.Repositories;
+using E_proc.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_proc.Services
@@ -10,12 +11,14 @@ namespace E_proc.Services
          
         private readonly AuthContext _dbContext;
         private readonly ICitizenRepository _reposCitizen;
+        private readonly IEncryptionService _encryptionService;
 
 
-        public UserService(AuthContext dbContext, ICitizenRepository reposCitizen)
+        public UserService(AuthContext dbContext, ICitizenRepository reposCitizen, IEncryptionService encryptionService)
         {
             _dbContext = dbContext;
             _reposCitizen=reposCitizen;
+            _encryptionService=encryptionService;
 
 
 
@@ -24,7 +27,9 @@ namespace E_proc.Services
         {
         
 
-            return await _dbContext.Users.FirstOrDefaultAsync(u =>u.Email.Equals(userLogin.Email) && u.Password == userLogin.Password   );
+            userLogin.Password = _encryptionService.Encrypt(userLogin.Password);
+            Console.WriteLine(userLogin.Password);
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email.Equals(userLogin.Email) && u.Password == userLogin.Password);
             
          
         }
