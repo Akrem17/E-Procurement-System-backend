@@ -2,6 +2,7 @@
 using E_proc.Models.StatusModel;
 using E_proc.Repositories.Interfaces;
 using E_proc.Services;
+using E_proc.Services.Interfaces;
 using E_proc.Services.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -36,6 +37,7 @@ namespace E_proc.Controllers
             _emailSender = emailSender;
             _reposSupplier = reposSupplier;
             _reposInstit = reposInstit;
+       
             
 
         }
@@ -153,6 +155,7 @@ namespace E_proc.Controllers
 
                var userFound= await _repos.GetByEmailAndPassword(user);
 
+
                 if (userFound != null)
                 {
 
@@ -179,7 +182,7 @@ namespace E_proc.Controllers
 
                     }
                 }            
-                return Unauthorized();
+                return NotFound();
 
             }
 
