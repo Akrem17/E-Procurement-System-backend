@@ -111,6 +111,30 @@ namespace E_proc.Repositories.Implementations
 
     }
 
+        public async Task<List<Supplier>> FindBy(string? email, bool? confirmed, string? phone)
+        {
+            var suppliers = new List<Supplier>();
+
+
+            if (email != null && confirmed == null && phone == null)
+            {
+                suppliers = await _dbContext.Supplier.Where(u => u.Email == email).ToListAsync();
+
+            }
+            else if (email == null && confirmed != null && phone == null)
+            {
+                suppliers = await _dbContext.Supplier.Where(u => u.EmailConfirmed == confirmed).ToListAsync();
+
+            }
+
+
+
+
+
+
+            return suppliers;
+        }
+
         public async Task<IEnumerable<Supplier>> ReadAsync()
         {
             var supplier = await _dbContext.Supplier.ToListAsync();

@@ -55,10 +55,35 @@ namespace E_proc.Repositories.Implementations
         
         }
 
+        public async Task<List<Institute>> FindBy(string? email, bool? confirmed, string? phone)
+        {
+            var institutes = new List<Institute>();
+
+
+            if (email != null && confirmed == null && phone == null)
+            {
+                institutes = await _dbContext.Institute.Where(u => u.Email == email).ToListAsync();
+
+            }
+            else if (email == null && confirmed != null  && phone == null)
+            {
+                institutes = await _dbContext.Institute.Where(u => u.EmailConfirmed == confirmed).ToListAsync();
+
+            }
+         
+         
+       
+
+
+
+            return institutes;
+        }
+
         public async Task<IEnumerable<Institute>> ReadAsync()
         {
         
             var institutes = await _dbContext.Institute.ToListAsync();
+
             return institutes;
         }
 
