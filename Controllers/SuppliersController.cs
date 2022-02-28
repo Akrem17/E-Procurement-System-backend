@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using E_proc.Models;
 using E_proc.Repositories;
 using E_proc.Repositories.Interfaces;
+using E_proc.Models.StatusModel;
 
 namespace E_proc.Controllers
 {
@@ -26,10 +27,27 @@ namespace E_proc.Controllers
 
         // GET: api/Suppliers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Supplier>>> GetSupplier()
+        public async Task<IActionResult> GetSupplier(string? email = null, bool? confirmed = null, string? phone = null)
         {
-              var  suppliers=await _reposSuuplier.ReadAsync();
-            return Ok(suppliers);
+
+
+            if (email == null && confirmed == null)
+            {
+                var suppliers = await _reposSuuplier.ReadAsync();
+
+                if (suppliers == null) return new Success(false, "message.UserNotFound", new { });
+
+
+                return new Success(true, "message.sucess", suppliers);
+
+
+            }
+            else
+            {
+                var citizens = await _reposSuuplier.FindBy(email, confirmed, phone);
+                return new Success(true, "message.sucess", citizens);
+            }
+
 
 
         }
