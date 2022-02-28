@@ -22,33 +22,32 @@ namespace E_proc.Controllers
         }
         // get all users or find users by email
         [HttpGet]
-        public async Task<IResult> Get(string? email = null)
+        public async Task<IActionResult> Get(string? email = null, bool? confirmed=null )
         {
            
-            if (string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(email) && confirmed == null)
             {
                 var users = await _repos.ReadAsync();
-                if (users == null) return Results.NotFound();
-                return Results.Ok(users);
+                if (users == null) return NotFound();
+                return Ok(users);
             }
             else
             {
-
-                var user = await _repos.FindBy(email);
-                return Results.Ok(user);
+                var user = await _repos.FindBy(email, confirmed);
+                return Ok(user);
 
             }
         }
 
         // get user by id
         [HttpGet("{id}")]
-        public async Task<IResult> Get(int id, string email= null)
+        public async Task<IActionResult> Get(int id)
         {
-            Console.WriteLine(email);
+         
 
             var user = await _repos.Read(id);
-            if (user == null) return Results.NotFound("User not found");
-            return Results.Ok(user);
+            if (user == null) return NotFound("User not found");
+            return Ok(user);
         }
 
   
@@ -57,7 +56,7 @@ namespace E_proc.Controllers
 
         // add a user
         [HttpPost]
-        public async Task<IResult> Post([FromBody] User? user)
+        public async Task<IActionResult> Post([FromBody] User? user)
         {
 
             if (user != null)
@@ -65,38 +64,38 @@ namespace E_proc.Controllers
 
                 int status = await _repos.CreateAsync(user);
 
-                if (status == 409) return Results.Conflict("This email is already exists");
+                if (status == 409) return Conflict("This email is already exists");
 
-                return Results.Ok(user);
+                return Ok(user);
             }
 
-            return Results.Problem("User is empty");
+            return Problem("User is empty");
 
 
         }
 
         // update user
         [HttpPut("{id}")]
-        public async Task<IResult> Put(int id, [FromBody] User user)
+        public async Task<IActionResult> Put(int id, [FromBody] User user)
         {
 
             var newUser = await _repos.UpdateAsync(id, user);
 
             if(newUser == null) 
-                return Results.NotFound("User not found or email already exists");
-                  return Results.Ok("User updated successfully "); ;
+                return NotFound("User not found or email already exists");
+                  return Ok("User updated successfully "); ;
 
         }
 
         // delete a user
         [HttpDelete("{id}")]
-        public async Task<IResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
          var res=   await _repos.Delete(id);
 
             if (res == 200)
-           return Results.Ok("User deleted successfully ");
-           return Results.NotFound("User not found");
+           return Ok("User deleted successfully ");
+           return NotFound("User not found");
 
         }
     }

@@ -34,7 +34,10 @@ namespace E_proc.Models
 
 
 
-
+     public bool IsConfirmed()
+        {
+            return EmailConfirmed;
+        }
 
     }
 }

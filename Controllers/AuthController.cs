@@ -1,4 +1,5 @@
 ﻿using E_proc.Models;
+using E_proc.Models.StatusModel;
 using E_proc.Repositories.Interfaces;
 using E_proc.Services;
 using E_proc.Services.Repositories;
@@ -20,19 +21,22 @@ namespace E_proc.Controllers
         private readonly ITokenService _tokenService;
         private readonly IEmailSender _emailSender;
         private readonly ISupplierRepository _reposSupplier;
+        private readonly IInstituteRepository _reposInstit;
+
 
         IConfiguration config = new ConfigurationBuilder()
          .AddJsonFile("appsettings.json")
          .Build();
 
-        public AuthController(IUserService repos, IUserRepository Userrepos, ITokenService tokenService, IEmailSender emailSender,ISupplierRepository reposSupplier)
+        public AuthController(IUserService repos, IUserRepository Userrepos, ITokenService tokenService, IEmailSender emailSender,ISupplierRepository reposSupplier, IInstituteRepository reposInstit)
         {
             _repos = repos;
            _Userrepos = Userrepos;
             _tokenService = tokenService;
             _emailSender = emailSender;
             _reposSupplier = reposSupplier;
-
+            _reposInstit = reposInstit;
+            
 
         }
 
@@ -42,7 +46,7 @@ namespace E_proc.Controllers
         // singup a citizen route
         [HttpPost("/signup/citizen")]
 
-        public async Task<IResult> Signup([FromBody] Citizen? user)
+        public async Task<IActionResult> Signup([FromBody] Citizen? user)
         {
 
 
@@ -51,9 +55,9 @@ namespace E_proc.Controllers
 
                 Citizen status = await _repos.SignupCitizen(user);
 
-                if (status == null) return Results.Conflict("This email is already exists");
+                if (status == null) return new Success(false, "message.email already exsits", new { });
 
-              
+
                 var tokenString = _tokenService.GenerateTokenString(status);
 
 
@@ -61,18 +65,18 @@ namespace E_proc.Controllers
                 var message = new Mail(new string[] { status.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + status.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
 
-                return Results.Ok(new { tokenString, status });
+               
+                return new Success(true, "message.sucess", new { tokenString, status });
             }
 
-
-            return Results.Problem("User is empty");
+            return new Success(false, "message.user is empty", new { });
 
 
         }
-        // singup a citizen route
+        // singup a supplier route
         [HttpPost("/signup/supplier")]
 
-        public async Task<IResult> Signup([FromBody] Supplier? user)
+        public async Task<IActionResult> Signup([FromBody] Supplier? user)
         {
 
 
@@ -80,7 +84,7 @@ namespace E_proc.Controllers
             {
                 Supplier supplier = await _reposSupplier.CreateAsync(user);
 
-                if (supplier == null) return Results.Conflict("This email is already exists");
+                if (supplier == null) return new Success(false, "message.email already exsits", new {});
 
 
                 var tokenString = _tokenService.GenerateTokenString(supplier);
@@ -90,15 +94,52 @@ namespace E_proc.Controllers
                 var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + supplier.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
 
-                return Results.Ok(new { tokenString, supplier });
+            
+                return new Success(true, "message.sucess", new { tokenString, supplier });
+               
             }
 
 
-            return Results.Problem("User is empty");
+            return new Success(false, "message.user is empty", new { });
 
 
         }
 
+
+        // singup a institute route
+        [HttpPost("/signup/institute")]
+
+        public async Task<IActionResult> Signup([FromBody] Institute? user)
+        {
+
+
+            if (user != null)
+            {
+                Institute supplier = await _reposInstit.CreateAsync(user);
+
+                if (supplier == null) return new Success(false, "message.email already exsits", new {});
+
+
+                var tokenString = _tokenService.GenerateTokenString(supplier);
+
+
+
+                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + supplier.Id + "/" + tokenString);
+                _emailSender.SendEmail(message);
+
+
+
+
+
+                return new Success(true, "message.sucess", new { tokenString, supplier });
+
+            }
+
+
+            return new Success(false, "message.user is empty", new { });
+
+
+        }
 
 
         //  login a user
@@ -117,7 +158,8 @@ namespace E_proc.Controllers
 
                     var loggedUser = await _Userrepos.Read(userFound.Id);
 
-                    if (loggedUser == null) return NotFound("User not found");
+                    if (loggedUser == null) return new Success(false, "message.User not found", new { });
+
                     var tokenString = _tokenService.GenerateTokenString(loggedUser);
 
                     if (loggedUser.EmailConfirmed == true) {
@@ -147,7 +189,7 @@ namespace E_proc.Controllers
         // verify Email
         [HttpGet("Verify/{id}/{token}")]
 
-        public async Task<IResult> VerifyConfirmation(int id,string token)
+        public async Task<IActionResult> VerifyConfirmation(int id,string token)
         {
 
             var email = _tokenService.ValidateJwtToken(token);
@@ -162,19 +204,20 @@ namespace E_proc.Controllers
                     user.EmailConfirmed = true;
                     var updatedUser = await _Userrepos.UpdateAsync(id, user);
 
-                   
-                    return Results.Ok("Email confirmed ");
+
+                        return new Success(true, "message.Email confirmed ", new { });
+
                     }
                    
-                     return Results.BadRequest("Token didn't match with user");
+                    return BadRequest("Token didn't match with user");
                     
                 }
-                return Results.NotFound("User not found");
+                return new Success(false, "message.user not found ", new { });
 
             }
 
 
-            return Results.Problem("Token Invalid");
+            return new Success(false, "message.Token not valid ", new { });
 
         }
 

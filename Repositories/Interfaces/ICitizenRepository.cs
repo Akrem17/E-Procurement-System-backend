@@ -11,6 +11,8 @@ namespace E_proc.Repositories
         Task<Citizen> ReadById(int id);
 
         Task<Citizen> UpdateAsync(int id, Citizen citizen);
+        Task<List<Citizen>> FindBy(string? email, bool? confirmed,string? cin,string ?phone);
+
         Task<int> Delete(int id);
     }
 }
