@@ -2,19 +2,18 @@ using E_proc.Models;
 using E_proc.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using E_proc;
-using System.Text.Json;
+
 using E_proc.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using E_proc.Repositories.Interfaces;
-using E_proc.Repositories.Implementations;
 using E_proc.Services.Repositories;
+using E_proc.Repositories.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +69,7 @@ builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICitizenRepository, CitizenRepository>();
 builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IInstituteRepository, InstituteRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton(emailConfig);
@@ -92,6 +92,7 @@ builder.Services.AddControllers()
 using var db = new AuthContext(options);
 
 db.Database.EnsureCreated();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

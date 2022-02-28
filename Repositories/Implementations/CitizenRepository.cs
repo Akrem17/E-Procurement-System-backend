@@ -16,7 +16,7 @@ namespace E_proc.Repositories
         public async Task<Citizen> CreateAsync(Citizen citizen)
         {
 
-            var foundedUser = await _dbContext.Citizen.FirstOrDefaultAsync(u => u.Email == citizen.Email);
+            var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == citizen.Email);
             if (foundedUser == null)
             {
                 Citizen x = new Citizen { Email = citizen.Email, FirstName = citizen.FirstName, LastName = citizen.LastName, Password = citizen.Password, Type = citizen.Type,CIN= citizen.CIN,Phone=citizen.Phone };
@@ -52,7 +52,7 @@ namespace E_proc.Repositories
 
             if (oldUser != null)
             {
-                var foundedUser = await _dbContext.Citizen.FirstOrDefaultAsync(u => u.Email == user.Email);
+                var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
 
                 if (foundedUser?.Id == id || foundedUser == null)
                 {
@@ -93,5 +93,42 @@ namespace E_proc.Repositories
 
         }
 
+        public async Task<List<Citizen>> FindBy(string? email, bool? confirmed,string? cin, string? phone)
+        {
+            var users = new List<Citizen>();
+
+
+            if (email != null && confirmed == null && cin==null && phone==null)
+            {
+                users = await _dbContext.Citizen.Where(u => u.Email == email).ToListAsync();
+
+            }
+            else if (email == null && confirmed != null && cin ==null && phone ==null)
+            {
+                users = await _dbContext.Citizen.Where(u => u.EmailConfirmed == confirmed).ToListAsync();
+
+            }
+            else if (email == null && confirmed == null && cin != null && phone==null)
+            {
+                users = await _dbContext.Citizen.Where(u => u.CIN == cin).ToListAsync();
+
+            }
+            else if (email == null && confirmed != null && cin != null && phone==null)
+            {
+                users = await _dbContext.Citizen.Where(u => u.CIN == cin && u.EmailConfirmed== confirmed).ToListAsync();
+
+            }
+            else if (email == null && confirmed == null && cin == null && phone != null)
+            {
+                users = await _dbContext.Citizen.Where(u => u.CIN == cin && u.Phone == phone).ToListAsync();
+
+            }
+
+
+
+
+            return users;
+
+        }
     }
 }

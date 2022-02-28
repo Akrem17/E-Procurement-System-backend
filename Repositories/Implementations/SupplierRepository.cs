@@ -19,7 +19,7 @@ namespace E_proc.Repositories.Implementations
         {
 
             Console.WriteLine("hii");
-            var foundedUser = await _dbContext.Supplier.FirstOrDefaultAsync(u => u.Email == supplier.Email);
+            var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == supplier.Email);
             if (foundedUser == null)
             {
                 Representative representative = new Representative { 
@@ -121,7 +121,7 @@ namespace E_proc.Repositories.Implementations
 
             if (oldUser != null)
             {
-                var foundedUser = await _dbContext.Supplier.FirstOrDefaultAsync(u => u.Email == supplier.Email);
+                var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == supplier.Email);
 
                 if (foundedUser?.Id == id || foundedUser == null)
                 {

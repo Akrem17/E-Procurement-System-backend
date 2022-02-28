@@ -36,32 +36,31 @@ namespace E_proc.Controllers
 
         //// GET: api/Suppliers/5
         [HttpGet("{id}")]
-        public async Task<IResult> Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
 
             var supplier = await _reposSuuplier.ReadById(id);
-            if (supplier == null) return Results.NotFound("User not found");
-            return Results.Ok(supplier);
+            if (supplier == null) return NotFound("User not found");
+            return Ok(supplier);
         }
 
         //// PUT: api/Suppliers/5
         [HttpPut("{id}")]
-        public async Task<IResult> Put(int id, [FromBody] Supplier supplier)
+        public async Task<ActionResult> Put(int id, [FromBody] Supplier supplier)
         {
 
             var newUser = await _reposSuuplier.UpdateAsync(id, supplier);
 
             if (newUser == null)
-                return Results.NotFound("User not found or email already exists");
-            return Results.Ok("User updated successfully "); ;
+                return NotFound("User not found or email already exists");
+            return Ok("User updated successfully "); ;
 
         }
 
-        //// POST: api/Suppliers
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
         [HttpPost]
 
-        public async Task<IResult> PostSupplier([FromBody] Supplier? supplier)
+        public async Task<ActionResult> PostSupplier([FromBody] Supplier? supplier)
         {
 
             if (supplier != null)
@@ -70,27 +69,27 @@ namespace E_proc.Controllers
 
                 Supplier status = await _reposSuuplier.CreateAsync(supplier);
 
-                if (status == null) return Results.Conflict("This email is already exists");
+                if (status == null) return Conflict("This email is already exists");
 
 
 
-                return Results.Ok(supplier);
+                return Ok(supplier);
             }
 
 
-            return Results.Problem("User is empty");
+            return Problem("User is empty");
 
         }
 
         //// DELETE: api/Suppliers/5
         [HttpDelete("{id}")]
-        public async Task<IResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             var res = await _reposSuuplier.Delete(id);
 
             if (res == 200)
-                return Results.Ok("Supplier deleted successfully ");
-            return Results.NotFound("Supplier not found");
+                return Ok("Supplier deleted successfully ");
+            return NotFound("Supplier not found");
 
 
 

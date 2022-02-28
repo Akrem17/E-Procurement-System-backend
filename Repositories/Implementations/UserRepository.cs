@@ -96,10 +96,27 @@ namespace E_proc.Services.Repositories
 
        
 
-        public async Task<List<User>> FindBy(string email)
+        public async Task<List<User>> FindBy(string? email=null, Nullable<bool> confirmed =null)
         {
-            if(email == null) return null;
-            var users = await _dbContext.Users.Where(u=>u.Email == email).ToListAsync();    
+
+            var users = new List<User>();
+
+            if (email == null && confirmed == null)
+            {
+                 users = await _dbContext.Users.Where(u => u.Email == email).ToListAsync();
+              
+            }
+            else if (email != null && confirmed == null)
+            {
+                 users = await _dbContext.Users.Where(u => u.Email == email).ToListAsync();
+              
+            }
+            else if (email == null && confirmed != null)
+            {
+                 users = await _dbContext.Users.Where(u => u.EmailConfirmed == confirmed).ToListAsync();
+               
+            }
+
             return users;
 
 
