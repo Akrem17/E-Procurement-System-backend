@@ -167,9 +167,8 @@ namespace E_proc.Controllers
 
                     if (loggedUser.EmailConfirmed == true) {
                         _tokenService.GenerateTokenString(loggedUser);
-                
 
-                    return Ok(new {tokenString, loggedUser });
+                        return new Success(true, "message.success", new { tokenString, loggedUser });
 
                     }
                     else
@@ -178,11 +177,13 @@ namespace E_proc.Controllers
                       
                         var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + loggedUser.Id + "/" + tokenString);
                         _emailSender.SendEmail(message);
-                        return Unauthorized("account not verified, check your email");
+                     
+                        return new Forbidden(false, "message.account not verified, check your email");
 
                     }
-                }            
-                return NotFound();
+                }
+                     return new Success(false, "message.notFound");
+
 
             }
 
@@ -212,8 +213,7 @@ namespace E_proc.Controllers
 
                     }
                    
-                    return BadRequest("Token didn't match with user");
-                    
+                    return  new Forbidden(false, "message.Token didn't match with user");
                 }
                 return new Success(false, "message.user not found ", new { });
 

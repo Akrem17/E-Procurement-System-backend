@@ -46,10 +46,10 @@ namespace E_proc.Controllers
             }
             else
             {
-                var citizens = await _reposInstit.FindBy(email, confirmed, phone);
-                if (citizens.Count()!=0)
+                var institutes = await _reposInstit.FindBy(email, confirmed, phone);
+                if (institutes.Count()!=0)
                 {
-                    return new Success(true, "message.sucess", citizens);
+                    return new Success(true, "message.sucess", institutes);
 
                 }
                 return new Success(false, "message.not found");
@@ -60,15 +60,15 @@ namespace E_proc.Controllers
 
        
         [HttpGet("{id}")]
-        public async Task<ActionResult<Institute>> GetInstitute(int id)
+        public async Task<IActionResult> GetInstitute(int id)
         {
 
-            var supplier = await _reposInstit.ReadById(id);
-            if (supplier == null) return NotFound("User not found");
-            return Ok(supplier);
+            var institutes = await _reposInstit.ReadById(id);
+            if (institutes == null) return new Success(false, "message.User not found");
+            return new Success(true, "message.sucess", new { institutes });
         }
 
-        // PUT: api/Institutes/5
+     
       
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInstitute(int id, Institute institute)
@@ -76,14 +76,16 @@ namespace E_proc.Controllers
             var newUser = await _reposInstit.UpdateAsync(id, institute);
 
             if (newUser == null)
-                return NotFound("User not found or email already exists");
-            return Ok("User updated successfully "); 
+           
+            return new Success(false, "message.User not found or email already exists");
+            return new Success(true, "message.success");
+
         }
 
         // POST: api/Institutes
-     
+
         [HttpPost]
-        public async Task<ActionResult<Institute>> PostInstitute(Institute institute)
+        public async Task<IActionResult> PostInstitute(Institute institute)
         {
 
             if (institute != null)
@@ -92,11 +94,13 @@ namespace E_proc.Controllers
 
                 Institute status = await _reposInstit.CreateAsync(institute);
 
-                if (status == null) return Conflict("This email is already exists");
+                if (status==null)
+               
+                return new Success(false, "message.This email is already exists");
 
 
 
-                return Ok(institute);
+                return new Success(true, "message.success", new { institute });
             }
 
 
@@ -110,8 +114,8 @@ namespace E_proc.Controllers
             var res = await _reposInstit.Delete(id);
 
             if (res == 200)
-                return Ok("Institute deleted successfully ");
-            return NotFound("Institute not found");
+                return new Success(true, "message.success");
+                return new Success(false, "message.User not found");
         }
 
     
