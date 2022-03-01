@@ -61,8 +61,8 @@ namespace E_proc.Controllers
         {
 
             var citizen = await _reposCitizen.ReadById(id);
-            if (citizen == null) return NotFound("User not found");
-            return Ok(citizen);
+            if (citizen == null) return new Success(false, "message.user Not Found");
+            return  new Success(true, "message.success", new { citizen });
         }
 
         //// update citizen
@@ -73,9 +73,10 @@ namespace E_proc.Controllers
             var newUser = await _reposCitizen.UpdateAsync(id, user);
 
             if (newUser == null)
-                return NotFound("User not found or email already exists");
-            return Ok("User updated successfully "); ;
-
+             
+            return new Success(false, "message.User not found or email already exists");
+       
+            return new Success(true, "message.User updated successfully");
         }
 
         // create citizen
@@ -90,15 +91,15 @@ namespace E_proc.Controllers
 
                 Citizen status = await _reposCitizen.CreateAsync(citizen);
       
-                if (status == null) return Conflict("This email is already exists");
+                if (status == null) return new Success(false, "message.This email is already exists");
 
 
 
-                return Ok( citizen);
+                return  new Success(true, "message.success", new { citizen });
             }
 
 
-            return Problem("User is empty");
+            return new Success(false, "message.User is empty");
 
         }
 
@@ -109,10 +110,10 @@ namespace E_proc.Controllers
             var res = await _reposCitizen.Delete(id);
 
             if (res == 200)
-                return Ok("Citizen deleted successfully ");
-            return NotFound("Citizen not found");
+                return new Success(true, "message.success");
 
-
+        
+            return new Success(false, "message.Citizen not found");
 
         }
         

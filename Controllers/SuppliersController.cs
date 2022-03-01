@@ -38,7 +38,7 @@ namespace E_proc.Controllers
                 if (suppliers == null) return new Success(false, "message.UserNotFound", new { });
 
 
-                return new Success(true, "message.sucess", suppliers);
+                return new Success(true, "message.success", suppliers);
 
 
             }
@@ -48,7 +48,7 @@ namespace E_proc.Controllers
                 
                 if (suppliers.Count() != 0)
                 {
-                    return new Success(true, "message.sucess", suppliers);
+                    return new Success(true, "message.success", suppliers);
 
                 }
                 return new Success(false, "message.not found");
@@ -60,31 +60,31 @@ namespace E_proc.Controllers
 
         //// GET: api/Suppliers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
 
             var supplier = await _reposSuuplier.ReadById(id);
-            if (supplier == null) return NotFound("User not found");
-            return Ok(supplier);
+            if (supplier == null) return new Success(false, "message.Usernot found");
+            return new Success(true, "message.success",supplier);
         }
 
         //// PUT: api/Suppliers/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Supplier supplier)
+        public async Task<IActionResult> Put(int id, [FromBody] Supplier supplier)
         {
 
             var newUser = await _reposSuuplier.UpdateAsync(id, supplier);
 
             if (newUser == null)
-                return NotFound("User not found or email already exists");
-            return Ok("User updated successfully "); ;
+            return new Success(false, "message.User not found or email already exists");
+            return new Success(true, "message.success");
 
         }
 
         
         [HttpPost]
 
-        public async Task<ActionResult> PostSupplier([FromBody] Supplier? supplier)
+        public async Task<IActionResult> PostSupplier([FromBody] Supplier? supplier)
         {
 
             if (supplier != null)
@@ -93,28 +93,29 @@ namespace E_proc.Controllers
 
                 Supplier status = await _reposSuuplier.CreateAsync(supplier);
 
-                if (status == null) return Conflict("This email is already exists");
+                if (status == null) return new Success(false, "message.This email is already exists");
 
 
 
-                return Ok(supplier);
+                    return new Success(true, "message.success",  supplier); ;
             }
 
 
-            return Problem("User is empty");
+            return new Success(false, "message.User is empty");
+
 
         }
 
         //// DELETE: api/Suppliers/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var res = await _reposSuuplier.Delete(id);
 
             if (res == 200)
-                return Ok("Supplier deleted successfully ");
-            return NotFound("Supplier not found");
-
+                return  new Success(true, "message.success"); ;
+           
+            return new Success(false, "messageSupplier not found");
 
 
         }

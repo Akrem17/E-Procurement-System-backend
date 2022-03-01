@@ -29,14 +29,14 @@ namespace E_proc.Controllers
             if (string.IsNullOrWhiteSpace(email) && confirmed == null)
             {
                 var users = await _repos.ReadAsync();
-                if (users == null) return NotFound();
-                return new Success(true, "message.sucess", users);
+                if (users == null) return new Success(false, "message.User not found");
+                return new Success(true, "message.success", users);
             }
             else
             {
                 var user = await _repos.FindBy(email, confirmed);
-                if (user.Count()==0) return new Success(false, "message.notFound", user);
-                return new Success(true, "message.sucess", user);
+                if (user.Count()==0) return new Success(false, "message.User notFound", user);
+                return new Success(true, "message.success", user);
 
 
             }
@@ -49,8 +49,8 @@ namespace E_proc.Controllers
          
 
             var user = await _repos.Read(id);
-            if (user == null) return NotFound("User not found");
-            return Ok(user);
+            if (user == null) return new Success(false, "message.User not found");
+            return  new Success(true, "message.success", user);
         }
 
   
@@ -67,12 +67,13 @@ namespace E_proc.Controllers
 
                 int status = await _repos.CreateAsync(user);
 
-                if (status == 409) return Conflict("This email is already exists");
+                if (status == 409) return new Success(false, "message.This email is already exists");
 
-                return Ok(user);
+                return new Success(true, "message.success", user);
             }
 
-            return Problem("User is empty");
+          
+            return new Success(false, "message.User is empty");
 
 
         }
@@ -85,8 +86,8 @@ namespace E_proc.Controllers
             var newUser = await _repos.UpdateAsync(id, user);
 
             if(newUser == null) 
-                return NotFound("User not found or email already exists");
-                  return Ok("User updated successfully "); ;
+                return  new Success(false, "message.This email is already exists");
+            return new Success(true, "message.success");
 
         }
 
@@ -97,8 +98,10 @@ namespace E_proc.Controllers
          var res=   await _repos.Delete(id);
 
             if (res == 200)
-           return Ok("User deleted successfully ");
-           return NotFound("User not found");
+                return    new Success(true, "message.success");
+           
+            return new Success(false, "message.User not found");
+
 
         }
     }
