@@ -7,5 +7,6 @@ namespace E_proc.Services
 
         public string GenerateTokenString(User user);
         public string? ValidateJwtToken(string token);
+        public bool ValidateToken(string token);
     }
 }

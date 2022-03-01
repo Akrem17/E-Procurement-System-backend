@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 
 namespace E_proc.Services
@@ -78,6 +79,49 @@ namespace E_proc.Services
 		}
 
 
+		public  bool ValidateToken(string authToken)
+		{
 
-	}
+			var mySecret = "?v=f2IdQqpjR0c&ab_channel=CodewithJulian";
+			var mySecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(mySecret));
+
+			var myIssuer = "https://localhost:7260/";
+			var myAudience = "https://localhost:7260/";
+
+			var tokenHandler = new JwtSecurityTokenHandler();
+			var res = true;
+			try
+            {
+
+
+            
+			SecurityToken validatedToken;
+			IPrincipal principal = tokenHandler.ValidateToken(authToken,  new TokenValidationParameters
+			{
+				ValidateIssuerSigningKey = true,
+				ValidateIssuer = true,
+				ValidateAudience = true,
+				ValidIssuer = myIssuer,
+				ValidAudience = myAudience,
+				IssuerSigningKey = mySecurityKey
+			}, out validatedToken);
+
+				
+			
+
+            }
+            catch 
+            {
+				 res = false;
+				
+
+			}
+
+			return res;
+		}
+
+	
+		
+	
+}
 }

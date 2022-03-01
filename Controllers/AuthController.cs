@@ -29,21 +29,16 @@ namespace E_proc.Controllers
          .AddJsonFile("appsettings.json")
          .Build();
 
-        public AuthController(IUserService repos, IUserRepository Userrepos, ITokenService tokenService, IEmailSender emailSender,ISupplierRepository reposSupplier, IInstituteRepository reposInstit)
+        public AuthController(IUserService repos, IUserRepository Userrepos, ITokenService tokenService, IEmailSender emailSender, ISupplierRepository reposSupplier, IInstituteRepository reposInstit)
         {
             _repos = repos;
-           _Userrepos = Userrepos;
+            _Userrepos = Userrepos;
             _tokenService = tokenService;
             _emailSender = emailSender;
             _reposSupplier = reposSupplier;
             _reposInstit = reposInstit;
-       
-            
 
         }
-
-
-
 
         // singup a citizen route
         [HttpPost("/signup/citizen")]
@@ -67,7 +62,7 @@ namespace E_proc.Controllers
                 var message = new Mail(new string[] { status.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + status.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
 
-               
+
                 return new Success(true, "message.sucess", new { tokenString, status });
             }
 
@@ -86,7 +81,7 @@ namespace E_proc.Controllers
             {
                 Supplier supplier = await _reposSupplier.CreateAsync(user);
 
-                if (supplier == null) return new Success(false, "message.email already exsits", new {});
+                if (supplier == null) return new Success(false, "message.email already exsits", new { });
 
 
                 var tokenString = _tokenService.GenerateTokenString(supplier);
@@ -96,9 +91,9 @@ namespace E_proc.Controllers
                 var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + supplier.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
 
-            
+
                 return new Success(true, "message.sucess", new { tokenString, supplier });
-               
+
             }
 
 
@@ -119,7 +114,7 @@ namespace E_proc.Controllers
             {
                 Institute supplier = await _reposInstit.CreateAsync(user);
 
-                if (supplier == null) return new Success(false, "message.email already exsits", new {});
+                if (supplier == null) return new Success(false, "message.email already exsits", new { });
 
 
                 var tokenString = _tokenService.GenerateTokenString(supplier);
@@ -149,11 +144,11 @@ namespace E_proc.Controllers
 
         public async Task<IActionResult> Login([FromBody] UserLogin? user)
         {
-           
+
             if (user != null)
             {
 
-               var userFound= await _repos.GetByEmailAndPassword(user);
+                var userFound = await _repos.GetByEmailAndPassword(user);
 
 
                 if (userFound != null)
@@ -174,15 +169,15 @@ namespace E_proc.Controllers
                     else
                     {
                         //verify if token expired
-                      
+
                         var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + loggedUser.Id + "/" + tokenString);
                         _emailSender.SendEmail(message);
-                     
+
                         return new Forbidden(false, "message.account not verified, check your email");
 
                     }
                 }
-                     return new Success(false, "message.notFound");
+                return new Success(false, "message.notFound");
 
 
             }
@@ -191,29 +186,29 @@ namespace E_proc.Controllers
 
         }
         // verify Email
-        [HttpGet("Verify/{id}/{token}")]
+        [HttpGet("verify-account/{id}/{token}")]
 
-        public async Task<IActionResult> VerifyConfirmation(int id,string token)
+        public async Task<IActionResult> VerifyConfirmation(int id, string token)
         {
 
             var email = _tokenService.ValidateJwtToken(token);
-            if (email != null) { 
-                
+            if (email != null) {
+
                 var user = await _Userrepos.Read(id);
                 if (user != null)
 
-                {   
-                    if(user.Email== email) { 
+                {
+                    if (user.Email == email) {
 
-                    user.EmailConfirmed = true;
-                    var updatedUser = await _Userrepos.UpdateAsync(id, user);
+                        user.EmailConfirmed = true;
+                        var updatedUser = await _Userrepos.UpdateAsync(id, user);
 
 
                         return new Success(true, "message.Email confirmed ", new { });
 
                     }
-                   
-                    return  new Forbidden(false, "message.Token didn't match with user");
+
+                    return new Forbidden(false, "message.Token didn't match with user");
                 }
                 return new Success(false, "message.user not found ", new { });
 
@@ -221,6 +216,49 @@ namespace E_proc.Controllers
 
 
             return new Success(false, "message.Token not valid ", new { });
+
+        }
+
+
+
+        [HttpPost("reset-password-token")]
+
+        public async Task<IActionResult> ResetPasswordToken([FromBody] ResetPasswordToken? model)
+        {
+            var users = await _Userrepos.FindBy(model.Email, null);
+            if (users.Count() == 0) return new Success(false, "message.user Not Found");
+            var user = users?[0];
+            var token = _tokenService.GenerateTokenString(user);
+
+            var link = $"reset-password/{model.Email}/{token}";
+
+            var message = new Mail(new string[] { model.Email }, $"Reset Password E-PROC", $"Welcome to E-proc. /n Your reset password Link is \n https://localhost:7260/{ link }");
+            _emailSender.SendEmail(message);
+
+            return new Success(true, "message.success",link);
+        }
+
+            [HttpPost("reset-password/{email}/{token}")]
+
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel? model,string email,string token)
+        {
+
+            var users = await _Userrepos.FindBy(email, null);
+            if (users.Count() == 0) return new Success(false, "message.user Not Found");
+
+            var user = users?[0];
+           
+            
+           if( model.NewPassword != model.ConfirmPassword) return new Success(false, "message.Password not confirmed");
+
+            var verifiedToken =  _tokenService.ValidateToken(token);
+            if(!verifiedToken) return new Success(false, "message.Token not verified");
+
+            var update = await _Userrepos.ResetPasswordAsync(user, token, model.NewPassword);
+            if (update != null)
+                return new Success(true, "message.Password updated successfully", update);
+            else return new Success(false, "message.User not added");
+
 
         }
 

@@ -10,6 +10,7 @@ namespace E_proc.Services.Repositories
         Task<User> UpdateAsync(int id, User user);
         Task<int> Delete(int id);
         Task<List<User>> FindBy(string email, bool? confirmed);
+        Task<User> ResetPasswordAsync(User user, string token, string newPassword);
 
 
     }
