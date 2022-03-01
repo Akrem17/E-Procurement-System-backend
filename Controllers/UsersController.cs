@@ -86,7 +86,7 @@ namespace E_proc.Controllers
             var newUser = await _repos.UpdateAsync(id, user);
 
             if(newUser == null) 
-                return  new Success(false, "message.This email is already exists");
+            return  new Success(false, "message.This email is already exists");
             return new Success(true, "message.success");
 
         }
@@ -98,7 +98,7 @@ namespace E_proc.Controllers
          var res=   await _repos.Delete(id);
 
             if (res == 200)
-                return    new Success(true, "message.success");
+            return  new Success(true, "message.success");
            
             return new Success(false, "message.User not found");
 

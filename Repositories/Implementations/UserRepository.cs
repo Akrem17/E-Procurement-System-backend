@@ -1,4 +1,5 @@
 ﻿using E_proc.Models;
+using E_proc.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_proc.Services.Repositories
@@ -6,11 +7,13 @@ namespace E_proc.Services.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AuthContext _dbContext;
+        private readonly IEncryptionService _encryptionService;   
 
 
-        public UserRepository(AuthContext dbContext)
+        public UserRepository(AuthContext dbContext, IEncryptionService encryptionService)
         {
             _dbContext = dbContext;
+            _encryptionService = encryptionService;
         }
         public async Task<int> CreateAsync(User user)
         {
@@ -121,6 +124,15 @@ namespace E_proc.Services.Repositories
 
 
 
+        }
+
+        public async Task<User> ResetPasswordAsync(User user, string token, string newPassword)
+        {
+
+            user.Password = _encryptionService.Encrypt( newPassword);
+            var updated = _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+            return user;
         }
     }
 }
