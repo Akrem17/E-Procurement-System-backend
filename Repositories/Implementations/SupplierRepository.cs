@@ -116,17 +116,12 @@ namespace E_proc.Repositories.Implementations
             var suppliers = new List<Supplier>();
 
 
-            if (email != null && confirmed == null && phone == null)
-            {
-                suppliers = await _dbContext.Supplier.Where(u => u.Email == email).ToListAsync();
+            suppliers = await _dbContext.Supplier
+                 .Where(s => !string.IsNullOrEmpty(email) ? s.Email == email : true)
+                 .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
+                 .Where(s => confirmed.HasValue ? s.EmailConfirmed == confirmed : true)
 
-            }
-            else if (email == null && confirmed != null && phone == null)
-            {
-                suppliers = await _dbContext.Supplier.Where(u => u.EmailConfirmed == confirmed).ToListAsync();
-
-            }
-
+                 .ToListAsync();
 
 
 

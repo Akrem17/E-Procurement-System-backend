@@ -60,19 +60,12 @@ namespace E_proc.Repositories.Implementations
             var institutes = new List<Institute>();
 
 
-            if (email != null && confirmed == null && phone == null)
-            {
-                institutes = await _dbContext.Institute.Where(u => u.Email == email).ToListAsync();
+            institutes = await _dbContext.Institute
+                     .Where(s => !string.IsNullOrEmpty(email) ? s.Email == email : true)
+                     .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
+                     .Where(s => confirmed.HasValue ? s.EmailConfirmed == confirmed : true)
 
-            }
-            else if (email == null && confirmed != null  && phone == null)
-            {
-                institutes = await _dbContext.Institute.Where(u => u.EmailConfirmed == confirmed).ToListAsync();
-
-            }
-         
-         
-       
+                     .ToListAsync();
 
 
 
