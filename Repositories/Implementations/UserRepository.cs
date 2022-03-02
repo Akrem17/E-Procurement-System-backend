@@ -104,25 +104,15 @@ namespace E_proc.Services.Repositories
 
             var users = new List<User>();
 
-            if (email == null && confirmed == null)
-            {
-                 users = await _dbContext.Users.Where(u => u.Email == email).ToListAsync();
-              
-            }
-            else if (email != null && confirmed == null)
-            {
-                 users = await _dbContext.Users.Where(u => u.Email == email).ToListAsync();
-              
-            }
-            else if (email == null && confirmed != null)
-            {
-                 users = await _dbContext.Users.Where(u => u.EmailConfirmed == confirmed).ToListAsync();
-               
-            }
+
+            users = await _dbContext.Users
+                 .Where(s => !string.IsNullOrEmpty(email) ? s.Email == email : true)
+                 .Where(s => confirmed.HasValue ? s.EmailConfirmed == confirmed : true)
+
+                 .ToListAsync();
+
 
             return users;
-
-
 
         }
 

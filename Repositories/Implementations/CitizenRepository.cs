@@ -104,35 +104,22 @@ namespace E_proc.Repositories
         {
             var users = new List<Citizen>();
 
-
-            if (email != null && confirmed == null && cin==null && phone==null)
-            {
-                users = await _dbContext.Citizen.Where(u => u.Email == email).ToListAsync();
-
-            }
-            else if (email == null && confirmed != null && cin ==null && phone ==null)
-            {
-                users = await _dbContext.Citizen.Where(u => u.EmailConfirmed == confirmed).ToListAsync();
-
-            }
-            else if (email == null && confirmed == null && cin != null && phone==null)
-            {
-                users = await _dbContext.Citizen.Where(u => u.CIN == cin).ToListAsync();
-
-            }
-            else if (email == null && confirmed != null && cin != null && phone==null)
-            {
-                users = await _dbContext.Citizen.Where(u => u.CIN == cin && u.EmailConfirmed== confirmed).ToListAsync();
-
-            }
-            else if (email == null && confirmed == null && cin == null && phone != null)
-            {
-                users = await _dbContext.Citizen.Where(u => u.CIN == cin && u.Phone == phone).ToListAsync();
-
-            }
+            //var query = from s in _dbContext.Citizen
+            //            where EF.Functions.Like(s.Email, email)
+            //            where EF.Functions.Like(s.Title, "%angel%")
+            //            where EF.Functions.Like(s.Title, "%angel%")
+            //            select s;
 
 
+            users = await _dbContext.Citizen
+                 .Where(s =>  !string.IsNullOrEmpty(email) ? s.Email == email : true)
+                    
 
+                 .Where(s => !string.IsNullOrEmpty(cin)  ? s.CIN == cin : true)
+                 .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
+                 .Where(s => confirmed.HasValue ? s.EmailConfirmed == confirmed : true)
+
+                 .ToListAsync();
 
             return users;
 
