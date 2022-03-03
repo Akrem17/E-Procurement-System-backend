@@ -10,7 +10,7 @@ namespace E_proc.Models
         public string postalCode { get; set; }
         public string city { get; set; }
         public string street1 { get; set; }
-        public string  street2 { get; set; }
+        public string street2 { get; set; }
 
 
     }

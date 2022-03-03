@@ -29,31 +29,27 @@ namespace E_proc.Controllers
             _encryptionService = encryptionService;
         }
 
+
+
         // get all citizens
         [HttpGet]
-        public async Task<Success> GetCitizen(string? email=null, bool? confirmed=null, string? cin = null,string? phone=null)
+        public async Task<Success> GetCitizen(string? email = null, bool? confirmed = null, string? cin = null, string? phone = null)
 
         {
-                
-            if(email == null && confirmed==null)
+            if (email == null && confirmed == null)
             {
                 var citizens = await _reposCitizen.ReadAsync();
 
                 if (citizens == null) return new Success(false, "message.UserNotFound", new { });
 
-                
-                return new Success(true, "message.sucess", citizens);
 
-
-            }
-            else  {
-                var citizens = await _reposCitizen.FindBy(email, confirmed,cin,phone);
                 return new Success(true, "message.sucess", citizens);
             }
-
-                
-       
-
+            else
+            {
+                var citizens = await _reposCitizen.FindBy(email, confirmed, cin, phone);
+                return new Success(true, "message.sucess", citizens);
+            }
 
         }
 
@@ -65,8 +61,9 @@ namespace E_proc.Controllers
 
             var citizen = await _reposCitizen.ReadById(id);
             if (citizen == null) return new Success(false, "message.user Not Found");
-            return  new Success(true, "message.success", new { citizen });
+            return new Success(true, "message.success", new { citizen });
         }
+
 
         //// update citizen
         [HttpPut("{id}")]
@@ -76,11 +73,14 @@ namespace E_proc.Controllers
             var newUser = await _reposCitizen.UpdateAsync(id, user);
 
             if (newUser == null)
-             
-            return new Success(false, "message.User not found or email already exists");
-       
+
+                return new Success(false, "message.User not found or email already exists");
+
             return new Success(true, "message.User updated successfully");
         }
+
+
+
 
         // create citizen
         [HttpPost]
@@ -93,18 +93,19 @@ namespace E_proc.Controllers
 
 
                 Citizen status = await _reposCitizen.CreateAsync(citizen);
-      
+
                 if (status == null) return new Success(false, "message.This email is already exists");
 
 
 
-                return  new Success(true, "message.success", new { citizen });
+                return new Success(true, "message.success", new { citizen });
             }
 
 
             return new Success(false, "message.User is empty");
 
         }
+
 
         // delete citizen
         [HttpDelete("{id}")]
@@ -115,11 +116,11 @@ namespace E_proc.Controllers
             if (res == 200)
                 return new Success(true, "message.success");
 
-        
+
             return new Success(false, "message.Citizen not found");
 
         }
-        
+
     }
 
 }

@@ -15,6 +15,8 @@ namespace E_proc.Models
            .Build();
             optionsBuilder.UseSqlServer(config.GetConnectionString("EprocDB"));
         }
+      
+
         public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }   
 
         public DbSet<User> Users { get; set; }
