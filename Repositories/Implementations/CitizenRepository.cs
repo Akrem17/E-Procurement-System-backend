@@ -9,12 +9,15 @@ namespace E_proc.Repositories
 
         private readonly AuthContext _dbContext;
         private readonly IEncryptionService _encryptionService;
+        private readonly IDateService _dateService;
 
 
-        public CitizenRepository(AuthContext dbContext, IEncryptionService encryptionService)
+
+        public CitizenRepository(AuthContext dbContext, IEncryptionService encryptionService, IDateService dateService)
         {
             _dbContext = dbContext;
             _encryptionService = encryptionService;
+            _dateService = dateService;
         }
 
 
@@ -117,22 +120,33 @@ namespace E_proc.Repositories
 
         }
 
-
+       
         //filter citizens by params
-        public async Task<List<Citizen>> FindBy(string? email, bool? confirmed, string? cin, string? phone)
+        public async Task<List<Citizen>> FindBy(string? email, bool? confirmed, string? cin, string? phone,DateTime? date)
         {
             var users = new List<Citizen>();
+            
+        
+            long dateFromStamp = 0;
+            long dateToStamp=0;
+            //convert date to timestamp format 
+            if (date.HasValue)
+            {
+                 dateFromStamp = _dateService.ConvertDatetimeToUnixTimeStamp(new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 0, 0, 0));
+                 dateToStamp = _dateService.ConvertDatetimeToUnixTimeStamp(new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 23, 59, 59));
+            }
+         
 
+       
+            
             users = await _dbContext.Citizen
                  .Where(s => !string.IsNullOrEmpty(email) ? s.Email == email : true)
-
-
                  .Where(s => !string.IsNullOrEmpty(cin) ? s.CIN == cin : true)
                  .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
                  .Where(s => confirmed.HasValue ? s.EmailConfirmed == confirmed : true)
-
+                 .Where(s => date.HasValue  ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
                  .ToListAsync();
-
+          
             return users;
 
         }

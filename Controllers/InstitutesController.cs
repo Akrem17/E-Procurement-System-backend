@@ -29,11 +29,11 @@ namespace E_proc.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetInstitute(string? email = null, bool? confirmed = null, string? phone = null)
+        public async Task<IActionResult> GetInstitute(string? email = null, bool? confirmed = null, string? phone = null, DateTime? date = null)
         {
 
 
-            if (email == null && confirmed == null)
+            if (email == null && confirmed == null && phone==null && date==null)
             {
                 var institutes = await _reposInstit.ReadAsync();
 
@@ -46,7 +46,7 @@ namespace E_proc.Controllers
             }
             else
             {
-                var institutes = await _reposInstit.FindBy(email, confirmed, phone);
+                var institutes = await _reposInstit.FindBy(email, confirmed, phone,date);
                 if (institutes.Count() != 0)
                 {
                     return new Success(true, "message.sucess", institutes);

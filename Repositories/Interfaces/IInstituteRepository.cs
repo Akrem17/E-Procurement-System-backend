@@ -11,7 +11,7 @@ namespace E_proc.Repositories.Interfaces
         Task<Institute> ReadById(int id);
 
         Task<Institute> UpdateAsync(int id, Institute institute);
-        Task<List<Institute>> FindBy(string? email, bool? confirmed, string? phone);
+        Task<List<Institute>> FindBy(string? email, bool? confirmed, string? phone,DateTime? date);
 
         Task<int> Delete(int id);
     }
