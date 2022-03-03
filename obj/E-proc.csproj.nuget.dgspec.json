@@ -80,6 +80,10 @@
               "target": "Package",
               "version": "[6.0.2, )"
             },
+            "Microsoft.Extensions.Caching.Memory": {
+              "target": "Package",
+              "version": "[7.0.0-preview.1.22076.8, )"
+            },
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",
               "version": "[6.15.1, )"
