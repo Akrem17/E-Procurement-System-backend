@@ -13,7 +13,7 @@ namespace E_proc.Models.StatusModel
 
         public Success(bool status, string message, object? data= null)
         {
-            data = data ?? new {};
+            data = data ?? null;
             this.status = status;
             this.message = message;
             this.data = data;

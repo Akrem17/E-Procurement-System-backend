@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace E_proc.Controllers
 {
 
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Administrator")]
     [Route("api/[controller]")]
     [ApiController]
     public class InstitutesController : ControllerBase

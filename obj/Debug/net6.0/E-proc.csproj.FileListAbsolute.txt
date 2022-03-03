@@ -276,3 +276,9 @@ C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\NETCore.MailKit.dll
 C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\BouncyCastle.Crypto.dll
 C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Castle.Core.dll
 C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Proxies.dll
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Microsoft.Extensions.Options.dll
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\System.Runtime.CompilerServices.Unsafe.dll

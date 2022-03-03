@@ -78,6 +78,29 @@ namespace E_proc.Services
 			return tokenString;
 		}
 
+		public string GenerateTokenStringPasswordReset(VerifyCodeModel model)
+		{
+			var claims = new[]
+								{
+									new Claim(ClaimTypes.Email,model.Email),
+									new Claim(type: "code", value: model.Code),
+									
+					};
+			var token = new JwtSecurityToken(
+								 issuer: config["Jwt:Issuer"],
+								 audience: config["Jwt:Audience"],
+								 claims: claims,
+								 expires: DateTime.UtcNow.AddDays(60),
+								notBefore: DateTime.UtcNow,
+								 signingCredentials: new SigningCredentials(
+									 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"])), SecurityAlgorithms.HmacSha256
+									)
+								 );
+			var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+			return tokenString;
+		}
+
 
 		public  bool ValidateToken(string authToken)
 		{

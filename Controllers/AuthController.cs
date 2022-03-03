@@ -1,10 +1,12 @@
 ﻿using E_proc.Models;
 using E_proc.Models.StatusModel;
+using E_proc.Repositories;
 using E_proc.Repositories.Interfaces;
 using E_proc.Services;
 using E_proc.Services.Interfaces;
 using E_proc.Services.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,13 +25,14 @@ namespace E_proc.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISupplierRepository _reposSupplier;
         private readonly IInstituteRepository _reposInstit;
-
+        private readonly IMemoryCache _memoryCache;
+        private readonly ICitizenRepository _reposCitizen;
 
         IConfiguration config = new ConfigurationBuilder()
          .AddJsonFile("appsettings.json")
          .Build();
 
-        public AuthController(IUserService repos, IUserRepository Userrepos, ITokenService tokenService, IEmailSender emailSender, ISupplierRepository reposSupplier, IInstituteRepository reposInstit)
+        public AuthController(IUserService repos, IUserRepository Userrepos, ITokenService tokenService, IEmailSender emailSender, ISupplierRepository reposSupplier, IInstituteRepository reposInstit, IMemoryCache memoryCache, ICitizenRepository reposCitizen)
         {
             _repos = repos;
             _Userrepos = Userrepos;
@@ -37,6 +40,8 @@ namespace E_proc.Controllers
             _emailSender = emailSender;
             _reposSupplier = reposSupplier;
             _reposInstit = reposInstit;
+            _memoryCache = memoryCache;
+            _reposCitizen= reposCitizen;
 
         }
 
@@ -120,8 +125,8 @@ namespace E_proc.Controllers
                 var tokenString = _tokenService.GenerateTokenString(supplier);
 
 
-
-                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + supplier.Id + "/" + tokenString);
+                                                                
+                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify-account/" + supplier.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
 
 
@@ -168,21 +173,20 @@ namespace E_proc.Controllers
                     }
                     else
                     {
-                        //verify if token expired
 
-                        var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + loggedUser.Id + "/" + tokenString);
+                        var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify-account/" + loggedUser.Id + "/" + tokenString);
                         _emailSender.SendEmail(message);
 
                         return new Forbidden(false, "message.account not verified, check your email");
 
                     }
                 }
-                return new Success(false, "message.notFound");
+                return new Success(false, "message.Password is incorrect");
 
 
             }
 
-            return Problem("User is empty");
+            return new Success(false, "message.User is empty");
 
         }
         // verify Email
@@ -223,44 +227,115 @@ namespace E_proc.Controllers
 
         [HttpPost("reset-password-token")]
 
-        public async Task<IActionResult> ResetPasswordToken([FromBody] ResetPasswordToken? model)
+        public async Task<IActionResult> ResetPasswordCode([FromBody] ResetPasswordToken? model)
         {
             var users = await _Userrepos.FindBy(model.Email, null);
             if (users.Count() == 0) return new Success(false, "message.user Not Found");
             var user = users?[0];
-            var token = _tokenService.GenerateTokenString(user);
 
-            var link = $"reset-password/{model.Email}/{token}";
+            //generate code
+            var verificationCode = "1234";
+            //store the code
+            
+            _memoryCache.Set(model.Email, verificationCode,TimeSpan.FromSeconds(20));
+            
+            var code = _memoryCache.Get(model.Email);
 
-            var message = new Mail(new string[] { model.Email }, $"Reset Password E-PROC", $"Welcome to E-proc. /n Your reset password Link is \n https://localhost:7260/{ link }");
-            _emailSender.SendEmail(message);
 
-            return new Success(true, "message.success",link);
+
+            
+            return new Success(true, "message.success",new {code=code });
         }
 
-            [HttpPost("reset-password/{email}/{token}")]
+        [HttpPost("verify-code")]
 
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel? model,string email,string token)
+        public async Task<IActionResult> VerifyTokenCode([FromBody] VerifyCodeModel? model)
+        {
+            string token="";
+            var code = _memoryCache.Get(model.Email)?.ToString();
+            Console.WriteLine(code);
+            if (code != null)
+            {
+                if (string.Equals(code, model.Code) )
+                {
+                    //generate token
+
+                     token = _tokenService.GenerateTokenStringPasswordReset(model);
+                    //delete code from cache
+
+                    _memoryCache.Set("passwordToken", token, TimeSpan.FromSeconds(50));
+                    _memoryCache.Remove(model.Email);
+                    return new Success(true, "message.code verified", new {token});
+
+
+                }
+                return new Success(false, "message.Code is not verified");
+
+            }
+            return new Success(false, "message.Code isExpired");
+
+        }
+
+
+
+
+
+
+        [HttpPost("reset-password")]
+
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel? model)
         {
 
+            var verifiedToken = string.Equals(_memoryCache.Get("passwordToken")?.ToString(), model.Token);
+
+            if (!verifiedToken) return new Success(false, "message.Token not verified");
+
+            var email = _tokenService.ValidateJwtToken(model.Token); 
+            if (email != model.Email)
+            return new Success(false, "message.Email not the same");
+
+            var users = await _Userrepos.FindBy(model.Email, null);
+            if (users.Count() == 0) return new Success(false, "message.user Not Found");
+
+            var user = users?[0];
+            
+           if( model.NewPassword != model.ConfirmPassword) return new Success(false, "message.Password not confirmed");
+
+
+            var update = await _Userrepos.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            if (update != null)
+            {
+                _memoryCache.Remove("passwordToken");
+                return new Success(true, "message.Password updated successfully", update);
+            }
+             return new Success(false, "message.User not added");
+
+
+        }
+
+
+        [HttpPost("connected-user")]
+
+        public async Task<IActionResult> GetConnectedUser([FromBody] string? token)
+        {
+
+            var email =  _tokenService.ValidateJwtToken(token);
+            
+            if (email == null) return new Success(false, "message.token not verified");
             var users = await _Userrepos.FindBy(email, null);
             if (users.Count() == 0) return new Success(false, "message.user Not Found");
 
             var user = users?[0];
-           
-            
-           if( model.NewPassword != model.ConfirmPassword) return new Success(false, "message.Password not confirmed");
+         
 
-            var verifiedToken =  _tokenService.ValidateToken(token);
-            if(!verifiedToken) return new Success(false, "message.Token not verified");
+            return new Success(true, "message.success",user);
 
-            var update = await _Userrepos.ResetPasswordAsync(user, token, model.NewPassword);
-            if (update != null)
-                return new Success(true, "message.Password updated successfully", update);
-            else return new Success(false, "message.User not added");
+
+
+
 
 
         }
 
-        }
+    }
 }

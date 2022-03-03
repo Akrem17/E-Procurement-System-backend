@@ -10,9 +10,12 @@ using E_proc.Models;
 using E_proc.Repositories;
 using E_proc.Models.StatusModel;
 using E_proc.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace E_proc.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "citizen")]
     [Route("api/[controller]")]
     [ApiController]
     public class CitizensController : ControllerBase
