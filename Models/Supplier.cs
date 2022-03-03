@@ -2,7 +2,7 @@
 
 namespace E_proc.Models
 {
-    public class Supplier:User
+    public class Supplier : User
     {
         [Required(ErrorMessage = "Please enter SupplierName")]
 

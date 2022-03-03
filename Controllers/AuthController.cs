@@ -41,7 +41,7 @@ namespace E_proc.Controllers
             _reposSupplier = reposSupplier;
             _reposInstit = reposInstit;
             _memoryCache = memoryCache;
-            _reposCitizen= reposCitizen;
+            _reposCitizen = reposCitizen;
 
         }
 
@@ -51,7 +51,6 @@ namespace E_proc.Controllers
         public async Task<IActionResult> Signup([FromBody] Citizen? user)
         {
 
-
             if (user != null)
             {
 
@@ -59,12 +58,12 @@ namespace E_proc.Controllers
 
                 if (status == null) return new Success(false, "message.email already exsits", new { });
 
-
+                //generate token string
                 var tokenString = _tokenService.GenerateTokenString(status);
 
 
-
-                var message = new Mail(new string[] { status.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + status.Id + "/" + tokenString);
+                //send confirmation email
+                var message = new Mail(new string[] { status.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n https://localhost:7260/verify/" + status.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
 
 
@@ -73,8 +72,11 @@ namespace E_proc.Controllers
 
             return new Success(false, "message.user is empty", new { });
 
-
         }
+
+
+
+
         // singup a supplier route
         [HttpPost("/signup/supplier")]
 
@@ -88,24 +90,22 @@ namespace E_proc.Controllers
 
                 if (supplier == null) return new Success(false, "message.email already exsits", new { });
 
-
+                //generate token string
                 var tokenString = _tokenService.GenerateTokenString(supplier);
 
 
-
-                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify/" + supplier.Id + "/" + tokenString);
+                //send confirmation email
+                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n https://localhost:7260/verify/" + supplier.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
-
 
                 return new Success(true, "message.sucess", new { tokenString, supplier });
 
             }
 
-
             return new Success(false, "message.user is empty", new { });
-
-
         }
+
+
 
 
         // singup a institute route
@@ -121,27 +121,24 @@ namespace E_proc.Controllers
 
                 if (supplier == null) return new Success(false, "message.email already exsits", new { });
 
-
+                //generate token string
                 var tokenString = _tokenService.GenerateTokenString(supplier);
 
-
-                                                                
-                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify-account/" + supplier.Id + "/" + tokenString);
+                //send confirmation email
+                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n https://localhost:7260/verify-account/" + supplier.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
-
-
-
-
 
                 return new Success(true, "message.sucess", new { tokenString, supplier });
 
             }
 
-
             return new Success(false, "message.user is empty", new { });
 
 
         }
+
+
+
 
 
         //  login a user
@@ -163,9 +160,11 @@ namespace E_proc.Controllers
 
                     if (loggedUser == null) return new Success(false, "message.User not found", new { });
 
+                    //generate token string
                     var tokenString = _tokenService.GenerateTokenString(loggedUser);
 
-                    if (loggedUser.EmailConfirmed == true) {
+                    if (loggedUser.EmailConfirmed == true)
+                    {
                         _tokenService.GenerateTokenString(loggedUser);
 
                         return new Success(true, "message.success", new { tokenString, loggedUser });
@@ -173,8 +172,8 @@ namespace E_proc.Controllers
                     }
                     else
                     {
-
-                        var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. /n Your Confirmation Link is \n https://localhost:7260/verify-account/" + loggedUser.Id + "/" + tokenString);
+                        //send confirmation email
+                        var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n https://localhost:7260/verify-account/" + loggedUser.Id + "/" + tokenString);
                         _emailSender.SendEmail(message);
 
                         return new Forbidden(false, "message.account not verified, check your email");
@@ -182,13 +181,14 @@ namespace E_proc.Controllers
                     }
                 }
                 return new Success(false, "message.Password is incorrect");
-
-
             }
-
             return new Success(false, "message.User is empty");
-
         }
+
+
+
+
+
         // verify Email
         [HttpGet("verify-account/{id}/{token}")]
 
@@ -196,13 +196,15 @@ namespace E_proc.Controllers
         {
 
             var email = _tokenService.ValidateJwtToken(token);
-            if (email != null) {
+            if (email != null)
+            {
 
                 var user = await _Userrepos.Read(id);
                 if (user != null)
 
                 {
-                    if (user.Email == email) {
+                    if (user.Email == email)
+                    {
 
                         user.EmailConfirmed = true;
                         var updatedUser = await _Userrepos.UpdateAsync(id, user);
@@ -215,16 +217,17 @@ namespace E_proc.Controllers
                     return new Forbidden(false, "message.Token didn't match with user");
                 }
                 return new Success(false, "message.user not found ", new { });
-
             }
-
-
             return new Success(false, "message.Token not valid ", new { });
 
         }
 
 
 
+
+
+
+        //send verification code to email
         [HttpPost("reset-password-token")]
 
         public async Task<IActionResult> ResetPasswordCode([FromBody] ResetPasswordToken? model)
@@ -233,46 +236,56 @@ namespace E_proc.Controllers
             if (users.Count() == 0) return new Success(false, "message.user Not Found");
             var user = users?[0];
 
-            //generate code
-            var verificationCode = "1234";
+            //generate random code
+            int NoDigits = 4;
+            Random rnd = new Random();
+            var verificationCode = rnd.Next((int)Math.Pow(10, (NoDigits - 1)), (int)Math.Pow(10, NoDigits) - 1).ToString();
+
+            //send code to email
+
+            var message = new Mail(new string[] { model.Email }, $"Reset Password E-PROC", $"Welcome to E-proc. \n Your  code is {verificationCode} ");
+            _emailSender.SendEmail(message);
             //store the code
-            
-            _memoryCache.Set(model.Email, verificationCode,TimeSpan.FromSeconds(20));
-            
+
+            _memoryCache.Set(model.Email, verificationCode, TimeSpan.FromSeconds(30));
+
             var code = _memoryCache.Get(model.Email);
-
-
-
-            
-            return new Success(true, "message.success",new {code=code });
+            return new Success(true, "message.success", new { code = code });
         }
 
+
+
+
+
+
+        //verify the code and generate token
         [HttpPost("verify-code")]
 
         public async Task<IActionResult> VerifyTokenCode([FromBody] VerifyCodeModel? model)
         {
-            string token="";
+            string token = "";
+
             var code = _memoryCache.Get(model.Email)?.ToString();
             Console.WriteLine(code);
             if (code != null)
             {
-                if (string.Equals(code, model.Code) )
+                if (string.Equals(code, model.Code))
                 {
                     //generate token
 
-                     token = _tokenService.GenerateTokenStringPasswordReset(model);
+                    token = _tokenService.GenerateTokenStringPasswordReset(model);
                     //delete code from cache
 
                     _memoryCache.Set("passwordToken", token, TimeSpan.FromSeconds(50));
                     _memoryCache.Remove(model.Email);
-                    return new Success(true, "message.code verified", new {token});
+                    return new Success(true, "message.code verified", new { token });
 
 
                 }
                 return new Success(false, "message.Code is not verified");
 
             }
-            return new Success(false, "message.Code isExpired");
+            return new Success(false, "message.Code is  Expired");
 
         }
 
@@ -280,6 +293,7 @@ namespace E_proc.Controllers
 
 
 
+        //verify token and reset password
 
         [HttpPost("reset-password")]
 
@@ -290,50 +304,49 @@ namespace E_proc.Controllers
 
             if (!verifiedToken) return new Success(false, "message.Token not verified");
 
-            var email = _tokenService.ValidateJwtToken(model.Token); 
+            //verify token and get the user from token
+            var email = _tokenService.ValidateJwtToken(model.Token);
             if (email != model.Email)
-            return new Success(false, "message.Email not the same");
+                return new Success(false, "message.Email not the same");
 
             var users = await _Userrepos.FindBy(model.Email, null);
             if (users.Count() == 0) return new Success(false, "message.user Not Found");
 
             var user = users?[0];
-            
-           if( model.NewPassword != model.ConfirmPassword) return new Success(false, "message.Password not confirmed");
+
+            //update user
+            if (model.NewPassword != model.ConfirmPassword) return new Success(false, "message.Password not confirmed");
 
 
             var update = await _Userrepos.ResetPasswordAsync(user, model.Token, model.NewPassword);
             if (update != null)
             {
+                //clear cache
                 _memoryCache.Remove("passwordToken");
                 return new Success(true, "message.Password updated successfully", update);
             }
-             return new Success(false, "message.User not added");
+            return new Success(false, "message.User not added");
 
 
         }
 
 
+
+
+
+        //get the connected user
         [HttpPost("connected-user")]
 
         public async Task<IActionResult> GetConnectedUser([FromBody] string? token)
         {
+            //verify  token and get the email
+            var email = _tokenService.ValidateJwtToken(token);
 
-            var email =  _tokenService.ValidateJwtToken(token);
-            
             if (email == null) return new Success(false, "message.token not verified");
             var users = await _Userrepos.FindBy(email, null);
             if (users.Count() == 0) return new Success(false, "message.user Not Found");
-
             var user = users?[0];
-         
-
-            return new Success(true, "message.success",user);
-
-
-
-
-
+            return new Success(true, "message.success", user);
 
         }
 

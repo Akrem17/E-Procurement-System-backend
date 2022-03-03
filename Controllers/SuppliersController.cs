@@ -21,9 +21,12 @@ namespace E_proc.Controllers
 
         public SuppliersController(ISupplierRepository reposSuuplier)
         {
-            _reposSuuplier = reposSuuplier;       
+            _reposSuuplier = reposSuuplier;
 
         }
+
+
+
 
         // GET: api/Suppliers
         [HttpGet]
@@ -40,12 +43,11 @@ namespace E_proc.Controllers
 
                 return new Success(true, "message.success", suppliers);
 
-
             }
             else
             {
                 var suppliers = await _reposSuuplier.FindBy(email, confirmed, phone);
-                
+
                 if (suppliers.Count() != 0)
                 {
                     return new Success(true, "message.success", suppliers);
@@ -54,9 +56,9 @@ namespace E_proc.Controllers
                 return new Success(false, "message.not found");
             }
 
-
-
         }
+
+
 
         //// GET: api/Suppliers/5
         [HttpGet("{id}")]
@@ -65,8 +67,11 @@ namespace E_proc.Controllers
 
             var supplier = await _reposSuuplier.ReadById(id);
             if (supplier == null) return new Success(false, "message.Usernot found");
-            return new Success(true, "message.success",supplier);
+            return new Success(true, "message.success", supplier);
         }
+
+
+
 
         //// PUT: api/Suppliers/5
         [HttpPut("{id}")]
@@ -76,12 +81,14 @@ namespace E_proc.Controllers
             var newUser = await _reposSuuplier.UpdateAsync(id, supplier);
 
             if (newUser == null)
-            return new Success(false, "message.User not found or email already exists");
+                return new Success(false, "message.User not found or email already exists");
             return new Success(true, "message.success");
 
         }
 
-        
+
+
+        //add supplier
         [HttpPost]
 
         public async Task<IActionResult> PostSupplier([FromBody] Supplier? supplier)
@@ -97,7 +104,7 @@ namespace E_proc.Controllers
 
 
 
-                    return new Success(true, "message.success",  supplier); ;
+                return new Success(true, "message.success", supplier); ;
             }
 
 
@@ -106,6 +113,9 @@ namespace E_proc.Controllers
 
         }
 
+
+
+
         //// DELETE: api/Suppliers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -113,8 +123,8 @@ namespace E_proc.Controllers
             var res = await _reposSuuplier.Delete(id);
 
             if (res == 200)
-                return  new Success(true, "message.success"); ;
-           
+                return new Success(true, "message.success"); ;
+
             return new Success(false, "messageSupplier not found");
 
 

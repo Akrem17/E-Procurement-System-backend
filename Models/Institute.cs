@@ -13,7 +13,7 @@ namespace E_proc.Models
 
         public string representativeName { get; set; }
 
-        public string NotificationEmail {get;set;}
+        public string NotificationEmail { get; set; }
         public virtual Address? address { get; set; }
         public string Phone { get; set; }
         public string Fax { get; set; }

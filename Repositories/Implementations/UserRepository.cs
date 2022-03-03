@@ -7,7 +7,7 @@ namespace E_proc.Services.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly AuthContext _dbContext;
-        private readonly IEncryptionService _encryptionService;   
+        private readonly IEncryptionService _encryptionService;
 
 
         public UserRepository(AuthContext dbContext, IEncryptionService encryptionService)
@@ -15,6 +15,11 @@ namespace E_proc.Services.Repositories
             _dbContext = dbContext;
             _encryptionService = encryptionService;
         }
+
+
+
+
+        //add user
         public async Task<int> CreateAsync(User user)
         {
             var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
@@ -31,24 +36,27 @@ namespace E_proc.Services.Repositories
             {
                 return 409;
             }
-               
+
 
         }
-     
 
+        //delete user
         public async Task<int> Delete(int id)
         {
 
             var user = await Read(id);
-            if (user != null) {
+            if (user != null)
+            {
                 var deletedUser = _dbContext.Users.Remove(user);
                 await _dbContext.SaveChangesAsync();
                 return 200;
-            };          
-             return  404;
+            };
+            return 404;
 
         }
 
+
+        //
         public async Task<IEnumerable<User>> ReadAsync()
         {
 
@@ -58,11 +66,11 @@ namespace E_proc.Services.Repositories
 
         public async Task<User> Read(int id)
         {
-       
-            
 
-              return  await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id );
-            
+
+
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+
         }
 
 
@@ -70,22 +78,22 @@ namespace E_proc.Services.Repositories
         public async Task<User> UpdateAsync(int id, User user)
         {
             var oldUser = await Read(id);
-          
-                if (oldUser != null)
+
+            if (oldUser != null)
             {
-                var  foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
-                
+                var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+
                 if (foundedUser?.Id == id || foundedUser == null)
                 {
 
-       
-                oldUser.Email = user.Email; 
-                oldUser.FirstName = user.FirstName;
-                oldUser.LastName = user.LastName;   
-                oldUser.Password = user.Password;   
-                oldUser.Type=user.Type;
-               
-                await _dbContext.SaveChangesAsync();
+
+                    oldUser.Email = user.Email;
+                    oldUser.FirstName = user.FirstName;
+                    oldUser.LastName = user.LastName;
+                    oldUser.Password = user.Password;
+                    oldUser.Type = user.Type;
+
+                    await _dbContext.SaveChangesAsync();
                     return oldUser;
                 }
                 else
@@ -97,9 +105,9 @@ namespace E_proc.Services.Repositories
             return oldUser;
         }
 
-       
 
-        public async Task<List<User>> FindBy(string? email=null, Nullable<bool> confirmed =null)
+
+        public async Task<List<User>> FindBy(string? email = null, Nullable<bool> confirmed = null)
         {
 
             var users = new List<User>();
@@ -119,7 +127,7 @@ namespace E_proc.Services.Repositories
         public async Task<User> ResetPasswordAsync(User user, string token, string newPassword)
         {
 
-            user.Password = _encryptionService.Encrypt( newPassword);
+            user.Password = _encryptionService.Encrypt(newPassword);
             var updated = _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
             return user;

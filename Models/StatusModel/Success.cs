@@ -11,7 +11,7 @@ namespace E_proc.Models.StatusModel
 
         public Object data { get; set; }
 
-        public Success(bool status, string message, object? data= null)
+        public Success(bool status, string message, object? data = null)
         {
             data = data ?? null;
             this.status = status;
@@ -25,16 +25,14 @@ namespace E_proc.Models.StatusModel
             respone.StatusCode = 200;
             var myData = new
             {
-                status ,
-                message ,
+                status,
+                message,
                 data,
-            
             };
             return respone.WriteAsJsonAsync(myData);
-            
-           
+
+
         }
     }
 
 }
-     

@@ -26,15 +26,22 @@ namespace E_proc.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public string Type { get; set; } 
+        public string Type { get; set; }
 
         [DefaultValue(false)]
-        public bool EmailConfirmed  { get; set; } 
+        public bool EmailConfirmed { get; set; }
 
 
+      
+        
+        public string? createdAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        public string? updatedAt { get; set; }
 
 
-     public bool IsConfirmed()
+        
+         
+        
+        public bool IsConfirmed()
         {
             return EmailConfirmed;
         }

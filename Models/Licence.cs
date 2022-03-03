@@ -12,7 +12,7 @@ namespace E_proc.Models
         public string AcquisitionDate { get; set; }
         public string ExpirationDate { get; set; }
         public string IssuingInstitutionName { get; set; }
-     
+
 
 
     }

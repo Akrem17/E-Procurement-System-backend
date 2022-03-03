@@ -11,32 +11,38 @@ namespace E_proc.Repositories.Implementations
         private readonly AuthContext _dbContext;
         private readonly IEncryptionService _encryptionService;
 
-        public SupplierRepository( AuthContext dbContext, IEncryptionService encryptionService)
+        public SupplierRepository(AuthContext dbContext, IEncryptionService encryptionService)
         {
 
             _dbContext = dbContext;
             _encryptionService = encryptionService;
 
         }
+
+
+
+
+        //create supplier
         public async Task<Supplier> CreateAsync(Supplier supplier)
 
         {
 
-            
+
             var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == supplier.Email);
             if (foundedUser == null)
             {
 
                 supplier.Password = _encryptionService.Encrypt(supplier.Password);
 
-                Representative representative = new Representative { 
+                Representative representative = new Representative
+                {
                     Name = supplier.representative.Name,
-                    Email = supplier.representative.Email,  
-                    Phone = supplier.representative.Phone,  
-                    Position = supplier.representative.Position,    
+                    Email = supplier.representative.Email,
+                    Phone = supplier.representative.Phone,
+                    Position = supplier.representative.Position,
                     SocialSecurityNumber = supplier.representative.SocialSecurityNumber,
-                    SocialSecurityNumberDate = supplier.representative.SocialSecurityNumberDate             
-                
+                    SocialSecurityNumberDate = supplier.representative.SocialSecurityNumberDate
+
                 };
                 Address address = new Address
                 {
@@ -57,11 +63,12 @@ namespace E_proc.Repositories.Implementations
 
                 };
 
-                Supplier x= new Supplier {
+                Supplier x = new Supplier
+                {
                     Email = supplier.Email,
-                    FirstName = supplier.FirstName, 
-                    LastName = supplier.LastName, 
-                    Password = supplier.Password, 
+                    FirstName = supplier.FirstName,
+                    LastName = supplier.LastName,
+                    Password = supplier.Password,
                     Type = supplier.Type,
                     CNSSId = supplier.CNSSId,
                     Category = supplier.Category,
@@ -72,28 +79,29 @@ namespace E_proc.Repositories.Implementations
                     Fax = supplier.Fax,
                     licence = licence,
                     Phone = supplier.Phone,
-                    RegistrationDate = supplier.RegistrationDate,   
-                    RegistrationNumber  = supplier.RegistrationNumber,
+                    RegistrationDate = supplier.RegistrationDate,
+                    RegistrationNumber = supplier.RegistrationNumber,
                     ReplyEmail = supplier.ReplyEmail,
                     representative = representative,
                     SupplierName = supplier.SupplierName,
                     TaxId = supplier.TaxId
-                    
-                
+
+
                 };
 
-                
+
                 var user = await _dbContext.Supplier.AddAsync(x);
                 _dbContext.SaveChanges();
 
                 return x;
 
             }
-            else
-            {
-                return null;
-            }
+            return null;
+
         }
+
+
+        //delete supplier
 
         public async Task<int> Delete(int id)
         {
@@ -107,10 +115,12 @@ namespace E_proc.Repositories.Implementations
             };
             return 404;
 
-        
 
-    }
 
+        }
+
+
+        //filter suppliers using params 
         public async Task<List<Supplier>> FindBy(string? email, bool? confirmed, string? phone)
         {
             var suppliers = new List<Supplier>();
@@ -130,17 +140,26 @@ namespace E_proc.Repositories.Implementations
             return suppliers;
         }
 
+
+
+        //get all suppliers
         public async Task<IEnumerable<Supplier>> ReadAsync()
         {
             var supplier = await _dbContext.Supplier.ToListAsync();
             return supplier;
         }
 
+
+
+        //get supplier by id 
         public async Task<Supplier> ReadById(int id)
         {
             return await _dbContext.Supplier.FirstOrDefaultAsync(user => user.Id == id);
         }
 
+
+
+        //update suppliers
         public async Task<Supplier> UpdateAsync(int id, Supplier supplier)
         {
 
@@ -170,9 +189,9 @@ namespace E_proc.Repositories.Implementations
                     oldUser.RegistrationNumber = supplier.licence.RegistrationNumber;
 
                     oldUser.address.countryName = supplier.address.countryName;
-                     oldUser.address.city = supplier.address.city;
-                     oldUser.address.postalCode = supplier.address.postalCode;
-                     oldUser.address.street1 = supplier.address.street1;
+                    oldUser.address.city = supplier.address.city;
+                    oldUser.address.postalCode = supplier.address.postalCode;
+                    oldUser.address.street1 = supplier.address.street1;
                     oldUser.address.street2 = supplier.address.street2;
 
                     oldUser.Email = supplier.Email;

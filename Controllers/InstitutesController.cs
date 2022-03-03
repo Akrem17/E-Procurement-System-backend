@@ -26,7 +26,8 @@ namespace E_proc.Controllers
             _reposInstit = reposInstit;
         }
 
-       
+
+
         [HttpGet]
         public async Task<IActionResult> GetInstitute(string? email = null, bool? confirmed = null, string? phone = null)
         {
@@ -46,7 +47,7 @@ namespace E_proc.Controllers
             else
             {
                 var institutes = await _reposInstit.FindBy(email, confirmed, phone);
-                if (institutes.Count()!=0)
+                if (institutes.Count() != 0)
                 {
                     return new Success(true, "message.sucess", institutes);
 
@@ -57,7 +58,10 @@ namespace E_proc.Controllers
 
         }
 
-       
+
+
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInstitute(int id)
         {
@@ -67,19 +71,24 @@ namespace E_proc.Controllers
             return new Success(true, "message.sucess", new { institutes });
         }
 
-     
-      
+
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInstitute(int id, Institute institute)
         {
             var newUser = await _reposInstit.UpdateAsync(id, institute);
 
             if (newUser == null)
-           
-            return new Success(false, "message.User not found or email already exists");
+
+                return new Success(false, "message.User not found or email already exists");
             return new Success(true, "message.success");
 
         }
+
+
+
+
 
         // POST: api/Institutes
 
@@ -93,9 +102,9 @@ namespace E_proc.Controllers
 
                 Institute status = await _reposInstit.CreateAsync(institute);
 
-                if (status==null)
-               
-                return new Success(false, "message.This email is already exists");
+                if (status == null)
+
+                    return new Success(false, "message.This email is already exists");
 
 
 
@@ -106,6 +115,8 @@ namespace E_proc.Controllers
             return Problem("User is empty");
         }
 
+
+
         // DELETE: api/Institutes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInstitute(int id)
@@ -114,9 +125,9 @@ namespace E_proc.Controllers
 
             if (res == 200)
                 return new Success(true, "message.success");
-                return new Success(false, "message.User not found");
+            return new Success(false, "message.User not found");
         }
 
-    
+
     }
 }
