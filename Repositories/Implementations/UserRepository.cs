@@ -116,7 +116,6 @@ namespace E_proc.Services.Repositories
             users = await _dbContext.Users
                  .Where(s => !string.IsNullOrEmpty(email) ? s.Email == email : true)
                  .Where(s => confirmed.HasValue ? s.EmailConfirmed == confirmed : true)
-
                  .ToListAsync();
 
 

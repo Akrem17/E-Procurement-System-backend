@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace E_proc.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "citizen")]
+   // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "citizen")]
     [Route("api/[controller]")]
     [ApiController]
     public class CitizensController : ControllerBase
@@ -33,10 +33,10 @@ namespace E_proc.Controllers
 
         // get all citizens
         [HttpGet]
-        public async Task<Success> GetCitizen(string? email = null, bool? confirmed = null, string? cin = null, string? phone = null)
+        public async Task<Success> GetCitizen(string? email = null, bool? confirmed = null, string? cin = null, string? phone = null, DateTime? date =null)
 
         {
-            if (email == null && confirmed == null)
+            if (email == null && confirmed == null&& cin ==null && phone == null && date ==null )
             {
                 var citizens = await _reposCitizen.ReadAsync();
 
@@ -47,7 +47,7 @@ namespace E_proc.Controllers
             }
             else
             {
-                var citizens = await _reposCitizen.FindBy(email, confirmed, cin, phone);
+                var citizens = await _reposCitizen.FindBy(email, confirmed, cin, phone, date);
                 return new Success(true, "message.sucess", citizens);
             }
 

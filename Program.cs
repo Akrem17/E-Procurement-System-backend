@@ -74,7 +74,7 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IInstituteRepository, InstituteRepository>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IEncryptionService, EncryptionService>();
-
+builder.Services.AddTransient<IDateService, DateService>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
