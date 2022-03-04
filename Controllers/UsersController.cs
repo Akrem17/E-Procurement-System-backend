@@ -28,10 +28,10 @@ namespace E_proc.Controllers
 
         // get all users or find users by email
         [HttpGet]
-        public async Task<IActionResult> Get(string? email = null, bool? confirmed = null)
+        public async Task<IActionResult> Get(string? email = null, bool? confirmed = null,DateTime? date= null)
         {
 
-            if (string.IsNullOrWhiteSpace(email) && confirmed == null)
+            if (string.IsNullOrWhiteSpace(email) && confirmed == null && date==null )
             {
                 var users = await _repos.ReadAsync();
                 if (users == null) return new Success(false, "message.User not found");
@@ -39,7 +39,7 @@ namespace E_proc.Controllers
             }
             else
             {
-                var user = await _repos.FindBy(email, confirmed);
+                var user = await _repos.FindBy(email, confirmed,date);
                 if (user.Count() == 0) return new Success(false, "message.User notFound", user);
                 return new Success(true, "message.success", user);
 
