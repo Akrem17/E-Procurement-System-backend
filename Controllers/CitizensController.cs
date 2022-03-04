@@ -59,6 +59,7 @@ namespace E_proc.Controllers
         public async Task<IActionResult> Get(int id)
         {
 
+
             var citizen = await _reposCitizen.ReadById(id);
             if (citizen == null) return new Success(false, "message.user Not Found");
             return new Success(true, "message.success", new { citizen });
