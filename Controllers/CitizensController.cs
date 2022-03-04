@@ -40,7 +40,7 @@ namespace E_proc.Controllers
             {
                 var citizens = await _reposCitizen.ReadAsync();
 
-                if (citizens == null) return new Success(false, "message.UserNotFound", new { });
+                if (citizens == null) return new Success(false, "message.UserNotFound");
 
 
                 return new Success(true, "message.sucess", citizens);
@@ -72,9 +72,10 @@ namespace E_proc.Controllers
 
             var newUser = await _reposCitizen.UpdateAsync(id, user);
 
+
             if (newUser == null)
 
-                return new Success(false, "message.User not found or email already exists");
+            return new Success(false, "message.User not found or email already exists");
 
             return new Success(true, "message.User updated successfully");
         }

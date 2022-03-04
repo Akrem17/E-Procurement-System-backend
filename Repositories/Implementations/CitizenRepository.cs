@@ -90,7 +90,8 @@ namespace E_proc.Repositories
                     oldUser.Type = user.Type;
                     oldUser.CIN = user.CIN;
                     oldUser.Phone = user.Phone;
-
+                    oldUser.Phone = user.Phone;
+                    oldUser.updatedAt= new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
                     await _dbContext.SaveChangesAsync();
                     return oldUser;
                 }

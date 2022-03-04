@@ -83,7 +83,6 @@ namespace E_proc.Repositories.Implementations
                      .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
                      .Where(s => confirmed.HasValue ? s.EmailConfirmed == confirmed : true)
                      .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
-
                      .ToListAsync();
 
 
@@ -131,7 +130,7 @@ namespace E_proc.Repositories.Implementations
                     oldUser.address.countryName = institute.address.countryName; oldUser.address.city = institute.address.city; oldUser.address.postalCode = institute.address.postalCode; oldUser.address.street1 = institute.address.street1; oldUser.address.street2 = institute.address.street2;
                     oldUser.Interlocutor.Name = institute.Interlocutor.Name; oldUser.Interlocutor.Phone = institute.Interlocutor.Phone; oldUser.Interlocutor.Position = institute.Interlocutor.Position; oldUser.Interlocutor.SocialSecurityNumber = institute.Interlocutor.SocialSecurityNumber; oldUser.Interlocutor.SocialSecurityNumberDate = institute.Interlocutor.SocialSecurityNumberDate; oldUser.Interlocutor.Email = institute.Interlocutor.Email;
                     oldUser.Email = institute.Email; oldUser.FirstName = institute.FirstName; oldUser.LastName = institute.LastName; oldUser.Password = institute.Password; oldUser.Type = institute.Type; oldUser.AreaType = institute.AreaType; oldUser.Fax = institute.Fax; oldUser.NameAr = institute.NameAr; oldUser.NameFr = institute.NameFr; oldUser.NotificationEmail = institute.NotificationEmail; oldUser.Phone = institute.Phone; oldUser.representativeName = institute.representativeName;
-
+                    oldUser.updatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
 
                     await _dbContext.SaveChangesAsync();
                     return oldUser;

@@ -10,12 +10,14 @@ namespace E_proc.Repositories.Implementations
 
         private readonly AuthContext _dbContext;
         private readonly IEncryptionService _encryptionService;
+        private readonly IDateService _dateService;
 
-        public SupplierRepository(AuthContext dbContext, IEncryptionService encryptionService)
+        public SupplierRepository(AuthContext dbContext, IEncryptionService encryptionService, IDateService dateService  )
         {
 
             _dbContext = dbContext;
             _encryptionService = encryptionService;
+            _dateService=dateService;
 
         }
 
@@ -121,15 +123,25 @@ namespace E_proc.Repositories.Implementations
 
 
         //filter suppliers using params 
-        public async Task<List<Supplier>> FindBy(string? email, bool? confirmed, string? phone)
+        public async Task<List<Supplier>> FindBy(string? email, bool? confirmed, string? phone, DateTime? date)
         {
             var suppliers = new List<Supplier>();
 
+
+            long dateFromStamp = 0;
+            long dateToStamp = 0;
+            //convert date to timestamp format 
+            if (date.HasValue)
+            {
+                dateFromStamp = _dateService.ConvertDatetimeToUnixTimeStamp(new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 0, 0, 0));
+                dateToStamp = _dateService.ConvertDatetimeToUnixTimeStamp(new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 23, 59, 59));
+            }
 
             suppliers = await _dbContext.Supplier
                  .Where(s => !string.IsNullOrEmpty(email) ? s.Email == email : true)
                  .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
                  .Where(s => confirmed.HasValue ? s.EmailConfirmed == confirmed : true)
+                 .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
 
                  .ToListAsync();
 
@@ -211,7 +223,7 @@ namespace E_proc.Repositories.Implementations
                     oldUser.ReplyEmail = supplier.ReplyEmail;
                     oldUser.SupplierName = supplier.SupplierName;
                     oldUser.TaxId = supplier.TaxId;
-
+                    oldUser.updatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
                     await _dbContext.SaveChangesAsync();
                     return oldUser;
                 }

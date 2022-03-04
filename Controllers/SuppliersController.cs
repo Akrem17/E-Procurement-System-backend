@@ -30,11 +30,11 @@ namespace E_proc.Controllers
 
         // GET: api/Suppliers
         [HttpGet]
-        public async Task<IActionResult> GetSupplier(string? email = null, bool? confirmed = null, string? phone = null)
+        public async Task<IActionResult> GetSupplier(string? email = null, bool? confirmed = null, string? phone = null, DateTime? date = null)
         {
 
 
-            if (email == null && confirmed == null)
+            if (email == null && confirmed == null && phone == null && date == null)
             {
                 var suppliers = await _reposSuuplier.ReadAsync();
 
@@ -46,7 +46,7 @@ namespace E_proc.Controllers
             }
             else
             {
-                var suppliers = await _reposSuuplier.FindBy(email, confirmed, phone);
+                var suppliers = await _reposSuuplier.FindBy(email, confirmed, phone,date);
 
                 if (suppliers.Count() != 0)
                 {
