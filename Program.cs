@@ -67,6 +67,7 @@ builder.Services.AddDbContext<AuthContext>(options =>
         config.GetConnectionString("EprocDB"));
 });
 
+
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICitizenRepository, CitizenRepository>();
 builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
@@ -78,7 +79,6 @@ builder.Services.AddTransient<IDateService, DateService>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
-
 builder.Services.AddCors();
 builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -129,7 +129,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseHttpLogging();
 app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();

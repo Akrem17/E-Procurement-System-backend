@@ -8,12 +8,13 @@ namespace E_proc.Services.Repositories
     {
         private readonly AuthContext _dbContext;
         private readonly IEncryptionService _encryptionService;
+        private readonly IDateService _dateService;
 
-
-        public UserRepository(AuthContext dbContext, IEncryptionService encryptionService)
+        public UserRepository(AuthContext dbContext, IEncryptionService encryptionService , IDateService dateService)
         {
             _dbContext = dbContext;
             _encryptionService = encryptionService;
+            _dateService = dateService;
         }
 
 
@@ -107,21 +108,7 @@ namespace E_proc.Services.Repositories
 
 
 
-        public async Task<List<User>> FindBy(string? email = null, Nullable<bool> confirmed = null)
-        {
-
-            var users = new List<User>();
-
-
-            users = await _dbContext.Users
-                 .Where(s => !string.IsNullOrEmpty(email) ? s.Email == email : true)
-                 .Where(s => confirmed.HasValue ? s.EmailConfirmed == confirmed : true)
-                 .ToListAsync();
-
-
-            return users;
-
-        }
+        
 
         public async Task<User> ResetPasswordAsync(User user, string token, string newPassword)
         {
@@ -131,6 +118,30 @@ namespace E_proc.Services.Repositories
             var updated = _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
             return user;
+        }
+
+        public async  Task<List<User>> FindBy(string? email=null, bool? confirmed = null, DateTime? date = null)
+        {
+            var users = new List<User>();
+
+            long dateFromStamp = 0;
+            long dateToStamp = 0;
+            //convert date to timestamp format 
+            if (date.HasValue)
+            {
+                dateFromStamp = _dateService.ConvertDatetimeToUnixTimeStamp(new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 0, 0, 0));
+                dateToStamp = _dateService.ConvertDatetimeToUnixTimeStamp(new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 23, 59, 59));
+            }
+
+            users = await _dbContext.Users
+                 .Where(s => !string.IsNullOrEmpty(email) ? s.Email == email : true)
+                 .Where(s => confirmed.HasValue ? s.EmailConfirmed == confirmed : true)
+                 .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
+
+                 .ToListAsync();
+
+
+            return users;
         }
     }
 }

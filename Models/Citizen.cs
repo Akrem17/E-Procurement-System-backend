@@ -7,7 +7,7 @@ namespace E_proc.Models
         [StringLength(16, MinimumLength = 5, ErrorMessage = "Phone number is not validated")]
         public string Phone { get; set; }
 
-        public string CIN { get; set; }
+        public string? CIN { get; set; }
 
         public Citizen()
         {

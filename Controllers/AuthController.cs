@@ -15,7 +15,7 @@ using System.Text;
 
 namespace E_proc.Controllers
 {
-    [Route("")]
+    [Route("api/")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -46,7 +46,7 @@ namespace E_proc.Controllers
         }
 
         // singup a citizen route
-        [HttpPost("/signup/citizen")]
+        [HttpPost("signup/citizen")]
 
         public async Task<IActionResult> Signup([FromBody] Citizen? user)
         {
@@ -78,7 +78,7 @@ namespace E_proc.Controllers
 
 
         // singup a supplier route
-        [HttpPost("/signup/supplier")]
+        [HttpPost("signup/supplier")]
 
         public async Task<IActionResult> Signup([FromBody] Supplier? user)
         {
@@ -109,7 +109,7 @@ namespace E_proc.Controllers
 
 
         // singup a institute route
-        [HttpPost("/signup/institute")]
+        [HttpPost("signup/institute")]
 
         public async Task<IActionResult> Signup([FromBody] Institute? user)
         {
@@ -142,7 +142,7 @@ namespace E_proc.Controllers
 
 
         //  login a user
-        [HttpPost("/login")]
+        [HttpPost("login")]
 
         public async Task<IActionResult> Login([FromBody] UserLogin? user)
         {
@@ -232,7 +232,7 @@ namespace E_proc.Controllers
 
         public async Task<IActionResult> ResetPasswordCode([FromBody] ResetPasswordToken? model)
         {
-            var users = await _Userrepos.FindBy(model.Email, null);
+            var users = await _Userrepos.FindBy(model.Email, null,null);
             if (users.Count() == 0) return new Success(false, "message.user Not Found");
             var user = users?[0];
 
@@ -309,7 +309,7 @@ namespace E_proc.Controllers
             if (email != model.Email)
                 return new Success(false, "message.Email not the same");
 
-            var users = await _Userrepos.FindBy(model.Email, null);
+            var users = await _Userrepos.FindBy(model.Email, null,null);
             if (users.Count() == 0) return new Success(false, "message.user Not Found");
 
             var user = users?[0];
@@ -343,7 +343,7 @@ namespace E_proc.Controllers
             var email = _tokenService.ValidateJwtToken(token);
 
             if (email == null) return new Success(false, "message.token not verified");
-            var users = await _Userrepos.FindBy(email, null);
+            var users = await _Userrepos.FindBy(email, null,null);
             if (users.Count() == 0) return new Success(false, "message.user Not Found");
             var user = users?[0];
             return new Success(true, "message.success", user);
