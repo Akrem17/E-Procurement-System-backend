@@ -149,16 +149,18 @@ namespace E_proc.Controllers
 
             if (user != null)
             {
-
+               var users=await  _Userrepos.FindBy(user.Email);
+                if (users.Count() == 0)
+                    return new Success(false, "message.Email not found");
                 var userFound = await _repos.GetByEmailAndPassword(user);
-
+                
 
                 if (userFound != null)
                 {
 
                     var loggedUser = await _Userrepos.Read(userFound.Id);
 
-                    if (loggedUser == null) return new Success(false, "message.User not found", new { });
+                    if (loggedUser == null) return new Success(false, "message.User not found");
 
                     //generate token string
                     var tokenString = _tokenService.GenerateTokenString(loggedUser);
