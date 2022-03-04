@@ -92,7 +92,7 @@ namespace E_proc.Services.Repositories
                     oldUser.LastName = user.LastName;
                     oldUser.Password = user.Password;
                     oldUser.Type = user.Type;
-
+                    oldUser.updatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
                     await _dbContext.SaveChangesAsync();
                     return oldUser;
                 }
@@ -127,6 +127,7 @@ namespace E_proc.Services.Repositories
         {
 
             user.Password = _encryptionService.Encrypt(newPassword);
+            user.updatedAt  = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
             var updated = _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
             return user;
