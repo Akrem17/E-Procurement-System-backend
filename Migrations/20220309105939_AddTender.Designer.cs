@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_proc.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20220303133617_createdAt")]
-    partial class createdAt
+    [Migration("20220309105939_AddTender")]
+    partial class AddTender
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -131,6 +131,106 @@ namespace E_proc.Migrations
                     b.ToTable("Representative");
                 });
 
+            modelBuilder.Entity("E_proc.Models.Tender", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AddressReceiptId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Budget")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BusinessKind")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Departement")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EvaluationMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Financing")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GuaranteeType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InstituteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ResponsibleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StartDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("createdAt")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("specificationURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("updatedAt")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressReceiptId");
+
+                    b.HasIndex("InstituteId");
+
+                    b.HasIndex("ResponsibleId");
+
+                    b.ToTable("Tender");
+                });
+
+            modelBuilder.Entity("E_proc.Models.TenderClassification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Amount")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TenderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenderId");
+
+                    b.ToTable("TenderClassification");
+                });
+
             modelBuilder.Entity("E_proc.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -168,11 +268,9 @@ namespace E_proc.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("createdAt")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("updatedAt")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -209,7 +307,6 @@ namespace E_proc.Migrations
                     b.HasBaseType("E_proc.Models.User");
 
                     b.Property<string>("CIN")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -343,6 +440,44 @@ namespace E_proc.Migrations
                     b.HasDiscriminator().HasValue("Supplier");
                 });
 
+            modelBuilder.Entity("E_proc.Models.Tender", b =>
+                {
+                    b.HasOne("E_proc.Models.Address", "AddressReceipt")
+                        .WithMany()
+                        .HasForeignKey("AddressReceiptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_proc.Models.Institute", "Institute")
+                        .WithMany()
+                        .HasForeignKey("InstituteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_proc.Models.Representative", "Responsible")
+                        .WithMany()
+                        .HasForeignKey("ResponsibleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AddressReceipt");
+
+                    b.Navigation("Institute");
+
+                    b.Navigation("Responsible");
+                });
+
+            modelBuilder.Entity("E_proc.Models.TenderClassification", b =>
+                {
+                    b.HasOne("E_proc.Models.Tender", "Tender")
+                        .WithMany("TenderClassification")
+                        .HasForeignKey("TenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tender");
+                });
+
             modelBuilder.Entity("E_proc.Models.Institute", b =>
                 {
                     b.HasOne("E_proc.Models.Representative", "Interlocutor")
@@ -383,6 +518,11 @@ namespace E_proc.Migrations
                     b.Navigation("licence");
 
                     b.Navigation("representative");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Tender", b =>
+                {
+                    b.Navigation("TenderClassification");
                 });
 #pragma warning restore 612, 618
         }

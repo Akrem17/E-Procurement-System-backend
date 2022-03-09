@@ -56,8 +56,5 @@ namespace E_proc.Models
         public virtual Address? address { get; set; }
 
 
-
-
-
     }
 }
