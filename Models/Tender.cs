@@ -1,12 +1,16 @@
 ﻿using E_proc.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 namespace E_proc.Models
 {
     public class Tender
+
     {
+
         [Key]
+        [JsonIgnore]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please enter name")]
@@ -33,15 +37,23 @@ namespace E_proc.Models
         [Required(ErrorMessage = "Please enter Departement")]
         public string? Departement { get; set; }
 
-        [Required(ErrorMessage = "Please enter AddressReceipt")]
+
+
+        public int addressReceiptId { get; set; }
+        [ForeignKey("addressReceiptId")]
         virtual public Address? AddressReceipt { get; set; }
 
-        [Required(ErrorMessage = "Please enter responsible")]
+
+
+        public int responsibleId { get; set; }
+        [ForeignKey("responsibleId")]
         virtual public Representative Responsible { get; set; }
 
-        [Required(ErrorMessage = "Please enter institute")]
+        public int instituteId { get; set; }
+        [ForeignKey("instituteId")]
         virtual public Institute Institute { get; set; }
 
+        [ForeignKey("tenderClassificationId")]
         virtual public ICollection<TenderClassification>? TenderClassification {get; set;}
 
         //crate specification model later
@@ -50,8 +62,9 @@ namespace E_proc.Models
 
 
 
-
+        [JsonIgnore]
         public string? createdAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        [JsonIgnore]
         public string? updatedAt { get; set; }
 
 

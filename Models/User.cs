@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 
 namespace E_proc.Models
 {
@@ -10,7 +9,9 @@ namespace E_proc.Models
 
     public class User
     {
+   
         [Key]
+        [System.Text.Json.Serialization.JsonIgnore]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please enter Firstname")]
@@ -32,9 +33,10 @@ namespace E_proc.Models
         public bool EmailConfirmed { get; set; }
 
 
-      
-        
+
+        [JsonIgnore]
         public string? createdAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        [JsonIgnore]
         public string? updatedAt { get; set; }
 
 

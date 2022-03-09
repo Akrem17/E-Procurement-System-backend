@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace E_proc.Models
 {
@@ -44,15 +45,19 @@ namespace E_proc.Models
 
         public string Fax { get; set; }
 
-        [Required(ErrorMessage = "Please enter representative")]
 
+
+        public int representativeId { get; set; }
+        [ForeignKey("representativeId")]
         public virtual Representative? representative { get; set; }
 
-        [Required(ErrorMessage = "Please enter licence")]
-
+      
+        public int licenceId { get; set; }
+        [ForeignKey("licenceId")]
         public virtual Licence? licence { get; set; }
-        [Required(ErrorMessage = "Please enter address")]
 
+        public int addressId { get; set; }
+        [ForeignKey("addressId")]
         public virtual Address? address { get; set; }
 
 

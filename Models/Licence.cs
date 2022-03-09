@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace E_proc.Models
 {
     public class Licence
     {
         [Key]
+        [JsonIgnore]
         public int Id { get; set; }
         public string Category { get; set; }
         public string Name { get; set; }

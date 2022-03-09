@@ -7,14 +7,23 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using E_proc.Models;
+using E_proc.Repositories.Interfaces;
 
 namespace E_proc.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class TendersController : ControllerBase
     {
         private readonly AuthContext _context;
+        private readonly ITenderRepository _reposTender;
+
+        public TendersController(ITenderRepository reposTender)
+        {
+                
+            _reposTender = reposTender;
+        }
 
         public TendersController(AuthContext context)
         {

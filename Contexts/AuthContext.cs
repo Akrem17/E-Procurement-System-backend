@@ -23,8 +23,8 @@ namespace E_proc.Models
                 .WithMany(i => i.Tender).
                 OnDelete(DeleteBehavior.Restrict);
 
-            
-               
+                
+
                     }
             public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }   
 
