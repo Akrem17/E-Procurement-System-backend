@@ -4,7 +4,7 @@
 
 namespace E_proc.Migrations
 {
-    public partial class createdAt : Migration
+    public partial class AddTender : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -151,6 +151,92 @@ namespace E_proc.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Tender",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BusinessKind = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Financing = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Budget = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EvaluationMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GuaranteeType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Departement = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AddressReceiptId = table.Column<int>(type: "int", nullable: false),
+                    ResponsibleId = table.Column<int>(type: "int", nullable: false),
+                    InstituteId = table.Column<int>(type: "int", nullable: false),
+                    specificationURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    createdAt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    updatedAt = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tender", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tender_Address_AddressReceiptId",
+                        column: x => x.AddressReceiptId,
+                        principalTable: "Address",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tender_Representative_ResponsibleId",
+                        column: x => x.ResponsibleId,
+                        principalTable: "Representative",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tender_Users_InstituteId",
+                        column: x => x.InstituteId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TenderClassification",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TenderId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TenderClassification", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TenderClassification_Tender_TenderId",
+                        column: x => x.TenderId,
+                        principalTable: "Tender",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tender_AddressReceiptId",
+                table: "Tender",
+                column: "AddressReceiptId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tender_InstituteId",
+                table: "Tender",
+                column: "InstituteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tender_ResponsibleId",
+                table: "Tender",
+                column: "ResponsibleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TenderClassification_TenderId",
+                table: "TenderClassification",
+                column: "TenderId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Users_addressId",
                 table: "Users",
@@ -180,10 +266,16 @@ namespace E_proc.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "TenderClassification");
 
             migrationBuilder.DropTable(
                 name: "UsersLogin");
+
+            migrationBuilder.DropTable(
+                name: "Tender");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Address");

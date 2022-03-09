@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace E_proc.Models
 {
@@ -18,7 +19,7 @@ namespace E_proc.Models
         public string Phone { get; set; }
         public string Fax { get; set; }
         public virtual Representative? Interlocutor { get; set; }
-
+        public virtual ICollection<Tender>? Tender { get; set; }
 
 
 

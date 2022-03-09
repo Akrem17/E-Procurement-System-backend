@@ -15,15 +15,25 @@ namespace E_proc.Models
            .Build();
             optionsBuilder.UseSqlServer(config.GetConnectionString("EprocDB"));
         }
-      
 
-        public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }   
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Tender>()
+                .HasOne(t => t.Institute)
+                .WithMany(i => i.Tender).
+                OnDelete(DeleteBehavior.Restrict);
+
+            
+               
+                    }
+            public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }   
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserLogin> UsersLogin { get; set; }
         public DbSet<E_proc.Models.Citizen> Citizen { get; set; }
         public DbSet<E_proc.Models.Supplier> Supplier { get; set; }
         public DbSet<E_proc.Models.Institute> Institute { get; set; }
+        public DbSet<E_proc.Models.Tender> Tender { get; set; }
 
 
     }
