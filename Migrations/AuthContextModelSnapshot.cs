@@ -52,7 +52,7 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("E_proc.Models.Licence", b =>
@@ -89,7 +89,7 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Licence");
+                    b.ToTable("Licence", (string)null);
                 });
 
             modelBuilder.Entity("E_proc.Models.Representative", b =>
@@ -126,7 +126,7 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Representative");
+                    b.ToTable("Representative", (string)null);
                 });
 
             modelBuilder.Entity("E_proc.Models.Tender", b =>
@@ -196,7 +196,7 @@ namespace E_proc.Migrations
 
                     b.HasIndex("ResponsibleId");
 
-                    b.ToTable("Tender");
+                    b.ToTable("Tender", (string)null);
                 });
 
             modelBuilder.Entity("E_proc.Models.TenderClassification", b =>
@@ -226,7 +226,7 @@ namespace E_proc.Migrations
 
                     b.HasIndex("TenderId");
 
-                    b.ToTable("TenderClassification");
+                    b.ToTable("TenderClassification", (string)null);
                 });
 
             modelBuilder.Entity("E_proc.Models.User", b =>
@@ -273,7 +273,7 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
@@ -297,7 +297,7 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsersLogin");
+                    b.ToTable("UsersLogin", (string)null);
                 });
 
             modelBuilder.Entity("E_proc.Models.Citizen", b =>

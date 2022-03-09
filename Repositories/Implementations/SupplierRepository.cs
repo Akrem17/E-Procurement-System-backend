@@ -33,69 +33,73 @@ namespace E_proc.Repositories.Implementations
             var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == supplier.Email);
             if (foundedUser == null)
             {
-
+                
                 supplier.Password = _encryptionService.Encrypt(supplier.Password);
 
-                Representative representative = new Representative
-                {
-                    Name = supplier.representative.Name,
-                    Email = supplier.representative.Email,
-                    Phone = supplier.representative.Phone,
-                    Position = supplier.representative.Position,
-                    SocialSecurityNumber = supplier.representative.SocialSecurityNumber,
-                    SocialSecurityNumberDate = supplier.representative.SocialSecurityNumberDate
-
-                };
-                Address address = new Address
-                {
-                    countryName = supplier.address.countryName,
-                    city = supplier.address.city,
-                    postalCode = supplier.address.postalCode,
-                    street1 = supplier.address.street1,
-                    street2 = supplier.address.street2
-                };
-                Licence licence = new Licence
-                {
-                    Category = supplier.licence.Category,
-                    AcquisitionDate = supplier.licence.AcquisitionDate,
-                    ExpirationDate = supplier.licence.ExpirationDate,
-                    IssuingInstitutionName = supplier.licence.IssuingInstitutionName,
-                    Name = supplier.licence.Name,
-                    RegistrationNumber = supplier.licence.RegistrationNumber
-
-                };
-
-                Supplier x = new Supplier
-                {
-                    Email = supplier.Email,
-                    FirstName = supplier.FirstName,
-                    LastName = supplier.LastName,
-                    Password = supplier.Password,
-                    Type = supplier.Type,
-                    CNSSId = supplier.CNSSId,
-                    Category = supplier.Category,
-                    BuisnessType = supplier.BuisnessType,
-                    BuisnessClassification = supplier.BuisnessClassification,
-                    address = address,
-                    CompanyName = supplier.CompanyName,
-                    Fax = supplier.Fax,
-                    licence = licence,
-                    Phone = supplier.Phone,
-                    RegistrationDate = supplier.RegistrationDate,
-                    RegistrationNumber = supplier.RegistrationNumber,
-                    ReplyEmail = supplier.ReplyEmail,
-                    representative = representative,
-                    SupplierName = supplier.SupplierName,
-                    TaxId = supplier.TaxId
 
 
-                };
+                //Representative representative = new Representative
+                //    {
+                //        Name = supplier.representative.Name,
+                //        Email = supplier.representative.Email,
+                //        Phone = supplier.representative.Phone,
+                //        Position = supplier.representative.Position,
+                //        SocialSecurityNumber = supplier.representative.SocialSecurityNumber,
+                //        SocialSecurityNumberDate = supplier.representative.SocialSecurityNumberDate
+
+                //    };
 
 
-                var user = await _dbContext.Supplier.AddAsync(x);
+                //Address address = new Address
+                //{
+                //    countryName = supplier.address.countryName,
+                //    city = supplier.address.city,
+                //    postalCode = supplier.address.postalCode,
+                //    street1 = supplier.address.street1,
+                //    street2 = supplier.address.street2
+                //};
+                //Licence licence = new Licence
+                //{
+                //    Category = supplier.licence.Category,
+                //    AcquisitionDate = supplier.licence.AcquisitionDate,
+                //    ExpirationDate = supplier.licence.ExpirationDate,
+                //    IssuingInstitutionName = supplier.licence.IssuingInstitutionName,
+                //    Name = supplier.licence.Name,
+                //    RegistrationNumber = supplier.licence.RegistrationNumber
+
+                //};
+
+                //Supplier x = new Supplier
+                //{
+                //    Email = supplier.Email,
+                //    FirstName = supplier.FirstName,
+                //    LastName = supplier.LastName,
+                //    Password = supplier.Password,
+                //    Type = supplier.Type,
+                //    CNSSId = supplier.CNSSId,
+                //    Category = supplier.Category,
+                //    BuisnessType = supplier.BuisnessType,
+                //    BuisnessClassification = supplier.BuisnessClassification,
+                //    address = address,
+                //    CompanyName = supplier.CompanyName,
+                //    Fax = supplier.Fax,
+                //    licence = licence,
+                //    Phone = supplier.Phone,
+                //    RegistrationDate = supplier.RegistrationDate,
+                //    RegistrationNumber = supplier.RegistrationNumber,
+                //    ReplyEmail = supplier.ReplyEmail,
+                //    representative = representative,
+                //    SupplierName = supplier.SupplierName,
+                //    TaxId = supplier.TaxId
+
+
+           // };
+
+
+            var user = await _dbContext.Supplier.AddAsync(supplier);
                 _dbContext.SaveChanges();
 
-                return x;
+                return supplier;
 
             }
             return null;
