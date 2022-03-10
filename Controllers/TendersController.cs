@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using E_proc.Models;
 using E_proc.Repositories.Interfaces;
+using E_proc.Models.StatusModel;
+using System.Text.Json;
 
 namespace E_proc.Controllers
 {
@@ -19,94 +21,80 @@ namespace E_proc.Controllers
         private readonly AuthContext _context;
         private readonly ITenderRepository _reposTender;
 
-        public TendersController(ITenderRepository reposTender)
+        public TendersController(AuthContext context,ITenderRepository reposTender)
         {
-                
+
             _reposTender = reposTender;
-        }
-
-        public TendersController(AuthContext context)
-        {
             _context = context;
+
         }
 
+      
         // GET: api/Tenders
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tender>>> GetTender()
+        public async Task<IActionResult> GetTender()
         {
-            return await _context.Tender.ToListAsync();
+            var tenders = await _reposTender.ReadAsync();
+
+            if (tenders == null) return new Success(false, "message.UserNotFound", new { });
+
+
+            return new Success(true, "message.success", tenders);
         }
 
         // GET: api/Tenders/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tender>> GetTender(int id)
+        public async Task<IActionResult> GetTender(int id)
         {
-            var tender = await _context.Tender.FindAsync(id);
-
-            if (tender == null)
-            {
-                return NotFound();
-            }
-
-            return tender;
+            var tender = await _reposTender.ReadById(id);
+            tender.Institute = null;
+         //  var res= JsonSerializer.Serialize(tender);
+            if (tender == null) return new Success(false, "message.Usernot found");
+            return new Success(true, "message.success", tender);
         }
 
         // PUT: api/Tenders/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTender(int id, Tender tender)
         {
-            if (id != tender.Id)
-            {
-                return BadRequest();
-            }
+            var newUser = await _reposTender.UpdateAsync(id, tender);
 
-            _context.Entry(tender).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TenderExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            if (newUser == null)
+                return new Success(false, "message.User not found ");
+            return new Success(true, "message.success", newUser);
         }
 
         // POST: api/Tenders
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Tender>> PostTender(Tender tender)
+        public async Task<IActionResult> PostTender([FromBody] Tender tender)
         {
-            _context.Tender.Add(tender);
-            await _context.SaveChangesAsync();
+            if (tender != null)
+            {
 
-            return CreatedAtAction("GetTender", new { id = tender.Id }, tender);
+                //verify institute
+                var status = await _reposTender.CreateAsync(tender);
+
+
+                if (status!=null)
+                return new Success(true, "message.success", tender);
+
+            }
+
+
+            return new Success(false, "message.User is empty");
+
         }
 
         // DELETE: api/Tenders/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTender(int id)
         {
-            var tender = await _context.Tender.FindAsync(id);
-            if (tender == null)
-            {
-                return NotFound();
-            }
+            var res = await _reposTender.Delete(id);
+            if (res == 200)
+                return new Success(true, "message.success"); ;
 
-            _context.Tender.Remove(tender);
-            await _context.SaveChangesAsync();
+            return new Success(false, "Tender not found");
 
-            return NoContent();
         }
 
         private bool TenderExists(int id)

@@ -33,6 +33,7 @@ namespace E_proc.Services
 			var myAudience = "https://localhost:7260/";
 
 			var tokenHandler = new JwtSecurityTokenHandler();
+
 			try
 			{
 				var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -61,7 +62,10 @@ namespace E_proc.Services
 									new Claim(ClaimTypes.Email,user.Email),
 									new Claim(ClaimTypes.GivenName,user.FirstName),
 									new Claim(ClaimTypes.Surname,user.LastName),
-									new Claim(ClaimTypes.Role,user.Type)
+									new Claim(ClaimTypes.Role,user.Type),
+									new Claim("Email",user.Email),
+									new Claim("Type",user.Type)
+								
 					};
 			var token = new JwtSecurityToken(
 								 issuer: config["Jwt:Issuer"],
@@ -73,6 +77,9 @@ namespace E_proc.Services
 									 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"])), SecurityAlgorithms.HmacSha256
 									)
 								 );
+			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+
 			var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
 			return tokenString;

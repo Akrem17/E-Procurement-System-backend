@@ -22,11 +22,12 @@ namespace E_proc.Models
                 .HasOne(t => t.Institute)
                 .WithMany(i => i.Tender).
                 OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<Tender>().Ignore(c => c.Institute);
 
-                
 
-                    }
-            public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }   
+
+        }
+        public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }   
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserLogin> UsersLogin { get; set; }

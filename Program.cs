@@ -16,6 +16,7 @@ using E_proc.Services.Repositories;
 using E_proc.Repositories.Implementations;
 using E_proc.Services.Interfaces;
 using E_proc.Services.Implementations;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,7 +68,7 @@ builder.Services.AddDbContext<AuthContext>(options =>
         config.GetConnectionString("EprocDB"));
 });
 
-
+builder.Services.AddTransient<ITenderRepository, TenderRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICitizenRepository, CitizenRepository>();
 builder.Services.AddTransient<ISupplierRepository, SupplierRepository>();
@@ -81,6 +82,9 @@ builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddCors();
 builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+
+
 
 
 builder.Services.AddControllers()
@@ -100,6 +104,7 @@ db.Database.EnsureCreated();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
+
 
     options.TokenValidationParameters = new TokenValidationParameters()
     {

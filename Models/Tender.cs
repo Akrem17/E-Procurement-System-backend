@@ -10,7 +10,7 @@ namespace E_proc.Models
     {
 
         [Key]
-        [JsonIgnore]
+     
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please enter name")]
@@ -41,19 +41,25 @@ namespace E_proc.Models
 
         public int addressReceiptId { get; set; }
         [ForeignKey("addressReceiptId")]
+
         virtual public Address? AddressReceipt { get; set; }
 
 
 
         public int responsibleId { get; set; }
         [ForeignKey("responsibleId")]
-        virtual public Representative Responsible { get; set; }
+        
+        virtual public Representative? Responsible { get; set; }
 
         public int instituteId { get; set; }
+        
         [ForeignKey("instituteId")]
-        virtual public Institute Institute { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+     
+        virtual public Institute? Institute { get; set; }
 
-        [ForeignKey("tenderClassificationId")]
+
+        
         virtual public ICollection<TenderClassification>? TenderClassification {get; set;}
 
         //crate specification model later
