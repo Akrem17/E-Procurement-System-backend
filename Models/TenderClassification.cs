@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace E_proc.Models
 {
@@ -6,6 +8,7 @@ namespace E_proc.Models
     {
 
         [Key]
+       
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please enter name")]
@@ -16,7 +19,14 @@ namespace E_proc.Models
 
         [Required(ErrorMessage = "Please enter Amount ")]
         public string Amount { get; set; }
-        virtual public Tender Tender { get; set; }
+
+        public int tenderId { get; set; }
+
+        [ForeignKey("tenderId")]
+        [JsonIgnore]
+        virtual public Tender? Tender { get; set; }
+
+
 
     }
 }

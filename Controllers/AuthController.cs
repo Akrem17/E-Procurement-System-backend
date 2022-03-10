@@ -335,14 +335,15 @@ namespace E_proc.Controllers
 
 
 
-
+        
         //get the connected user
         [HttpPost("connected-user")]
 
-        public async Task<IActionResult> GetConnectedUser([FromBody] string? token)
+        public async Task<IActionResult> GetConnectedUser([FromBody] Token? token)
         {
+            Console.WriteLine(token.token);
             //verify  token and get the email
-            var email = _tokenService.ValidateJwtToken(token);
+            var email = _tokenService.ValidateJwtToken(token.token);
 
             if (email == null) return new Success(false, "message.token not verified");
             var users = await _Userrepos.FindBy(email, null,null);
