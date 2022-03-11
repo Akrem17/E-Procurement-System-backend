@@ -212,15 +212,15 @@ namespace E_proc.Controllers
                         var updatedUser = await _Userrepos.UpdateAsync(id, user);
 
 
-                        return new Success(true, "message.Email confirmed ", new { });
+                        return new Success(true, "message.Email confirmed ");
 
                     }
 
                     return new Forbidden(false, "message.Token didn't match with user");
                 }
-                return new Success(false, "message.user not found ", new { });
+                return new Success(false, "message.user not found ");
             }
-            return new Success(false, "message.Token not valid ", new { });
+            return new Success(false, "message.Token not valid ");
 
         }
 
@@ -254,6 +254,23 @@ namespace E_proc.Controllers
             var code = _memoryCache.Get(model.Email);
             return new Success(true, "message.success", new { code = code });
         }
+
+
+        //Verify token
+        [HttpPost("verify-token")]
+
+        public async Task<IActionResult> VerifyToken([FromBody] VerifyToken? model)
+        {
+            var email = _tokenService.ValidateJwtToken(model.Token);
+
+            if (email == null || email != model.Email) 
+            return new Success(false, "message.Token Not Verified");
+            return new Success(true, "message.Verified");
+
+
+        }
+
+
 
 
 
