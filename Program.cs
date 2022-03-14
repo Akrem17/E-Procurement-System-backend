@@ -67,7 +67,7 @@ builder.Services.AddDbContext<AuthContext>(options =>
     options.UseSqlServer(
         config.GetConnectionString("EprocDB"));
 });
-
+builder.Services.AddTransient<IRepresentativeRepository, RepresentativeRepository>();
 builder.Services.AddTransient<ITenderRepository, TenderRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICitizenRepository, CitizenRepository>();
