@@ -9,16 +9,23 @@ namespace E_proc.Repositories.Implementations
 
         private readonly AuthContext _dbContext;
 
+
         public TenderRepository(AuthContext dbContext)
         {
             _dbContext = dbContext; 
-                
+            
         }
         public async Task<Tender> CreateAsync(Tender tender)
         {
-
+          var  representative = _dbContext.Representative.Where(r=>r.SocialSecurityNumber==tender.Responsible.SocialSecurityNumber).FirstOrDefault();       
+            if (representative!=null)
+            {
+                tender.responsibleId = representative.Id;
+                tender.Responsible = null;
+            }
             var tenderResult = await _dbContext.Tender.AddAsync(tender);
             _dbContext.SaveChanges();
+
 
             return tender;
 
