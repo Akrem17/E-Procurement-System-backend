@@ -211,8 +211,7 @@ namespace E_proc.Repositories.Implementations
                     oldUser.address.street2 = supplier.address.street2;
 
                     oldUser.Email = supplier.Email;
-                    oldUser.FirstName = supplier.FirstName;
-                    oldUser.LastName = supplier.LastName;
+                   
                     oldUser.Password = supplier.Password;
                     oldUser.Type = supplier.Type;
                     oldUser.CNSSId = supplier.CNSSId;

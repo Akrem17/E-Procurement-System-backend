@@ -60,8 +60,6 @@ namespace E_proc.Services
 			var claims = new[]
 								{
 									new Claim(ClaimTypes.Email,user.Email),
-									new Claim(ClaimTypes.GivenName,user.FirstName),
-									new Claim(ClaimTypes.Surname,user.LastName),
 									new Claim(ClaimTypes.Role,user.Type),
 									new Claim("Email",user.Email),
 									new Claim("Type",user.Type)

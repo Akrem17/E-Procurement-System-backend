@@ -14,11 +14,7 @@ namespace E_proc.Models
        
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Please enter Firstname")]
-        public string FirstName { get; set; }
-
-        [Required(ErrorMessage = "Please enter Lastname")]
-        public string LastName { get; set; }
+ 
 
         [EmailAddress(ErrorMessage = "Please Validate the email")]
         public string Email { get; set; }
@@ -32,9 +28,6 @@ namespace E_proc.Models
         [DefaultValue(false)]
         public bool EmailConfirmed { get; set; }
 
-
-
-    
         public string? createdAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
    
         public string? updatedAt { get; set; }

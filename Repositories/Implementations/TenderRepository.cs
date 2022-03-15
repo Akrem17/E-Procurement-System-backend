@@ -50,10 +50,23 @@ namespace E_proc.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Tender>> ReadAsync()
+        public async Task<IEnumerable<Tender>> ReadAsync(int skip, int take)
         {
-            var tender = await _dbContext.Tender.ToListAsync();
+          
+                var  tender = await _dbContext.Tender.Skip(skip).Take(take).ToArrayAsync();
+
+
+
             return tender;
+        }
+        public int CountData()
+        {
+
+            var items =  _dbContext.Tender.Count();
+
+
+
+            return items;
         }
 
         public async Task<Tender> ReadById(int id)
@@ -69,7 +82,7 @@ namespace E_proc.Repositories.Implementations
             if (oldUser != null)
             {
                 
-                oldUser.StartDate = tender.StartDate;oldUser.GuaranteeType = tender.GuaranteeType;oldUser.Financing = tender.Financing;oldUser.Budget=tender.Budget;oldUser.BusinessKind=tender.BusinessKind;oldUser.Departement=tender.Departement;oldUser.EvaluationMethod=tender.EvaluationMethod;oldUser.Name = tender.Name; oldUser.specificationURL = tender.specificationURL;
+                oldUser.StartDate = tender.StartDate;oldUser.Financing = tender.Financing;oldUser.Budget=tender.Budget;oldUser.BusinessKind=tender.BusinessKind;oldUser.Departement=tender.Departement;oldUser.EvaluationMethod=tender.EvaluationMethod;oldUser.Name = tender.Name; oldUser.specificationURL = tender.specificationURL;
                 oldUser.updatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
 
                     await _dbContext.SaveChangesAsync();

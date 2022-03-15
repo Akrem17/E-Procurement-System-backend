@@ -28,11 +28,11 @@ namespace E_proc.Models
         [Required(ErrorMessage = "Please enter StartDate")]
         public string StartDate { get; set; }
 
+        [Required(ErrorMessage = "Please enter Deadline")]
+        public string DeadLine { get; set; }
+
         [Required(ErrorMessage = "Please enter Evaluation Method")]
         public string? EvaluationMethod { get; set; }
-
-        [Required(ErrorMessage = "Please Validate the GuaranteeType")]
-        public string? GuaranteeType { get; set; }
 
         [Required(ErrorMessage = "Please enter Departement")]
         public string? Departement { get; set; }
