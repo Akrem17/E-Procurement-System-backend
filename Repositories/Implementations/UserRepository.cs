@@ -26,7 +26,7 @@ namespace E_proc.Services.Repositories
             var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
             if (foundedUser == null)
             {
-                User x = new User { Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, Password = user.Password, Type = user.Type };
+                User x = new User { Email = user.Email, Password = user.Password, Type = user.Type };
 
                 await _dbContext.Users.AddAsync(user);
                 _dbContext.SaveChanges();
@@ -89,8 +89,8 @@ namespace E_proc.Services.Repositories
 
 
                     oldUser.Email = user.Email;
-                    oldUser.FirstName = user.FirstName;
-                    oldUser.LastName = user.LastName;
+                  
+                   
                     oldUser.Password = user.Password;
                     oldUser.Type = user.Type;
                     oldUser.updatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();

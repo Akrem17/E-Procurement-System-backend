@@ -42,7 +42,7 @@ namespace E_proc.Services
             if (foundedUser == null)
             {
                 Console.WriteLine(user.Type);
-                User x = new User { Email = user.Email, FirstName = user.FirstName, LastName = user.LastName, Password = user.Password, Type = user.Type };
+                User x = new User { Email = user.Email, Password = user.Password, Type = user.Type };
 
                 await _dbContext.Users.AddAsync(user);
                 _dbContext.SaveChanges();

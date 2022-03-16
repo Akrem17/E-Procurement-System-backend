@@ -32,14 +32,16 @@ namespace E_proc.Controllers
       
         // GET: api/Tenders
         [HttpGet]
-        public async Task<IActionResult> GetTender()
+        public async Task<IActionResult> GetTender(int? skip=0,int? take=10)
         {
-            var tenders = await _reposTender.ReadAsync();
+            
+            var tenders = await _reposTender.ReadAsync((int)skip,(int)take);
 
-            if (tenders == null) return new Success(false, "message.UserNotFound", new { });
+            if (tenders == null) return new Success(false, "message.UserNotFound");
 
-
-            return new Success(true, "message.success", tenders);
+            var items = _reposTender.CountData();
+           
+            return new Success(true, "message.success", new { tenders, items });
         }
 
         // GET: api/Tenders/5
