@@ -32,7 +32,7 @@ namespace E_proc.Controllers
       
         // GET: api/Tenders
         [HttpGet]
-        public async Task<IActionResult> GetTender(int? skip=0,int? take=10)
+        public async Task<IActionResult> GetTenders(int? skip=0,int? take=10)
         {
             
             var tenders = await _reposTender.ReadAsync((int)skip,(int)take);
@@ -41,7 +41,7 @@ namespace E_proc.Controllers
 
             var items = _reposTender.CountData();
            
-            return new Success(true, "message.success", tenders );
+            return new Success(true, "message.success",new { tenders, items });
         }
 
         // GET: api/Tenders/5
