@@ -2,6 +2,7 @@ using E_proc.Models;
 using E_proc.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 using System.Text;
 using Microsoft.OpenApi.Models;
@@ -17,6 +18,7 @@ using E_proc.Repositories.Implementations;
 using E_proc.Services.Interfaces;
 using E_proc.Services.Implementations;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +65,7 @@ var emailConfig = config.GetSection("EmailConfiguration").Get<EmailConfig>();
 
 builder.Services.AddDbContext<AuthContext>(options =>
 {
-    options.UseLazyLoadingProxies();
+
     options.UseSqlServer(
         config.GetConnectionString("EprocDB"));
 });
@@ -87,15 +89,19 @@ builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2
 
 
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
+//builder.Services.AddControllers()
+//    .AddJsonOptions(options =>
 
-    {
-        options.JsonSerializerOptions.Converters.Add(new CustomJsonConverterForType());
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-        options.JsonSerializerOptions.WriteIndented = true;
-    });
+//    {
+//        options.JsonSerializerOptions.Converters.Add(new CustomJsonConverterForType());
+//        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+//        options.JsonSerializerOptions.WriteIndented = true;
 
+//    });
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
 using var db = new AuthContext(options);
 

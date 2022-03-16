@@ -162,6 +162,7 @@ namespace E_proc.Repositories.Implementations
         public async Task<IEnumerable<Supplier>> ReadAsync()
         {
             var supplier = await _dbContext.Supplier.ToListAsync();
+
             return supplier;
         }
 

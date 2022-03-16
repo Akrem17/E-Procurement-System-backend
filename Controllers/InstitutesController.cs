@@ -11,6 +11,7 @@ using E_proc.Repositories.Interfaces;
 using E_proc.Models.StatusModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json;
 
 namespace E_proc.Controllers
 {
@@ -36,11 +37,11 @@ namespace E_proc.Controllers
             if (email == null && confirmed == null && phone==null && date==null)
             {
                 var institutes = await _reposInstit.ReadAsync();
+               
 
-                if (institutes == null) return new Success(false, "message.UserNotFound", new { });
-
-
-                return new Success(true, "message.sucess", institutes);
+                if (institutes == null) return new Success(false, "message.UserNotFound");
+                
+                return new Success(true, "message.sucess",institutes);
 
 
             }
@@ -62,13 +63,28 @@ namespace E_proc.Controllers
 
 
 
+        [HttpGet("{id}/tenders")]
+        public async Task<IActionResult> GetTendersOfInstitute(int id)
+        {
+
+            var tenders = await _reposInstit.getTendersOfInstitute(id);
+            return new Success(true, "message.sucess", new { tenders });
+
+        }
+
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInstitute(int id)
         {
 
-            var institutes = await _reposInstit.ReadById(id);
-            if (institutes == null) return new Success(false, "message.User not found");
-            return new Success(true, "message.sucess", new { institutes });
+            var institute = await _reposInstit.ReadById(id);
+            var tenders = await _reposInstit.getTendersOfInstitute(id);
+            var t = tenders.ToList();
+            t.ForEach(tend => { tend.Institute = null;});
+            institute.Tenders = t;
+            if (institute == null) return new Success(false, "message.User not found");
+            return new Success(true, "message.sucess", new { institute});
         }
 
 

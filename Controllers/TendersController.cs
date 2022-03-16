@@ -41,7 +41,7 @@ namespace E_proc.Controllers
 
             var items = _reposTender.CountData();
            
-            return new Success(true, "message.success", new { tenders, items });
+            return new Success(true, "message.success", tenders );
         }
 
         // GET: api/Tenders/5
