@@ -1,4 +1,5 @@
 ﻿using E_proc.Models;
+using E_proc.Repositories.Implementations;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -30,7 +31,7 @@ namespace E_proc.Models
 
         [Required(ErrorMessage = "Please enter Deadline")]
         public string DeadLine { get; set; }
-
+        
         [Required(ErrorMessage = "Please enter Evaluation Method")]
         public string? EvaluationMethod { get; set; }
 
@@ -51,15 +52,23 @@ namespace E_proc.Models
         
         virtual public Representative? Responsible { get; set; }
 
-        public int instituteId { get; set; }
+        public int? instituteId { get; set; }
         
         [ForeignKey("instituteId")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-     
+
+
         virtual public Institute? Institute { get; set; }
 
+        //virtual public Institute? Institutes
+        //{
+        //    get
+        //    {
+        //        return TenderRepository.
+        //    }
+        //    set { }
+        //}
 
-        
+
         virtual public ICollection<TenderClassification>? TenderClassification {get; set;}
 
         //crate specification model later

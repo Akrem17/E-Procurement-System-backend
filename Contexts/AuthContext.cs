@@ -6,7 +6,10 @@ namespace E_proc.Models
     public class AuthContext:DbContext
     {
 
-        public AuthContext() { }
+        public AuthContext() {
+        
+
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -14,6 +17,7 @@ namespace E_proc.Models
            .AddJsonFile("appsettings.json")
            .Build();
             optionsBuilder.UseSqlServer(config.GetConnectionString("EprocDB"));
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,7 +26,12 @@ namespace E_proc.Models
                 .HasOne(t => t.Institute)
                 .WithMany(i => i.Tender).
                 OnDelete(DeleteBehavior.Restrict);
-            //modelBuilder.Entity<Tender>().Ignore(c => c.Institute);
+            if (false)
+            {
+
+           
+                modelBuilder.Entity<Institute>().Ignore(c => c.Tender);
+            }
 
 
 

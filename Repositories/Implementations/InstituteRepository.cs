@@ -2,6 +2,8 @@
 using E_proc.Repositories.Interfaces;
 using E_proc.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace E_proc.Repositories.Implementations
 {
@@ -93,13 +95,27 @@ namespace E_proc.Repositories.Implementations
 
 
         //get all insitutes
-        public async Task<IEnumerable<Institute>> ReadAsync()
+        public async  Task<IEnumerable<Institute>> ReadAsync()
         {
 
-            var institutes = await _dbContext.Institute.ToListAsync();
+            var institutes = await _dbContext.Institute.Include(i=>i.Tender).ToListAsync();
+         
 
             return institutes;
         }
+
+        public async Task<IEnumerable<Tender>> getTendersOfInstitute(int id)
+        {
+
+            var institutes = await _dbContext.Tender.Where(t=>t.instituteId==id).ToArrayAsync();
+
+
+            return institutes;
+        }
+
+
+
+
 
 
 

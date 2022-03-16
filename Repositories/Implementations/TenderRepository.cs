@@ -51,14 +51,26 @@ namespace E_proc.Repositories.Implementations
         }
 
         public async Task<IEnumerable<Tender>> ReadAsync(int skip, int take)
-        {
-          
-                var  tender = await _dbContext.Tender.Skip(skip).Take(take).ToArrayAsync();
-
+        { 
+            var tender = await _dbContext.Tender.Include(t=>t.AddressReceipt).Include(t => t.Institute) .Skip(skip).Take(take).ToArrayAsync();
+            
 
 
             return tender;
         }
+
+
+        //public async Task<Institute> GetInstituteOfTender(int id)
+        //{
+        //    var institute = await _dbContext.Institute.FirstOrDefaultAsync(user => user.Id == id);
+        //    return institute;
+
+        //}
+
+
+
+
+
         public int CountData()
         {
 
