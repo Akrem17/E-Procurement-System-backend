@@ -67,6 +67,7 @@ builder.Services.AddDbContext<AuthContext>(options =>
 {
 
     options.UseSqlServer(
+
         config.GetConnectionString("EprocDB"));
 });
 builder.Services.AddTransient<IRepresentativeRepository, RepresentativeRepository>();
@@ -89,19 +90,17 @@ builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2
 
 
 
-//builder.Services.AddControllers()
-//    .AddJsonOptions(options =>
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
 
-//    {
-//        options.JsonSerializerOptions.Converters.Add(new CustomJsonConverterForType());
-//        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-//        options.JsonSerializerOptions.WriteIndented = true;
+    {
+        options.JsonSerializerOptions.Converters.Add(new CustomJsonConverterForType());
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+ 
 
-//    });
-builder.Services.AddControllersWithViews()
-    .AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-);
+    });
+
 
 using var db = new AuthContext(options);
 

@@ -24,8 +24,9 @@ namespace E_proc.Models
         {
             modelBuilder.Entity<Tender>()
                 .HasOne(t => t.Institute)
-                .WithMany(i => i.Tender).
-                OnDelete(DeleteBehavior.Restrict);
+                .WithMany(i => i.Tender)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
             if (false)
             {
 

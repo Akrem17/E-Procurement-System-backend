@@ -13,6 +13,7 @@
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.2",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "6.0.2",
           "Microsoft.EntityFrameworkCore": "6.0.2",
+          "Microsoft.EntityFrameworkCore.Abstractions": "7.0.0-preview.2.22153.1",
           "Microsoft.EntityFrameworkCore.Design": "6.0.2",
           "Microsoft.EntityFrameworkCore.Proxies": "6.0.2",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.2",
@@ -21,7 +22,6 @@
           "Microsoft.IdentityModel.Tokens": "6.15.1",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "6.0.2",
           "NETCore.MailKit": "2.0.3",
-          "Newtonsoft.Json": "13.0.1",
           "Swashbuckle.AspNetCore": "6.2.3",
           "System.IdentityModel.Tokens.Jwt": "6.15.1"
         },
@@ -1010,7 +1010,7 @@
       },
       "Microsoft.EntityFrameworkCore/6.0.2": {
         "dependencies": {
-          "Microsoft.EntityFrameworkCore.Abstractions": "6.0.2",
+          "Microsoft.EntityFrameworkCore.Abstractions": "7.0.0-preview.2.22153.1",
           "Microsoft.EntityFrameworkCore.Analyzers": "6.0.2",
           "Microsoft.Extensions.Caching.Memory": "7.0.0-preview.1.22076.8",
           "Microsoft.Extensions.DependencyInjection": "6.0.0",
@@ -1025,11 +1025,11 @@
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.Abstractions/6.0.2": {
+      "Microsoft.EntityFrameworkCore.Abstractions/7.0.0-preview.2.22153.1": {
         "runtime": {
           "lib/net6.0/Microsoft.EntityFrameworkCore.Abstractions.dll": {
-            "assemblyVersion": "6.0.2.0",
-            "fileVersion": "6.0.222.6404"
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.0.22.15301"
           }
         }
       },
@@ -3016,12 +3016,12 @@
       "path": "microsoft.entityframeworkcore/6.0.2",
       "hashPath": "microsoft.entityframeworkcore.6.0.2.nupkg.sha512"
     },
-    "Microsoft.EntityFrameworkCore.Abstractions/6.0.2": {
+    "Microsoft.EntityFrameworkCore.Abstractions/7.0.0-preview.2.22153.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-71hgKvRpMebTp9bKZB86w3uRXQAJzTeksZ4EyO1/OKj/AoL8/8IU31kHHcIFAfX/D0uefl4rO6jWgh3OaR41pQ==",
-      "path": "microsoft.entityframeworkcore.abstractions/6.0.2",
-      "hashPath": "microsoft.entityframeworkcore.abstractions.6.0.2.nupkg.sha512"
+      "sha512": "sha512-fAHgboRgyr5aR3I6H05Eg616BLlZJoj9ct+/rHHg3xaMthJv5r9bL8djwRxHQ84xXNBReLArf6Pk7SnETv0/sg==",
+      "path": "microsoft.entityframeworkcore.abstractions/7.0.0-preview.2.22153.1",
+      "hashPath": "microsoft.entityframeworkcore.abstractions.7.0.0-preview.2.22153.1.nupkg.sha512"
     },
     "Microsoft.EntityFrameworkCore.Analyzers/6.0.2": {
       "type": "package",

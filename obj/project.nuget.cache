@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "MWtAio7nL35oau3idZDUYcKmq0tBw4H4Aaj2sz4Rwfy4rwUo2efkekFkPgW2ePwGydMRtGb/InRV2rYT4Bcytg==",
+  "dgSpecHash": "5xlgCSmH/8VbufRMzMpjnspxumc26lGUIE33rV6qzko33XKb/tYDChvb9bXP5FXcl/AQT/J3EyCxpc9UkzRYpw==",
   "success": true,
   "projectFilePath": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\E-proc.csproj",
   "expectedPackageFiles": [
@@ -46,7 +46,7 @@
     "C:\\Users\\akrem\\.nuget\\packages\\microsoft.diasymreader\\1.3.0\\microsoft.diasymreader.1.3.0.nupkg.sha512",
     "C:\\Users\\akrem\\.nuget\\packages\\microsoft.dotnet.scaffolding.shared\\6.0.2\\microsoft.dotnet.scaffolding.shared.6.0.2.nupkg.sha512",
     "C:\\Users\\akrem\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.2\\microsoft.entityframeworkcore.6.0.2.nupkg.sha512",
-    "C:\\Users\\akrem\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.2\\microsoft.entityframeworkcore.abstractions.6.0.2.nupkg.sha512",
+    "C:\\Users\\akrem\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.0-preview.2.22153.1\\microsoft.entityframeworkcore.abstractions.7.0.0-preview.2.22153.1.nupkg.sha512",
     "C:\\Users\\akrem\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\6.0.2\\microsoft.entityframeworkcore.analyzers.6.0.2.nupkg.sha512",
     "C:\\Users\\akrem\\.nuget\\packages\\microsoft.entityframeworkcore.design\\6.0.2\\microsoft.entityframeworkcore.design.6.0.2.nupkg.sha512",
     "C:\\Users\\akrem\\.nuget\\packages\\microsoft.entityframeworkcore.proxies\\6.0.2\\microsoft.entityframeworkcore.proxies.6.0.2.nupkg.sha512",

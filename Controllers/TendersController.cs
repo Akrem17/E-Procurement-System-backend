@@ -49,8 +49,7 @@ namespace E_proc.Controllers
         public async Task<IActionResult> GetTender(int id)
         {
             var tender = await _reposTender.ReadById(id);
-            tender.Institute = null;
-         //  var res= JsonSerializer.Serialize(tender);
+            
             if (tender == null) return new Success(false, "message.Usernot found");
             return new Success(true, "message.success", tender);
         }
