@@ -14,6 +14,9 @@ namespace E_proc.Repositories.Interfaces
         Task<List<Institute>> FindBy(string? email, bool? confirmed, string? phone,DateTime? date);
 
         Task<int> Delete(int id);
-        Task<IEnumerable<Tender>> getTendersOfInstitute(int id);
+        Task<IEnumerable<Tender>> getTendersOfInstitute(int id, int skip, int take);
+        Task<int> getTendersOfInstituteCountData(int id);
+
+        
     }
 }

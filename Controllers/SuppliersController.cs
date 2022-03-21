@@ -27,7 +27,6 @@ namespace E_proc.Controllers
 
 
 
-
         // GET: api/Suppliers
         [HttpGet]
         public async Task<IActionResult> GetSupplier(string? email = null, bool? confirmed = null, string? phone = null, DateTime? date = null)
@@ -38,7 +37,7 @@ namespace E_proc.Controllers
             {
                 var suppliers = await _reposSuuplier.ReadAsync();
 
-                if (suppliers == null) return new Success(false, "message.UserNotFound", new { });
+                if (suppliers == null) return new Success(false, "message.UserNotFound");
 
 
                 return new Success(true, "message.success", suppliers);
@@ -76,8 +75,7 @@ namespace E_proc.Controllers
         //// PUT: api/Suppliers/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Supplier supplier)
-        {
-
+        {                                                                                                                                                                 
             var newUser = await _reposSuuplier.UpdateAsync(id, supplier);
 
             if (newUser == null)

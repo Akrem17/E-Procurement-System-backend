@@ -6,7 +6,6 @@ namespace E_proc.Models
     public class Address
     {
         [Key]
-        [JsonIgnore]
         public int Id { get; set; }
         public string countryName { get; set; }
         public string postalCode { get; set; }

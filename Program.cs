@@ -22,6 +22,36 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+
+    {
+        options.JsonSerializerOptions.Converters.Add(new CustomJsonConverterForType());
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+
+
+    });
+builder.Services.AddMvc()
+    .AddJsonOptions(options =>
+
+    {
+        options.JsonSerializerOptions.Converters.Add(new CustomJsonConverterForType());
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+
+
+    });
+builder.Services.AddMvcCore()
+    .AddJsonOptions(options =>
+
+    {
+        options.JsonSerializerOptions.Converters.Add(new CustomJsonConverterForType());
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+
+
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -69,8 +99,12 @@ builder.Services.AddDbContext<AuthContext>(options =>
     options.UseSqlServer(
 
         config.GetConnectionString("EprocDB"));
+
+    
+
 });
 builder.Services.AddTransient<IRepresentativeRepository, RepresentativeRepository>();
+builder.Services.AddTransient<IAddressRepository, AddressRepository>();
 builder.Services.AddTransient<ITenderRepository, TenderRepository>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<ICitizenRepository, CitizenRepository>();
@@ -84,22 +118,10 @@ builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddCors();
-builder.Services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 
 
 
-
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-
-    {
-        options.JsonSerializerOptions.Converters.Add(new CustomJsonConverterForType());
-        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-        options.JsonSerializerOptions.WriteIndented = true;
- 
-
-    });
 
 
 using var db = new AuthContext(options);
@@ -143,5 +165,4 @@ app.UseHttpLogging();
 app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
-
 app.Run();

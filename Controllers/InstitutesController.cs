@@ -64,22 +64,26 @@ namespace E_proc.Controllers
 
 
         [HttpGet("{id}/tenders")]
-        public async Task<IActionResult> GetTendersOfInstitute(int id)
+        public async Task<IActionResult> GetTendersOfInstitute(int id, int? skip = 0, int? take = 10)
         {
 
-            var tenders = await _reposInstit.getTendersOfInstitute(id);
-            return new Success(true, "message.sucess", new { tenders });
+            var tenders = await _reposInstit.getTendersOfInstitute(id, (int)skip, (int)take);
+            if (tenders.Count()==0) return new Success(false, "message.notFound");
+            var items = _reposInstit.getTendersOfInstituteCountData(id).Result;
+            
+            return new Success(true, "message.sucess", new { tenders, items });
+
 
         }
 
 
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetInstitute(int id)
+        public async Task<IActionResult> GetInstitute(int id, int? skip = 0, int? take = 10)
         {
 
             var institute = await _reposInstit.ReadById(id);
-            var tenders = await _reposInstit.getTendersOfInstitute(id);
+            var tenders = await _reposInstit.getTendersOfInstitute(id, (int)skip, (int)take);
             var t = tenders.ToList();
             t.ForEach(tend => { tend.Institute = null;});
             institute.Tenders = t;

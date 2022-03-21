@@ -27,6 +27,7 @@ namespace E_proc.Models
                 .WithMany(i => i.Tender)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+           
             if (false)
             {
 
@@ -46,6 +47,7 @@ namespace E_proc.Models
         public DbSet<E_proc.Models.Institute> Institute { get; set; }
         public DbSet<E_proc.Models.Tender> Tender { get; set; }
         public DbSet<E_proc.Models.Representative> Representative { get; set; }
+        public DbSet<E_proc.Models.Address> Address { get; set; }
 
 
     }
