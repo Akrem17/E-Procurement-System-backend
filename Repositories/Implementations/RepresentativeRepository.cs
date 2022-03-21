@@ -39,14 +39,25 @@ namespace E_proc.Repositories.Implementations
             return representative;
         }
 
-        public Task<Representative> ReadById(int id)
+        public async Task<Representative> ReadById(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Representative.FirstOrDefaultAsync(ad => ad.Id == id);
         }
 
-        public Task<Representative> UpdateAsync(int id, Representative representative)
+        public async Task<Representative> UpdateAsync(int id, Representative representative)
         {
-            throw new NotImplementedException();
+            var oldRepresentative = await ReadById(id);
+            if (oldRepresentative == null) return null;
+            oldRepresentative.Email = representative.Email;
+            oldRepresentative.Phone = representative.Phone;
+            oldRepresentative.Position = representative.Position;
+            oldRepresentative.Name = representative.Name; 
+            oldRepresentative.SocialSecurityNumber = representative.SocialSecurityNumber;
+            oldRepresentative.SocialSecurityNumberDate = representative.SocialSecurityNumberDate;
+
+            var res = await _dbContext.SaveChangesAsync();
+
+            return oldRepresentative;
         }
     }
 }

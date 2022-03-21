@@ -21,55 +21,61 @@ namespace E_proc.Controllers
         public RepresentativesController(IRepresentativeRepository reposRepresentative)
         {
 
-            _reposRepresentative= reposRepresentative;
+            _reposRepresentative = reposRepresentative;
         }
 
         // GET: api/Representatives
         [HttpGet]
-        public async Task<IActionResult > GetRepresentative(string? socialSecurityNumber)
+        public async Task<IActionResult> GetRepresentative(string? socialSecurityNumber)
         {
-            if(socialSecurityNumber == null)
+
+            if (socialSecurityNumber == null)
             {
 
-          
-            var representative = await _reposRepresentative.ReadAsync();
 
-            if (representative == null) return new Success(false, "message.UserNotFound");
+                var representative = await _reposRepresentative.ReadAsync();
+
+                if (representative == null) return new Success(false, "message.UserNotFound");
 
 
-            return new Success(true, "message.sucess", representative);
-            }
-            else { 
-
-            var representative = await _reposRepresentative.FindBy(socialSecurityNumber);
-            if (representative.Count() != 0)
-            {
                 return new Success(true, "message.sucess", representative);
-
             }
-            return new Success(false, "message.not found");
+            else {
+
+                var representative = await _reposRepresentative.FindBy(socialSecurityNumber);
+                if (representative.Count() != 0)
+                {
+                    return new Success(true, "message.sucess", representative);
+
+                }
+                return new Success(false, "message.not found");
             }
         }
 
 
+
+
+        // GET: api/Representatives/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Representative>> GetRepresentative(int id)
+        //{
+        //    return await _dbContext. .FirstOrDefaultAsync(user => user.Id == id);
+
+
+        //}
+
+        // PUT: api/Representatives/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutRepresentative(int id, Representative representative)
+        {
+
+            var repres = await _reposRepresentative.UpdateAsync(id, representative);    
+            if (repres == null) return new Success(false, "message.notFound");
+            return new Success(true, "message.Representative Updated", repres);
+
+        }
     }
-
-    // GET: api/Representatives/5
-    //[HttpGet("{id}")]
-    //public async Task<ActionResult<Representative>> GetRepresentative(int id)
-    //{
-    //    return await _dbContext. .FirstOrDefaultAsync(user => user.Id == id);
-
-
-    //}
-
-    //// PUT: api/Representatives/5
-    //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //[HttpPut("{id}")]
-    //public async Task<IActionResult> PutRepresentative(int id, Representative representative)
-    //{
-
-    //}
+}
 
     //// POST: api/Representatives
     //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -89,5 +95,5 @@ namespace E_proc.Controllers
     //{
 
     //}
-}
+
 
