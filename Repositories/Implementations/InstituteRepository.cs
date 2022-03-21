@@ -104,10 +104,17 @@ namespace E_proc.Repositories.Implementations
             return institutes;
         }
 
-        public async Task<IEnumerable<Tender>> getTendersOfInstitute(int id)
+        public async Task<IEnumerable<Tender>> getTendersOfInstitute(int id, int skip, int take)
         {
 
-            var institutes = await _dbContext.Tender.Where(t=>t.instituteId==id).ToArrayAsync();
+            Console.WriteLine(skip.ToString(),take.ToString());
+
+            var institutes = await _dbContext.Tender
+                .Where(t=>t.instituteId==id)
+                .Include(t=>t.Institute)
+                .Skip(skip)
+                .Take(take) 
+                .ToArrayAsync();
 
 
             return institutes;
@@ -158,6 +165,11 @@ namespace E_proc.Repositories.Implementations
                 }
             };
             return oldUser;
+        }
+
+        public async Task<int> getTendersOfInstituteCountData(int id)
+        {
+            return await _dbContext.Tender.Where(t => t.instituteId == id).CountAsync();
         }
     }
 }
