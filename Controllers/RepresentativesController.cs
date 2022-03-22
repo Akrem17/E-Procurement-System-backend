@@ -40,7 +40,8 @@ namespace E_proc.Controllers
 
                 return new Success(true, "message.sucess", representative);
             }
-            else {
+            else
+            {
 
                 var representative = await _reposRepresentative.FindBy(socialSecurityNumber);
                 if (representative.Count() != 0)
@@ -69,31 +70,52 @@ namespace E_proc.Controllers
         public async Task<IActionResult> PutRepresentative(int id, Representative representative)
         {
 
-            var repres = await _reposRepresentative.UpdateAsync(id, representative);    
+            var repres = await _reposRepresentative.UpdateAsync(id, representative);
             if (repres == null) return new Success(false, "message.notFound");
             return new Success(true, "message.Representative Updated", repres);
 
         }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> PostRepresentative(Representative representative)
+        {
+
+            if (representative != null)
+            {
+
+
+                Representative status = await _reposRepresentative.CreateAsync(representative);
+
+                if (status == null)
+
+                    return new Success(false, "message.This email is already exists");
+
+
+
+                return new Success(true, "message.success", new { representative });
+            }
+
+
+            return new Success(false, "message.User is empty");
+
+
+        }
+
+
+        //// DELETE: api/Representatives/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteRepresentative(int id)
+        //{
+
+        //}
+
+        //private bool RepresentativeExists(int id)
+        //{
+
+        //}
+
+
     }
 }
-
-    //// POST: api/Representatives
-    //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //[HttpPost]
-    //public async Task<ActionResult<Representative>> PostRepresentative(Representative representative)
-    //{
-
-
-    //// DELETE: api/Representatives/5
-    //[HttpDelete("{id}")]
-    //public async Task<IActionResult> DeleteRepresentative(int id)
-    //{
-
-    //}
-
-    //private bool RepresentativeExists(int id)
-    //{
-
-    //}
-
-

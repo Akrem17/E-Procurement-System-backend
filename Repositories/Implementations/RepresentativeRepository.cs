@@ -12,9 +12,24 @@ namespace E_proc.Repositories.Implementations
             _dbContext = dbContext;
 
         }
-        public Task<Representative> CreateAsync(Representative representative)
+        public async Task<Representative> CreateAsync(Representative representative)
         {
-            throw new NotImplementedException();
+
+            var foundedRepresentative = await _dbContext.Representative.FirstOrDefaultAsync(u => u.SocialSecurityNumber == representative.SocialSecurityNumber);
+            if (foundedRepresentative == null)
+            {
+
+
+                var repre = await _dbContext.Representative.AddAsync(representative);
+                _dbContext.SaveChanges();
+
+                return representative;
+
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public Task<int> Delete(int id)
