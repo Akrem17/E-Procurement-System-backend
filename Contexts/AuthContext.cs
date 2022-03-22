@@ -48,6 +48,7 @@ namespace E_proc.Models
         public DbSet<E_proc.Models.Tender> Tender { get; set; }
         public DbSet<E_proc.Models.Representative> Representative { get; set; }
         public DbSet<E_proc.Models.Address> Address { get; set; }
+        public DbSet<E_proc.Models.TenderClassification> TenderClassification { get; set; }
 
 
     }

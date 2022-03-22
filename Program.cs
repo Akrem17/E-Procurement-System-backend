@@ -103,6 +103,8 @@ builder.Services.AddDbContext<AuthContext>(options =>
     
 
 });
+
+builder.Services.AddTransient<ITenderClassificationRepository, TenderClassificationRepository>();
 builder.Services.AddTransient<IRepresentativeRepository, RepresentativeRepository>();
 builder.Services.AddTransient<IAddressRepository, AddressRepository>();
 builder.Services.AddTransient<ITenderRepository, TenderRepository>();
