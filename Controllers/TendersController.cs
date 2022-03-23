@@ -29,19 +29,37 @@ namespace E_proc.Controllers
 
         }
 
-      
+
         // GET: api/Tenders
         [HttpGet]
-        public async Task<IActionResult> GetTenders(int? skip=0,int? take=10)
+        public async Task<IActionResult> GetTenders(int? skip = 0, int? take = 10, string? bidNumber = null, string? bidName = null)
         {
+            if (bidNumber == null && bidName == null)
+            {
+
             
-            var tenders = await _reposTender.ReadAsync((int)skip,(int)take);
+
+                var tenders = await _reposTender.ReadAsync((int)skip, (int)take);
 
             if (tenders == null) return new Success(false, "message.UserNotFound");
 
             var items = _reposTender.CountData();
-           
-            return new Success(true, "message.success",new { tenders, items });
+
+            return new Success(true, "message.success", new { tenders, items });
+
+
+        }
+            else
+            {
+                var institutes = await _reposTender.FindBy(bidNumber, bidName);
+                if (institutes.Count() != 0)
+                {
+                    return new Success(true, "message.sucess", institutes);
+
+                }
+                return new Success(false, "message.not found");
+
+            }
         }
 
         // GET: api/Tenders/5
