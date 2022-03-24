@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_proc.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20220309105939_AddTender")]
-    partial class AddTender
+    [Migration("20220324143651_filedataupdate5")]
+    partial class filedataupdate5
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -55,6 +55,40 @@ namespace E_proc.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("E_proc.Models.FileData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("FileExtention")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MimeType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenderId");
+
+                    b.ToTable("FileData");
                 });
 
             modelBuilder.Entity("E_proc.Models.Licence", b =>
@@ -139,14 +173,15 @@ namespace E_proc.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AddressReceiptId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Budget")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BusinessKind")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeadLine")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -162,26 +197,26 @@ namespace E_proc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("GuaranteeType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("InstituteId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ResponsibleId")
-                        .HasColumnType("int");
 
                     b.Property<string>("StartDate")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("addressReceiptId")
+                        .HasColumnType("int");
+
                     b.Property<string>("createdAt")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("instituteId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int>("responsibleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("specificationURL")
                         .IsRequired()
@@ -192,11 +227,11 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressReceiptId");
+                    b.HasIndex("addressReceiptId");
 
-                    b.HasIndex("InstituteId");
+                    b.HasIndex("instituteId");
 
-                    b.HasIndex("ResponsibleId");
+                    b.HasIndex("responsibleId");
 
                     b.ToTable("Tender");
                 });
@@ -221,12 +256,12 @@ namespace E_proc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TenderId")
+                    b.Property<int>("tenderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenderId");
+                    b.HasIndex("tenderId");
 
                     b.ToTable("TenderClassification");
                 });
@@ -249,14 +284,6 @@ namespace E_proc.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -307,6 +334,14 @@ namespace E_proc.Migrations
                     b.HasBaseType("E_proc.Models.User");
 
                     b.Property<string>("CIN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -440,23 +475,32 @@ namespace E_proc.Migrations
                     b.HasDiscriminator().HasValue("Supplier");
                 });
 
+            modelBuilder.Entity("E_proc.Models.FileData", b =>
+                {
+                    b.HasOne("E_proc.Models.Tender", "Tender")
+                        .WithMany("Specifications")
+                        .HasForeignKey("TenderId");
+
+                    b.Navigation("Tender");
+                });
+
             modelBuilder.Entity("E_proc.Models.Tender", b =>
                 {
                     b.HasOne("E_proc.Models.Address", "AddressReceipt")
                         .WithMany()
-                        .HasForeignKey("AddressReceiptId")
+                        .HasForeignKey("addressReceiptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("E_proc.Models.Institute", "Institute")
-                        .WithMany()
-                        .HasForeignKey("InstituteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("Tender")
+                        .HasForeignKey("instituteId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("E_proc.Models.Representative", "Responsible")
                         .WithMany()
-                        .HasForeignKey("ResponsibleId")
+                        .HasForeignKey("responsibleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -471,7 +515,7 @@ namespace E_proc.Migrations
                 {
                     b.HasOne("E_proc.Models.Tender", "Tender")
                         .WithMany("TenderClassification")
-                        .HasForeignKey("TenderId")
+                        .HasForeignKey("tenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -522,7 +566,14 @@ namespace E_proc.Migrations
 
             modelBuilder.Entity("E_proc.Models.Tender", b =>
                 {
+                    b.Navigation("Specifications");
+
                     b.Navigation("TenderClassification");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Institute", b =>
+                {
+                    b.Navigation("Tender");
                 });
 #pragma warning restore 612, 618
         }

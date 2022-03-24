@@ -59,17 +59,11 @@ namespace E_proc.Models
 
         virtual public Institute? Institute { get; set; }
 
-        //virtual public Institute? Institutes
-        //{
-        //    get
-        //    {
-        //        return TenderRepository.
-        //    }
-        //    set { }
-        //}
-
 
         virtual public ICollection<TenderClassification>? TenderClassification {get; set;}
+
+        public virtual ICollection<FileData>? Specifications { get; set; }
+
 
         //crate specification model later
         public string specificationURL { get; set; }

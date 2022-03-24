@@ -16,7 +16,10 @@ namespace E_proc.Repositories.Interfaces
         Task<int> Delete(int id);
         Task<IEnumerable<Tender>> getTendersOfInstitute(int id, int skip, int take);
         Task<int> getTendersOfInstituteCountData(int id);
+       // Task<FileData[]> getInstituteSpecifications(int id);
 
-        
+
+
+
     }
 }
