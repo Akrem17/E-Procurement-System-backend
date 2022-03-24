@@ -84,9 +84,12 @@ namespace E_proc.Controllers
 
             var institute = await _reposInstit.ReadById(id);
             var tenders = await _reposInstit.getTendersOfInstitute(id, (int)skip, (int)take);
+           // var specifications=await _reposInstit.getInstituteSpecifications(id);
             var t = tenders.ToList();
             t.ForEach(tend => { tend.Institute = null;});
             institute.Tenders = t;
+            //institute.Specifications = specifications;
+
             if (institute == null) return new Success(false, "message.User not found");
             return new Success(true, "message.sucess", new { institute});
         }

@@ -27,7 +27,9 @@ namespace E_proc.Models
                 .WithMany(i => i.Tender)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
-           
+            modelBuilder.Entity<FileData>()
+                .HasOne(t => t.Tender).WithMany(t => t.Specifications).HasForeignKey(fk => fk.TenderId);
+
             if (false)
             {
 
@@ -49,6 +51,8 @@ namespace E_proc.Models
         public DbSet<E_proc.Models.Representative> Representative { get; set; }
         public DbSet<E_proc.Models.Address> Address { get; set; }
         public DbSet<E_proc.Models.TenderClassification> TenderClassification { get; set; }
+        public DbSet<E_proc.Models.FileData> FileData { get; set; }
+
 
 
     }

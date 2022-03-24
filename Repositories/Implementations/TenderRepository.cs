@@ -105,7 +105,7 @@ namespace E_proc.Repositories.Implementations
         public async Task<Tender> ReadById(int id)
         {
 
-            return await _dbContext.Tender.Include(t => t.AddressReceipt).Include(t => t.Institute).Include(t=>t.TenderClassification).Include(t => t.Responsible).FirstOrDefaultAsync(user => user.Id == id);
+            return await _dbContext.Tender.Include(t => t.AddressReceipt).Include(t => t.Institute).Include(t=>t.TenderClassification).Include(t => t.Responsible).Include(t=>t.Specifications).FirstOrDefaultAsync(user => user.Id == id);
         }
 
         public async Task<Tender> UpdateAsync(int id, Tender tender)

@@ -98,12 +98,13 @@ namespace E_proc.Repositories.Implementations
         public async  Task<IEnumerable<Institute>> ReadAsync()
         {
 
-            var institutes = await _dbContext.Institute.Include(i=>i.Tender).ToListAsync();
+            var institutes = await _dbContext.Institute.Include(i=>i.Tender). ToListAsync();
          
 
             return institutes;
         }
 
+        
         public async Task<IEnumerable<Tender>> getTendersOfInstitute(int id, int skip, int take)
         {
 
@@ -112,6 +113,7 @@ namespace E_proc.Repositories.Implementations
             var institutes = await _dbContext.Tender
                 .Where(t=>t.instituteId==id)
                 .Include(t=>t.Institute)
+
                 .Skip(skip)
                 .Take(take) 
                 .ToArrayAsync();
@@ -171,5 +173,6 @@ namespace E_proc.Repositories.Implementations
         {
             return await _dbContext.Tender.Where(t => t.instituteId == id).CountAsync();
         }
+     
     }
 }
