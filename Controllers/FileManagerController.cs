@@ -19,76 +19,102 @@ namespace E_proc.Controllers
 
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> PostAsync ([FromForm] FileModel model,int? instituteId)
+        public async Task<IActionResult> PostAsync ([FromForm] FileModel model,int? tenderId)
         {
 
 
             try
             {
-                FileRecord file = await SaveFileAsync(model.MyFile);
+                List<FileRecord> files = await SaveFileAsync(model.MyFile);
 
-                if (!string.IsNullOrEmpty(file.FilePath))
+           
+                    if (files.Count()!=0)
                 {
-                    file.AltText = model.AltText;
-                    file.Description = model.Description;
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        files[i].AltText = model.AltText;
+                        files[i].Description = model.Description;
+                    }
+                   
                     //Save to Inmemory object
                     //fileDB.Add(file);
                     //Save to SQL Server DB
-                    SaveToDB(file, instituteId);
+                    SaveToDB(files, tenderId);
                     return new Success(true,"message.success");
                 }
+                
+
                 else
                     return new Success(false, "message.failed");
+           
             }
             catch (Exception ex)
             {
-                                     return new Success(false,"message."+ex.Message);
+                return new Success(false,"message."+ex.Message);
             }
         }
 
 
-        private async Task<FileRecord> SaveFileAsync(IFormFile myFile)
+        private async Task<List<FileRecord>> SaveFileAsync(IFormFile[] myFile)
         {
-            FileRecord file = new FileRecord();
+            List<FileRecord >files = new List<FileRecord>();
+
+            
+                
+            
+
             if (myFile != null)
             {
-                if (!Directory.Exists(AppDirectory))
+               for (int i = 0; i < myFile.Length; i++)
+                    {
+                    FileRecord file = new FileRecord();
+
+                    if (!Directory.Exists(AppDirectory))
                     Directory.CreateDirectory(AppDirectory);
 
-                var fileName = DateTime.Now.Ticks.ToString() + Path.GetExtension(myFile.FileName);
+                var fileName = DateTime.Now.Ticks.ToString() + Path.GetExtension(myFile[i].FileName);
                 var path = Path.Combine(AppDirectory, fileName);
 
                 file.Id = fileDB.Count() + 1;
                 file.FilePath = path;
                 file.FileName = fileName;
-                file.FileFormat = Path.GetExtension(myFile.FileName);
-                file.ContentType = myFile.ContentType;
+                file.FileFormat = Path.GetExtension(myFile[i].FileName);
+                file.ContentType = myFile[i].ContentType;
 
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
-                    await myFile.CopyToAsync(stream);
+                    await myFile[i].CopyToAsync(stream);
                 }
 
-                return file;
+                        files.Add(file);
+                        
+                }
+               return files;
             } 
-            return file;
+            return files;
         }
 
-        private void SaveToDB(FileRecord record,int? TenderId=null)
+        private void SaveToDB(List<FileRecord> record,int? TenderId=null)
         {
             if (record == null)
                 throw new ArgumentNullException($"{nameof(record)}");
 
-            FileData fileData = new FileData();
-            fileData.FilePath = record.FilePath;
-            fileData.FileName = record.FileName;
-            fileData.FileExtention = record.FileFormat;
-            fileData.MimeType = record.ContentType;
+            List<FileData> filesData = new List<FileData>();
+            for (int i = 0; i < record.Count; i++)
+            {
+                FileData fileData = new FileData();
+                fileData.FilePath = record[i].FilePath;
+            fileData.FileName = record[i].FileName;
+            fileData.FileExtention = record[i].FileFormat;
+            fileData.MimeType = record[i].ContentType;
             fileData.TenderId = TenderId;
+                filesData.Add(fileData);
 
-            _context.FileData.Add(fileData);
+            }
+            _context.FileData.AddRange(filesData);
             _context.SaveChanges();
         }
+       
 
         [HttpGet]
         public List<FileRecord> GetAllFiles()
