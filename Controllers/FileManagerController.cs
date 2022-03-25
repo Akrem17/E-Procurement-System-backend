@@ -92,6 +92,8 @@ namespace E_proc.Controllers
                return files;
             } 
             return files;
+
+
         }
 
         private void SaveToDB(List<FileRecord> record,int? TenderId=null)
@@ -132,7 +134,7 @@ namespace E_proc.Controllers
             }).ToList();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("download/{id}")]
         public async Task<IActionResult> DownloadFile(int id)
         {
             if (!Directory.Exists(AppDirectory))
@@ -155,6 +157,13 @@ namespace E_proc.Controllers
             var fileName = Path.GetFileName(path);
 
             return File(memory, contentType, fileName);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetFile(int id)
+        {
+           var file= _context.FileData.Where(fd => fd.Id == id).FirstOrDefault();
+            return new Success(true, "message.success", file);
+
         }
 
     }

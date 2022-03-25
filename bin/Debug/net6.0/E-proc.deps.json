@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "E-proc/1.0.0": {
         "dependencies": {
+          "BitMiracle.Docotic.Pdf": "8.5.13165-dev",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "6.0.2",
           "Microsoft.AspNetCore.Cors": "2.2.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.2",
@@ -27,6 +28,14 @@
         },
         "runtime": {
           "E-proc.dll": {}
+        }
+      },
+      "BitMiracle.Docotic.Pdf/8.5.13165-dev": {
+        "runtime": {
+          "lib/netstandard2.0/BitMiracle.Docotic.Pdf.dll": {
+            "assemblyVersion": "8.5.13165.0",
+            "fileVersion": "8.5.13165.0"
+          }
         }
       },
       "Castle.Core/4.4.1": {
@@ -2721,6 +2730,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "BitMiracle.Docotic.Pdf/8.5.13165-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-c0vMkt82G7X72c5nou5ugcjKSsc89WsoFIt+LY+7LNsSZVlWENx8zuETRyoiN2ue6qD3ZlG4UVi4EjJT2aNLTA==",
+      "path": "bitmiracle.docotic.pdf/8.5.13165-dev",
+      "hashPath": "bitmiracle.docotic.pdf.8.5.13165-dev.nupkg.sha512"
     },
     "Castle.Core/4.4.1": {
       "type": "package",
