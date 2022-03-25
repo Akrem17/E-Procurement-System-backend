@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "BitMiracle.Docotic.Pdf/8.5.13165-dev": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/BitMiracle.Docotic.Pdf.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/BitMiracle.Docotic.Pdf.dll": {}
+        }
+      },
       "Castle.Core/4.4.1": {
         "type": "package",
         "dependencies": {
@@ -3736,6 +3745,27 @@
     }
   },
   "libraries": {
+    "BitMiracle.Docotic.Pdf/8.5.13165-dev": {
+      "sha512": "c0vMkt82G7X72c5nou5ugcjKSsc89WsoFIt+LY+7LNsSZVlWENx8zuETRyoiN2ue6qD3ZlG4UVi4EjJT2aNLTA==",
+      "type": "package",
+      "path": "bitmiracle.docotic.pdf/8.5.13165-dev",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "bitmiracle.docotic.pdf.8.5.13165-dev.nupkg.sha512",
+        "bitmiracle.docotic.pdf.nuspec",
+        "lib/net40/BitMiracle.Docotic.Pdf.dll",
+        "lib/net40/BitMiracle.Docotic.Pdf.xml",
+        "lib/net46/BitMiracle.Docotic.Pdf.dll",
+        "lib/net46/BitMiracle.Docotic.Pdf.xml",
+        "lib/netstandard2.0/BitMiracle.Docotic.Pdf.dll",
+        "lib/netstandard2.0/BitMiracle.Docotic.Pdf.xml",
+        "license.txt",
+        "logo.png",
+        "readme.txt"
+      ]
+    },
     "Castle.Core/4.4.1": {
       "sha512": "zanbjWC0Y05gbx4eGXkzVycOQqVOFVeCjVsDSyuao9P4mtN1w3WxxTo193NGC7j3o2u3AJRswaoC6hEbnGACnQ==",
       "type": "package",
@@ -11448,6 +11478,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "BitMiracle.Docotic.Pdf >= 8.5.13165-dev",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 6.0.2",
       "Microsoft.AspNetCore.Cors >= 2.2.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 6.0.2",
@@ -11505,6 +11536,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "BitMiracle.Docotic.Pdf": {
+            "target": "Package",
+            "version": "[8.5.13165-dev, )"
+          },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
             "version": "[6.0.2, )"

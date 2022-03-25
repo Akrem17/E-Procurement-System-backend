@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "5xlgCSmH/8VbufRMzMpjnspxumc26lGUIE33rV6qzko33XKb/tYDChvb9bXP5FXcl/AQT/J3EyCxpc9UkzRYpw==",
+  "dgSpecHash": "2HLX/wGy7DkmbCAmsASu9bExkXiaupwqlUMQ7U79s8nKhtTEK8tEFHN3iSvmqwTWSjJgcyjVGMi22sZn/UKW6Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\E-proc.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\akrem\\.nuget\\packages\\bitmiracle.docotic.pdf\\8.5.13165-dev\\bitmiracle.docotic.pdf.8.5.13165-dev.nupkg.sha512",
     "C:\\Users\\akrem\\.nuget\\packages\\castle.core\\4.4.1\\castle.core.4.4.1.nupkg.sha512",
     "C:\\Users\\akrem\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\akrem\\.nuget\\packages\\mailkit\\2.6.0\\mailkit.2.6.0.nupkg.sha512",
