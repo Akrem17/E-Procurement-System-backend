@@ -36,11 +36,10 @@ namespace E_proc.Controllers
                         files[i].Description = model.Description;
                     }
                    
-                    //Save to Inmemory object
-                    //fileDB.Add(file);
-                    //Save to SQL Server DB
-                    SaveToDB(files, tenderId);
-                    return new Success(true,"message.success");
+                  
+                    
+                    var file=SaveToDB(files, tenderId);
+                    return new Success(true,"message.success", file);
                 }
                 
 
@@ -96,7 +95,7 @@ namespace E_proc.Controllers
 
         }
 
-        private void SaveToDB(List<FileRecord> record,int? TenderId=null)
+        private FileData SaveToDB(List<FileRecord> record,int? TenderId=null)
         {
             if (record == null)
                 throw new ArgumentNullException($"{nameof(record)}");
@@ -115,6 +114,8 @@ namespace E_proc.Controllers
             }
             _context.FileData.AddRange(filesData);
             _context.SaveChanges();
+
+            return filesData[0];
         }
        
 
@@ -158,6 +159,7 @@ namespace E_proc.Controllers
 
             return File(memory, contentType, fileName);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetFile(int id)
         {
@@ -165,6 +167,21 @@ namespace E_proc.Controllers
             return new Success(true, "message.success", file);
 
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> deleteFile(int id)
+        {
+            var file = _context.FileData.Where(fd => fd.Id == id).FirstOrDefault();
+            if (file != null)
+            {
+                _context.FileData.Remove(file);
+                _context.SaveChanges();
+                return new Success(true, "message.success", file);
+
+            }
+            return new Success(false, "message.failed", file);
+
+        }
+
 
     }
 }
