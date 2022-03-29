@@ -79,10 +79,15 @@ namespace E_proc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("OfferId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("TenderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OfferId");
 
                     b.HasIndex("TenderId");
 
@@ -124,6 +129,52 @@ namespace E_proc.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Licence");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Offer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("FinalTotalMontant")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FinancialId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TechnicalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalMontant")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("isAccepted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FinancialId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("TechnicalId");
+
+                    b.HasIndex("TenderId");
+
+                    b.ToTable("Offer");
                 });
 
             modelBuilder.Entity("E_proc.Models.Representative", b =>
@@ -475,9 +526,48 @@ namespace E_proc.Migrations
 
             modelBuilder.Entity("E_proc.Models.FileData", b =>
                 {
+                    b.HasOne("E_proc.Models.Offer", null)
+                        .WithMany("Other")
+                        .HasForeignKey("OfferId");
+
                     b.HasOne("E_proc.Models.Tender", "Tender")
                         .WithMany("Specifications")
                         .HasForeignKey("TenderId");
+
+                    b.Navigation("Tender");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Offer", b =>
+                {
+                    b.HasOne("E_proc.Models.FileData", "Financial")
+                        .WithMany()
+                        .HasForeignKey("FinancialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_proc.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_proc.Models.FileData", "Technical")
+                        .WithMany()
+                        .HasForeignKey("TechnicalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_proc.Models.Tender", "Tender")
+                        .WithMany()
+                        .HasForeignKey("TenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Financial");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("Technical");
 
                     b.Navigation("Tender");
                 });
@@ -560,6 +650,11 @@ namespace E_proc.Migrations
                     b.Navigation("licence");
 
                     b.Navigation("representative");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Offer", b =>
+                {
+                    b.Navigation("Other");
                 });
 
             modelBuilder.Entity("E_proc.Models.Tender", b =>

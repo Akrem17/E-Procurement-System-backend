@@ -1,7 +1,6 @@
 ﻿using E_proc.Models;
 using E_proc.Models.StatusModel;
 using E_proc.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_proc.Controllers
@@ -11,13 +10,10 @@ namespace E_proc.Controllers
     public class FileManagerController : ControllerBase
     {   
 
-        private readonly string AppDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-        private static List<FileRecord> fileDB = new List<FileRecord>();
-        private readonly AuthContext _context;
+    
         private IFileDataRepository _fileRepository;
-        public FileManagerController(AuthContext context, IFileDataRepository fileRepository)
+        public FileManagerController(IFileDataRepository fileRepository)
         {
-            _context = context;
             _fileRepository = fileRepository;
         }
 
