@@ -4,11 +4,12 @@
 
 namespace E_proc.Migrations
 {
-    public partial class AddofferLinks : Migration
+    public partial class AddFiles : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-          
+         
+
             migrationBuilder.CreateTable(
                 name: "Offer",
                 columns: table => new
@@ -17,28 +18,14 @@ namespace E_proc.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalMontant = table.Column<int>(type: "int", nullable: false),
-                    FinalTotalMontant = table.Column<int>(type: "int", nullable: false),
+                    FinalTotalMontant = table.Column<int>(type: "int", nullable: true),
                     isAccepted = table.Column<bool>(type: "bit", nullable: true),
-                    FinancialId = table.Column<int>(type: "int", nullable: false),
-                    TechnicalId = table.Column<int>(type: "int", nullable: false),
                     TenderId = table.Column<int>(type: "int", nullable: false),
                     SupplierId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Offer", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Offer_FileData_FinancialId",
-                        column: x => x.FinancialId,
-                        principalTable: "FileData",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Offer_FileData_TechnicalId",
-                        column: x => x.TechnicalId,
-                        principalTable: "FileData",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Offer_Tender_TenderId",
                         column: x => x.TenderId,
@@ -53,11 +40,44 @@ namespace E_proc.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+           
+            migrationBuilder.CreateTable(
+                name: "FileData",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FileExtention = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MimeType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TenderId = table.Column<int>(type: "int", nullable: true),
+                    OfferId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FileData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FileData_Offer_OfferId",
+                        column: x => x.OfferId,
+                        principalTable: "Offer",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_FileData_Tender_TenderId",
+                        column: x => x.TenderId,
+                        principalTable: "Tender",
+                        principalColumn: "Id");
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Offer_FinancialId",
-                table: "Offer",
-                column: "FinancialId");
+                name: "IX_FileData_OfferId",
+                table: "FileData",
+                column: "OfferId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileData_TenderId",
+                table: "FileData",
+                column: "TenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Offer_SupplierId",
@@ -65,26 +85,23 @@ namespace E_proc.Migrations
                 column: "SupplierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Offer_TechnicalId",
-                table: "Offer",
-                column: "TechnicalId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Offer_TenderId",
                 table: "Offer",
                 column: "TenderId");
 
-           
+            
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-          
+            migrationBuilder.DropTable(
+                name: "FileData");
+
+      
 
             migrationBuilder.DropTable(
                 name: "Offer");
 
-        
         }
     }
 }

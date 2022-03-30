@@ -63,6 +63,8 @@ namespace E_proc.Models
         virtual public ICollection<TenderClassification>? TenderClassification {get; set;}
 
         public virtual ICollection<FileData>? Specifications { get; set; }
+        public virtual ICollection<Offer>? Offers { get; set; }
+
 
 
         //crate specification model later

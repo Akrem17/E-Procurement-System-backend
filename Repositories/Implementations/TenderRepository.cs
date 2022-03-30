@@ -52,7 +52,7 @@ namespace E_proc.Repositories.Implementations
 
         public async Task<IEnumerable<Tender>> ReadAsync(int skip, int take)
         { 
-            var tender = await _dbContext.Tender.Include(t=>t.AddressReceipt).Include(t => t.Institute) .Skip(skip).Take(take).ToArrayAsync();
+            var tender = await _dbContext.Tender.Include(t=>t.AddressReceipt).Include(t => t.Institute).Include(t=>t.Offers) .Skip(skip).Take(take).ToArrayAsync();
             
 
 
@@ -105,7 +105,7 @@ namespace E_proc.Repositories.Implementations
         public async Task<Tender> ReadById(int id)
         {
 
-            return await _dbContext.Tender.Include(t => t.AddressReceipt).Include(t => t.Institute).Include(t=>t.TenderClassification).Include(t => t.Responsible).Include(t=>t.Specifications).FirstOrDefaultAsync(user => user.Id == id);
+            return await _dbContext.Tender.Include(t => t.AddressReceipt).Include(t => t.Institute).Include(t=>t.Offers).ThenInclude(o=>o.Supplier).Include(t=>t.TenderClassification).Include(t => t.Responsible).Include(t=>t.Specifications).FirstOrDefaultAsync(user => user.Id == id);
         }
 
         public async Task<Tender> UpdateAsync(int id, Tender tender)

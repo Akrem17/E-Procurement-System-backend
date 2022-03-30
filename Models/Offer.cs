@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace E_proc.Models
 {
@@ -14,20 +15,13 @@ namespace E_proc.Models
 
         public bool? isAccepted { get; set; }
 
-        [ForeignKey("Financial")]
-        public int FinancialId { get; set; }
-        public virtual FileData? Financial { get; set; }
-
-        [ForeignKey("Technical")]
-        public int TechnicalId { get; set; }
-        public virtual FileData? Technical { get; set; }
-
-
-        public virtual ICollection<FileData>? Other { get; set; }
+        public virtual ICollection<FileData>? Files { get; set; }
 
 
         [ForeignKey("Tender")]
         public int TenderId { get; set; }
+
+        [JsonIgnore]
         public virtual Tender? Tender {get; set ;}
 
         [ForeignKey("Supplier")]

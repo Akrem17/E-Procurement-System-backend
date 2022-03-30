@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_proc.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20220329103334_AddofferLinks")]
-    partial class AddofferLinks
+    [Migration("20220330110653_offer")]
+    partial class offer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -141,10 +141,7 @@ namespace E_proc.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("FinalTotalMontant")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FinancialId")
+                    b.Property<int?>("FinalTotalMontant")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -152,9 +149,6 @@ namespace E_proc.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SupplierId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TechnicalId")
                         .HasColumnType("int");
 
                     b.Property<int>("TenderId")
@@ -168,11 +162,7 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FinancialId");
-
                     b.HasIndex("SupplierId");
-
-                    b.HasIndex("TechnicalId");
 
                     b.HasIndex("TenderId");
 
@@ -528,48 +518,34 @@ namespace E_proc.Migrations
 
             modelBuilder.Entity("E_proc.Models.FileData", b =>
                 {
-                    b.HasOne("E_proc.Models.Offer", null)
-                        .WithMany("Other")
+                    b.HasOne("E_proc.Models.Offer", "Offer")
+                        .WithMany("Files")
                         .HasForeignKey("OfferId");
 
                     b.HasOne("E_proc.Models.Tender", "Tender")
                         .WithMany("Specifications")
                         .HasForeignKey("TenderId");
 
+                    b.Navigation("Offer");
+
                     b.Navigation("Tender");
                 });
 
             modelBuilder.Entity("E_proc.Models.Offer", b =>
                 {
-                    b.HasOne("E_proc.Models.FileData", "Financial")
-                        .WithMany()
-                        .HasForeignKey("FinancialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("E_proc.Models.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("E_proc.Models.FileData", "Technical")
-                        .WithMany()
-                        .HasForeignKey("TechnicalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("E_proc.Models.Tender", "Tender")
-                        .WithMany()
+                        .WithMany("Offers")
                         .HasForeignKey("TenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Financial");
-
                     b.Navigation("Supplier");
-
-                    b.Navigation("Technical");
 
                     b.Navigation("Tender");
                 });
@@ -656,11 +632,13 @@ namespace E_proc.Migrations
 
             modelBuilder.Entity("E_proc.Models.Offer", b =>
                 {
-                    b.Navigation("Other");
+                    b.Navigation("Files");
                 });
 
             modelBuilder.Entity("E_proc.Models.Tender", b =>
                 {
+                    b.Navigation("Offers");
+
                     b.Navigation("Specifications");
 
                     b.Navigation("TenderClassification");

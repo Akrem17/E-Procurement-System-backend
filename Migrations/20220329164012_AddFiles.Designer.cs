@@ -4,6 +4,7 @@ using E_proc.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_proc.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    partial class AuthContextModelSnapshot : ModelSnapshot
+    [Migration("20220329164012_AddFiles")]
+    partial class AddFiles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -538,7 +540,7 @@ namespace E_proc.Migrations
                         .IsRequired();
 
                     b.HasOne("E_proc.Models.Tender", "Tender")
-                        .WithMany("Offers")
+                        .WithMany()
                         .HasForeignKey("TenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -635,8 +637,6 @@ namespace E_proc.Migrations
 
             modelBuilder.Entity("E_proc.Models.Tender", b =>
                 {
-                    b.Navigation("Offers");
-
                     b.Navigation("Specifications");
 
                     b.Navigation("TenderClassification");

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using E_proc.Models;
+using E_proc.Repositories.Interfaces;
+using E_proc.Models.StatusModel;
 
 namespace E_proc.Controllers
 {
@@ -15,17 +17,19 @@ namespace E_proc.Controllers
     public class OffersController : ControllerBase
     {
         private readonly AuthContext _context;
-
-        public OffersController(AuthContext context)
+        private IFileDataRepository _fileRepository;
+        public OffersController(AuthContext context, IFileDataRepository fileRepository)
         {
             _context = context;
+            _fileRepository = fileRepository;
+
         }
 
         // GET: api/Offers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Offer>>> GetOffer()
         {
-            return await _context.Offer.Include(o=>o.Supplier).Include(o => o.Tender).Include(o=>o.Financial). ToListAsync();
+            return await _context.Offer.Include(o=>o.Supplier).Include(o => o.Tender).Include(o=>o.Files). ToListAsync();
         }
 
         // GET: api/Offers/5
@@ -72,6 +76,42 @@ namespace E_proc.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("files")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> PostAsync([FromForm] FileModel model, int? tenderId)
+        {
+
+
+            try
+            {
+                List<FileRecord> files = await _fileRepository.SaveFileAsync(model.MyFile);
+
+
+                if (files.Count() != 0)
+                {
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        files[i].AltText = model.AltText;
+                        files[i].Description = model.Description;
+                    }
+
+
+
+                    var file = _fileRepository.SaveToDBForOffer(files, tenderId);
+                    return new Success(true, "message.success", file);
+                }
+                else
+                    return new Success(false, "message.failed");
+
+            }
+            catch (Exception ex)
+            {
+                return new Success(false, "message." + ex.Message);
+            }
+        }
+
+
 
         // POST: api/Offers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
