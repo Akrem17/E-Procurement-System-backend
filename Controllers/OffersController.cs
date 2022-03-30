@@ -18,32 +18,37 @@ namespace E_proc.Controllers
     {
         private readonly AuthContext _context;
         private IFileDataRepository _fileRepository;
-        public OffersController(AuthContext context, IFileDataRepository fileRepository)
+        private IOfferRepository _offerRepository;
+        public OffersController(AuthContext context, IFileDataRepository fileRepository, IOfferRepository offerRepository )
         {
             _context = context;
             _fileRepository = fileRepository;
+            _offerRepository = offerRepository;
 
         }
 
         // GET: api/Offers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Offer>>> GetOffer()
+        public async Task<IActionResult> GetOffer(int? skip,int? take)
         {
-            return await _context.Offer.Include(o=>o.Supplier).Include(o => o.Tender).Include(o=>o.Files). ToListAsync();
+            var offer = await _offerRepository.ReadAsync((int)skip,(int) take);
+
+
+            if (offer == null) return new Success(false, "message.UserNotFound");
+
+            return new Success(true, "message.sucess", offer);
+
         }
 
         // GET: api/Offers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Offer>> GetOffer(int id)
-        {
-            var offer = await _context.Offer.FindAsync(id);
+        public async Task<IActionResult> GetOffer(int id)
 
-            if (offer == null)
-            {
-                return NotFound();
-            }
-
-            return offer;
+        { 
+            var offer = await _offerRepository.ReadById(id);
+            if (offer == null) return new Success(false, "message.user Not Found");
+            return new Success(true, "message.success",  offer );
+  
         }
 
         // PUT: api/Offers/5
