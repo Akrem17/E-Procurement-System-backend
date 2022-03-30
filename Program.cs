@@ -103,6 +103,8 @@ builder.Services.AddDbContext<AuthContext>(options =>
     
 
 });
+builder.Services.AddTransient<IOfferRepository, OfferRepository>();
+
 builder.Services.AddTransient<IFileDataRepository, FileDataRepository>();
 builder.Services.AddTransient<ITenderClassificationRepository, TenderClassificationRepository>();
 builder.Services.AddTransient<IRepresentativeRepository, RepresentativeRepository>();
