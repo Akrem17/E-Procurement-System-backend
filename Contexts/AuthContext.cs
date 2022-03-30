@@ -31,11 +31,13 @@ namespace E_proc.Models
                 .HasOne(t => t.Tender).WithMany(t => t.Specifications).HasForeignKey(fk => fk.TenderId);
 
             if (false)
-            {
-
-           
+            {          
                 modelBuilder.Entity<Institute>().Ignore(c => c.Tender);
             }
+            modelBuilder.Entity<FileData>()
+                .HasOne(f => f.Offer).WithMany(o => o.Files);
+            modelBuilder.Entity<Tender>()
+                    .HasMany(t=>t.Offers).WithOne(o=>o.Tender).HasForeignKey(f => f.TenderId).IsRequired();
 
 
 

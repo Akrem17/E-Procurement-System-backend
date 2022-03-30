@@ -79,6 +79,30 @@ namespace E_proc.Repositories.Implementations
             return filesData[0];
         }
 
+        public FileData SaveToDBForOffer(List<FileRecord> record, int? OfferId = null)
+        {
+            if (record == null)
+                throw new ArgumentNullException($"{nameof(record)}");
+
+            List<FileData> filesData = new List<FileData>();
+            for (int i = 0; i < record.Count; i++)
+            {
+                FileData fileData = new FileData();
+                fileData.FilePath = record[i].FilePath;
+                fileData.FileName = record[i].FileName;
+                fileData.FileExtention = record[i].FileFormat;
+                fileData.MimeType = record[i].ContentType;
+                fileData.OfferId = OfferId;
+                filesData.Add(fileData);
+
+            }
+            _context.FileData.AddRange(filesData);
+            _context.SaveChanges();
+
+            return filesData[0];
+        }
+
+
         public List<FileRecord> GetAllFiles()
         {
             return _context.FileData.Select(n => new FileRecord

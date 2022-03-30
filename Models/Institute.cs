@@ -14,7 +14,6 @@ namespace E_proc.Models
         public string NameAr { get; set; }
         public string TypeOfInstitute { get; set; }
         public string AreaType { get; set; }
-
         public string representativeName { get; set; }
 
         public string NotificationEmail { get; set; }

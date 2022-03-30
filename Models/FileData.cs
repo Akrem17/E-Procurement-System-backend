@@ -21,6 +21,15 @@ namespace E_proc.Models
         [JsonIgnore]
         public virtual Tender? Tender { get; set; }
 
+        [ForeignKey("Offer")]
+
+        public int? OfferId { get; set; }
+
+        [JsonIgnore]
+        public virtual Offer? Offer { get; set; }
+     
+
+
 
 
 
