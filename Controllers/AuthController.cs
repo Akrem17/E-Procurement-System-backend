@@ -358,7 +358,6 @@ namespace E_proc.Controllers
 
         public async Task<IActionResult> GetConnectedUser([FromBody] Token? token)
         {
-            Console.WriteLine(token.token);
             //verify  token and get the email
             var email = _tokenService.ValidateJwtToken(token.token);
 
@@ -369,6 +368,6 @@ namespace E_proc.Controllers
             return new Success(true, "message.success", user);
 
         }
-
-    }
+     
+        }
 }

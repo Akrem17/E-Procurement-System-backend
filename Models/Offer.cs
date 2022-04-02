@@ -23,6 +23,9 @@ namespace E_proc.Models
 
         [JsonIgnore]
         public virtual Tender? Tender {get; set ;}
+        [NotMapped]
+        public virtual Tender? TenderInfo { get; set; }
+
 
         [ForeignKey("Supplier")]
         public int SupplierId { get; set; }

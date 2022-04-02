@@ -11,9 +11,11 @@ namespace E_proc.Repositories.Interfaces
         Task<Offer> ReadById(int id);
 
         Task<Offer> UpdateAsync(int id, Offer offer);
-        Task<List<Offer>> FindBy(string? bidNumber, string? bidName);
 
         Task<int> Delete(int id);
         public int CountData();
+        Task<List<Offer>> FindBy(string? supplierId, string? supplierEmail);
+
+
     }
 }

@@ -29,14 +29,27 @@ namespace E_proc.Controllers
 
         // GET: api/Offers
         [HttpGet]
-        public async Task<IActionResult> GetOffer(int? skip,int? take)
+        public async Task<IActionResult> GetOffer(int? skip=0,int? take=10,string? supplierId=null, string? supplierEmail = null)
         {
+            if (supplierId == null) { 
             var offer = await _offerRepository.ReadAsync((int)skip,(int) take);
+                var itemsNumber = _offerRepository.CountData();
 
-
-            if (offer == null) return new Success(false, "message.UserNotFound");
+            if (offer == null) return new Success(false, "message.OfferNotFound");
 
             return new Success(true, "message.sucess", offer);
+            }
+            else
+            {
+                var offer = await _offerRepository.FindBy(supplierId,supplierEmail);
+
+
+                if (offer == null) return new Success(false, "message.UserNotFound");
+
+                return new Success(true, "message.sucess", offer);
+            }
+            return new Success(false, "message.failed");
+
 
         }
 
@@ -52,34 +65,14 @@ namespace E_proc.Controllers
         }
 
         // PUT: api/Offers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOffer(int id, Offer offer)
         {
-            if (id != offer.Id)
-            {
-                return BadRequest();
-            }
+            var newOffer = await _offerRepository.UpdateAsync(id, offer);
 
-            _context.Entry(offer).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OfferExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            if (newOffer == null)
+                return new Success(false, "message.User not found ");
+            return new Success(true, "message.success", newOffer);
         }
 
         [HttpPost("files")]
