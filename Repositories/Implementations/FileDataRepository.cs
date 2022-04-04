@@ -164,7 +164,10 @@ namespace E_proc.Repositories.Implementations
 
         }
 
-
+        public FileData updateFile(int? fileId = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

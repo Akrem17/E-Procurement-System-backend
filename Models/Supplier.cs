@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace E_proc.Models
 {
@@ -51,7 +52,7 @@ namespace E_proc.Models
         [ForeignKey("representativeId")]
         public virtual Representative? representative { get; set; }
 
-      
+
         public int licenceId { get; set; }
         [ForeignKey("licenceId")]
         public virtual Licence? licence { get; set; }
@@ -60,6 +61,9 @@ namespace E_proc.Models
         [ForeignKey("addressId")]
         public virtual Address? address { get; set; }
 
+       
+
+    
 
     }
 }
