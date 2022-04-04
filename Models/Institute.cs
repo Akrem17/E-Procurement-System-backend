@@ -26,7 +26,7 @@ namespace E_proc.Models
 
         public virtual ICollection<Tender>? Tender { get;set;}
         [NotMapped]
-        public ICollection<Tender> Tenders
+        public ICollection<Tender>? Tenders
         {
             get;
 
