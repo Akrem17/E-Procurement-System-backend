@@ -14,7 +14,7 @@ namespace E_proc.Repositories.Interfaces
 
         Task<int> Delete(int id);
         public int CountData();
-        Task<List<Offer>> FindBy(string? supplierId, string? supplierEmail);
+        Task<List<Offer>> FindBy(int skip, int take ,string? supplierId, string? supplierEmail);
 
 
     }

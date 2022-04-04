@@ -42,12 +42,13 @@ namespace E_proc.Controllers
             }
             else
             {
-                var offer = await _offerRepository.FindBy(supplierId, supplierEmail);
+                var offer = await _offerRepository.FindBy((int)skip, (int)take,supplierId, supplierEmail);
+                var itemsNumber = _offerRepository.CountData();
 
 
                 if (offer == null) return new Success(false, "message.UserNotFound");
 
-                return new Success(true, "message.sucess", offer);
+                return new Success(true, "message.sucess",new  { offer , itemsNumber });
             }
             return new Success(false, "message.failed");
 
