@@ -31,7 +31,13 @@ namespace E_proc.Models
         public int SupplierId { get; set; }
         public virtual Supplier? Supplier { get; set; }
 
+        public virtual Offer Copy()
+        {
+            var offer = (Offer)MemberwiseClone();
+            offer.Id = this.Id;
+            return offer;
+        }
 
- 
+
     } 
 }
