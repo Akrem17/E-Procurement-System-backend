@@ -7,25 +7,57 @@ namespace E_proc.Repositories.Implementations
     public class OfferRepository : IOfferRepository
     {
         private readonly AuthContext _dbContext;
-        public OfferRepository(AuthContext dbContext)
+        private readonly IFileDataRepository _fileDataRepository;
+
+        public OfferRepository(AuthContext dbContext, IFileDataRepository fileDataRepository )
         {
 
             _dbContext = dbContext;
+            _fileDataRepository = fileDataRepository;
         }
 
         public int CountData()
         {
             return _dbContext.Offer.Count();
         }
+      
 
-        public Task<Offer> CreateAsync(Offer offer)
+        public async Task<Offer> CreateAsync(Offer offer)
         {
-            throw new NotImplementedException();
+            Offer off = new Offer();
+            offer.Id = 0;
+             off = offer.Copy();
+                 var of = await _dbContext.Offer.AddAsync(off);
+                _dbContext.SaveChanges();
+                 Console.WriteLine(off);
+                 Console.WriteLine(offer);
+
+            return off;
+
+
+
+
         }
 
-        public Task<int> Delete(int id)
+        public async Task<int> Delete(int id)
         {
-            throw new NotImplementedException();
+
+
+            var offer = await ReadById(id);
+            ICollection<FileData> files=offer.Files;
+
+            if (offer != null)
+            {
+                foreach (FileData file in files)
+                {
+                  var res=  _fileDataRepository.deleteFile(file.Id);
+                    
+                }
+                var deletedOffer = _dbContext.Offer.Remove(offer);
+                await _dbContext.SaveChangesAsync();
+                return 200;
+            };
+            return 404;
         }
 
         public async Task<List<Offer>> FindBy(string? supplierId, string? supplierEmail)

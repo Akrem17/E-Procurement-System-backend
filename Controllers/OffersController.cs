@@ -19,7 +19,7 @@ namespace E_proc.Controllers
         private readonly AuthContext _context;
         private IFileDataRepository _fileRepository;
         private IOfferRepository _offerRepository;
-        public OffersController(AuthContext context, IFileDataRepository fileRepository, IOfferRepository offerRepository )
+        public OffersController(AuthContext context, IFileDataRepository fileRepository, IOfferRepository offerRepository)
         {
             _context = context;
             _fileRepository = fileRepository;
@@ -29,19 +29,20 @@ namespace E_proc.Controllers
 
         // GET: api/Offers
         [HttpGet]
-        public async Task<IActionResult> GetOffer(int? skip=0,int? take=10,string? supplierId=null, string? supplierEmail = null)
+        public async Task<IActionResult> GetOffer(int? skip = 0, int? take = 10, string? supplierId = null, string? supplierEmail = null)
         {
-            if (supplierId == null) { 
-            var offer = await _offerRepository.ReadAsync((int)skip,(int) take);
+            if (supplierId == null)
+            {
+                var offer = await _offerRepository.ReadAsync((int)skip, (int)take);
                 var itemsNumber = _offerRepository.CountData();
 
-            if (offer == null) return new Success(false, "message.OfferNotFound");
+                if (offer == null) return new Success(false, "message.OfferNotFound");
 
-            return new Success(true, "message.sucess", offer);
+                return new Success(true, "message.sucess", offer);
             }
             else
             {
-                var offer = await _offerRepository.FindBy(supplierId,supplierEmail);
+                var offer = await _offerRepository.FindBy(supplierId, supplierEmail);
 
 
                 if (offer == null) return new Success(false, "message.UserNotFound");
@@ -57,11 +58,11 @@ namespace E_proc.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOffer(int id)
 
-        { 
+        {
             var offer = await _offerRepository.ReadById(id);
             if (offer == null) return new Success(false, "message.user Not Found");
-            return new Success(true, "message.success",  offer );
-  
+            return new Success(true, "message.success", offer);
+
         }
 
         // PUT: api/Offers/5
@@ -111,31 +112,34 @@ namespace E_proc.Controllers
 
 
 
-        // POST: api/Offers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Offer>> PostOffer(Offer offer)
+        public async Task<IActionResult> PostOffer(Offer offer)
         {
-            _context.Offer.Add(offer);
-            await _context.SaveChangesAsync();
+            if (offer != null)
+            {
 
-            return CreatedAtAction("GetOffer", new { id = offer.Id }, offer);
+                //verify institute
+                var offerAdded = await _offerRepository.CreateAsync(offer);
+
+
+                if (offerAdded != null)
+                    return new Success(true, "message.success", offerAdded);
+
+            }
+
+
+            return new Success(false, "message.User is empty");
         }
 
         // DELETE: api/Offers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOffer(int id)
         {
-            var offer = await _context.Offer.FindAsync(id);
-            if (offer == null)
-            {
-                return NotFound();
-            }
+            var res = await _offerRepository.Delete(id);
+            if (res == 200)
+                return new Success(true, "message.success"); ;
 
-            _context.Offer.Remove(offer);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return new Success(false, "Tender not found");
         }
 
         private bool OfferExists(int id)
