@@ -60,12 +60,12 @@ namespace E_proc.Repositories.Implementations
             return 404;
         }
 
-        public async Task<List<Offer>> FindBy(string? supplierId, string? supplierEmail)
+        public async Task<List<Offer>> FindBy(int skip, int take,string? supplierId, string? supplierEmail)
         {
             var offers = await _dbContext.Offer
                                 .Where(s => !string.IsNullOrEmpty(supplierId) ? s.SupplierId.ToString() == supplierId : true)
                                 .Where(s => !string.IsNullOrEmpty(supplierEmail) ? s.Supplier.Email == supplierEmail : true)
-                                 .Include(t => t.Supplier)
+                                 .Include(t => t.Supplier).Skip(skip).Take(take)
                                 .ToListAsync();
             Tender tender;
             for (var i = 0; i < offers.Count; i++)
