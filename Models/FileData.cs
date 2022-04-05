@@ -13,6 +13,7 @@ namespace E_proc.Models
         public string FileExtention { get; set; }
         public string MimeType { get; set; }
         public string FilePath { get; set; }
+        public string FileSize { get; set; }
 
         [ForeignKey("Tender")]
        

@@ -34,12 +34,14 @@ namespace E_proc.Repositories.Implementations
 
                     var fileName = DateTime.Now.Ticks.ToString() + Path.GetExtension(myFile[i].FileName);
                     var path = Path.Combine(AppDirectory, fileName);
+                    
 
                     file.Id = fileDB.Count() + 1;
                     file.FilePath = path;
                     file.FileName = fileName;
                     file.FileFormat = Path.GetExtension(myFile[i].FileName);
                     file.ContentType = myFile[i].ContentType;
+                    file.Size = myFile[i].Length.ToString();
 
                     using (var stream = new FileStream(path, FileMode.Create))
                     {
@@ -70,6 +72,7 @@ namespace E_proc.Repositories.Implementations
                 fileData.FileExtention = record[i].FileFormat;
                 fileData.MimeType = record[i].ContentType;
                 fileData.TenderId = TenderId;
+                fileData.FileSize = record[i].Size;
                 filesData.Add(fileData);
 
             }
@@ -93,6 +96,7 @@ namespace E_proc.Repositories.Implementations
                 fileData.FileExtention = record[i].FileFormat;
                 fileData.MimeType = record[i].ContentType;
                 fileData.OfferId = OfferId;
+                fileData.FileSize= record[i].Size;
                 filesData.Add(fileData);
 
             }

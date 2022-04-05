@@ -14,6 +14,7 @@ namespace E_proc.Repositories.Interfaces
         Task<FileData> GetFile(int id);
         Task<FileData> deleteFile(int id);
         FileData SaveToDBForOffer(List<FileRecord> record, int? OfferId = null);
+
         FileData updateFile( int? fileId = null);
 
 

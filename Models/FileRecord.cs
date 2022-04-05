@@ -9,5 +9,6 @@
         public string ContentType { get; set; }
         public string AltText { get; set; }
         public string Description { get; set; }
+        public string Size { get; set; }
     }
 }
