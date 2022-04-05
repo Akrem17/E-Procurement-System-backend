@@ -31,7 +31,7 @@ namespace E_proc.Controllers
         [HttpGet]
         public async Task<IActionResult> GetOffer(int? skip = 0, int? take = 10, string? supplierId = null, string? supplierEmail = null,string? offerNumber=null, string? tenderName = null, string? city = null, string? postDate = null)
         {
-            if (supplierId == null)
+            if (supplierId == null &&   supplierEmail == null &&  offerNumber == null &&  tenderName == null &&  city == null && postDate == null)
             {
                 var offer = await _offerRepository.ReadAsync((int)skip, (int)take);
                 var itemsNumber = _offerRepository.CountData();
