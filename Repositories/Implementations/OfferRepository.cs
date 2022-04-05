@@ -60,11 +60,16 @@ namespace E_proc.Repositories.Implementations
             return 404;
         }
 
-        public async Task<List<Offer>> FindBy(int skip, int take,string? supplierId, string? supplierEmail)
+        public async Task<List<Offer>> FindBy(int skip, int take,string? supplierId, string? supplierEmail, string? offerNumber = null, string? tenderName = null, string? city = null, string? postDate = null)
         {
             var offers = await _dbContext.Offer
                                 .Where(s => !string.IsNullOrEmpty(supplierId) ? s.SupplierId.ToString() == supplierId : true)
                                 .Where(s => !string.IsNullOrEmpty(supplierEmail) ? s.Supplier.Email == supplierEmail : true)
+                                .Where(s => !string.IsNullOrEmpty(offerNumber) ? EF.Functions.Like(s.Id.ToString(), offerNumber + "%") : true)
+                                .Where(s => !string.IsNullOrEmpty(tenderName) ? EF.Functions.Like(s.Name, tenderName + "%") : true)
+                               
+                            
+
                                  .Include(t => t.Supplier).Skip(skip).Take(take)
                                 .ToListAsync();
             Tender tender;
@@ -78,6 +83,21 @@ namespace E_proc.Repositories.Implementations
 
             return offers;
         }
+        public int CountDataWithFilters(int skip, int take, string? supplierId, string? supplierEmail, string? offerNumber = null, string? tenderName = null, string? city = null, string? postDate = null)
+        {
+            return _dbContext.Offer
+                            .Where(s => !string.IsNullOrEmpty(supplierId) ? s.SupplierId.ToString() == supplierId : true)
+                            .Where(s => !string.IsNullOrEmpty(supplierEmail) ? s.Supplier.Email == supplierEmail : true)
+                            .Where(s => !string.IsNullOrEmpty(offerNumber) ? EF.Functions.Like(s.Id.ToString(), offerNumber + "%") : true)
+                            .Where(s => !string.IsNullOrEmpty(tenderName) ? EF.Functions.Like(s.Name, tenderName + "%") : true).Count(); 
+
+
+
+                                 
+                
+
+        }
+
 
         public async Task<IEnumerable<Offer>> ReadAsync(int skip, int take)
         {

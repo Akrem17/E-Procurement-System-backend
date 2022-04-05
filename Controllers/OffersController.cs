@@ -29,7 +29,7 @@ namespace E_proc.Controllers
 
         // GET: api/Offers
         [HttpGet]
-        public async Task<IActionResult> GetOffer(int? skip = 0, int? take = 10, string? supplierId = null, string? supplierEmail = null)
+        public async Task<IActionResult> GetOffer(int? skip = 0, int? take = 10, string? supplierId = null, string? supplierEmail = null,string? offerNumber=null, string? tenderName = null, string? city = null, string? postDate = null)
         {
             if (supplierId == null)
             {
@@ -42,8 +42,8 @@ namespace E_proc.Controllers
             }
             else
             {
-                var offer = await _offerRepository.FindBy((int)skip, (int)take,supplierId, supplierEmail);
-                var itemsNumber = _offerRepository.CountData();
+                var offer = await _offerRepository.FindBy((int)skip, (int)take,supplierId, supplierEmail, offerNumber , tenderName,  city ,   postDate );
+                var itemsNumber = _offerRepository.CountDataWithFilters((int)skip, (int)take, supplierId, supplierEmail, offerNumber, tenderName, city, postDate);
 
 
                 if (offer == null) return new Success(false, "message.UserNotFound");
