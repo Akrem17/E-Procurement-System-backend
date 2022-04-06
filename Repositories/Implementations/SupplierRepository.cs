@@ -171,7 +171,7 @@ namespace E_proc.Repositories.Implementations
         //get supplier by id 
         public async Task<Supplier> ReadById(int id)
         {
-            return await _dbContext.Supplier.FirstOrDefaultAsync(user => user.Id == id);
+            return await _dbContext.Supplier.Include(s=>s.representative).Include(s=>s.licence).Include(s=>s.address). FirstOrDefaultAsync(user => user.Id == id);
         }
 
 

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "EVvSo/xho4fPgmnOn0l7iFNIrt6xk7tL9WRrcJWNX0A=",
+  "Hash": "Lfd+BZzEgf7LYMSR6rQTyFGqxZy3hjkX775b0G16pkY=",
   "Source": "E-proc",
   "BasePath": "_content/E-proc",
   "Mode": "Default",
@@ -3126,6 +3126,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\637847524695523370.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\wwwroot\\637847648368169540.pdf",
+      "SourceId": "E-proc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\wwwroot\\",
+      "BasePath": "_content/E-proc",
+      "RelativePath": "637847648368169540.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\637847648368169540.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\wwwroot\\637847648368269488.pdf",
+      "SourceId": "E-proc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\wwwroot\\",
+      "BasePath": "_content/E-proc",
+      "RelativePath": "637847648368269488.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\637847648368269488.pdf"
     }
   ]
 }
