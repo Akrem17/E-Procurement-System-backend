@@ -55,6 +55,7 @@ namespace E_proc.Models
         public DbSet<E_proc.Models.TenderClassification> TenderClassification { get; set; }
         public DbSet<E_proc.Models.FileData> FileData { get; set; }
         public DbSet<E_proc.Models.Offer> Offer { get; set; }
+        public DbSet<E_proc.Models.Licence> Licence { get; set; }
 
 
 

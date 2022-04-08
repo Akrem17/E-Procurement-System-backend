@@ -79,8 +79,8 @@ namespace E_proc.Controllers
             var newUser = await _reposSuuplier.UpdateAsync(id, supplier);
 
             if (newUser == null)
-                return new Success(false, "message.User not found or email already exists");
-            return new Success(true, "message.success");
+                return new Success(false, "message.Cannot be updated");
+            return new Success(true, "message.success",newUser);
 
         }
 
