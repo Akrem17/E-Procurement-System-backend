@@ -92,7 +92,7 @@ namespace E_proc.Controllers
             //institute.Specifications = specifications;
 
             if (institute == null) return new Success(false, "message.User not found");
-            return new Success(true, "message.sucess", new { institute});
+            return new Success(true, "message.sucess", institute);
         }
 
 
@@ -105,8 +105,8 @@ namespace E_proc.Controllers
 
             if (newUser == null)
 
-                return new Success(false, "message.User not found or email already exists");
-            return new Success(true, "message.success");
+                return new Success(false, "message.User not found ");
+            return new Success(true, "message.success", institute);
 
         }
 

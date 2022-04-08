@@ -17,9 +17,14 @@ namespace E_proc.Models
         public string representativeName { get; set; }
 
         public string NotificationEmail { get; set; }
+
+        public int addressId { get; set; }
+        [ForeignKey("addressId")]
         public virtual Address? address { get; set; }
         public string Phone { get; set; }
         public string Fax { get; set; }
+        public int interlocutorId { get; set; }
+        [ForeignKey("interlocutorId")]
         public virtual Representative? Interlocutor { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
