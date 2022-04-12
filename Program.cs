@@ -19,6 +19,7 @@ using E_proc.Services.Interfaces;
 using E_proc.Services.Implementations;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using E_proc.MyHub;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,11 +122,19 @@ builder.Services.AddTransient<IDateService, DateService>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
-builder.Services.AddCors();
+builder.Services.AddCors(
+    options =>
+    {
+        options.AddPolicy("AllowAllHeaders", builder =>
+        {
+            builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        });
+    }
+    );
 
 
 
-
+builder.Services.AddSignalR(options => { options.EnableDetailedErrors=true; });
 
 
 using var db = new AuthContext(options);
@@ -153,6 +162,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+app.UseCors("AllowAllHeaders");
+
 app.UseCors(builder => builder
      .AllowAnyOrigin()
      .AllowAnyMethod()
@@ -164,9 +175,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 app.UseHttpLogging();
 app.UseAuthorization();
 app.UseAuthentication();
 app.MapControllers();
+app.MapHub<NotificationHub>("/toastr");
 app.Run();

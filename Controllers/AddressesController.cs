@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using E_proc.Models;
 using E_proc.Repositories.Interfaces;
 using E_proc.Models.StatusModel;
+using E_proc.MyHub;
+using Microsoft.AspNetCore.SignalR;
 
 namespace E_proc.Controllers
 {
@@ -18,17 +20,21 @@ namespace E_proc.Controllers
     {
         private readonly AuthContext _context;
         private readonly IAddressRepository _reposAddress;
+        private readonly IHubContext<NotificationHub> _notificationHubContext;
 
-        public AddressesController(AuthContext context,IAddressRepository reposAddress)
+        public AddressesController(AuthContext context,IAddressRepository reposAddress, IHubContext<NotificationHub> notificationHubContext)
         {
             _context = context;
             _reposAddress=reposAddress;
+            _notificationHubContext = notificationHubContext;
+
         }
 
         // GET: api/Addresses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Address>>> GetAddress()
         {
+          
             return await _context.Address.ToListAsync();
         }
 
@@ -37,8 +43,10 @@ namespace E_proc.Controllers
         public async Task<ActionResult<Address>> GetAddress(int id)
         {
 
-            var address = await _context.Address.FindAsync(id);
+            await _notificationHubContext.Clients.All.SendAsync("Send","f");
 
+            var address = await _context.Address.FindAsync(id);
+           
             if (address == null)
             {
                 return NotFound();
