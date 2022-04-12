@@ -12,6 +12,7 @@ using E_proc.Models.StatusModel;
 using E_proc.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 
 namespace E_proc.Controllers
 {

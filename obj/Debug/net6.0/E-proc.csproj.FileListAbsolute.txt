@@ -284,3 +284,4 @@ C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Microsoft.Extensions.
 C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\System.Runtime.CompilerServices.Unsafe.dll
 C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\E-proc.staticwebassets.runtime.json
 C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\BitMiracle.Docotic.Pdf.dll
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\System.Net.WebSockets.WebSocketProtocol.dll

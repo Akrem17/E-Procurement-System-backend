@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using E_proc.Models;
 using E_proc.Repositories.Interfaces;
 using E_proc.Models.StatusModel;
+using E_proc.MyHub;
+using Microsoft.AspNetCore.SignalR;
 
 namespace E_proc.Controllers
 {
@@ -19,11 +21,15 @@ namespace E_proc.Controllers
         private readonly AuthContext _context;
         private IFileDataRepository _fileRepository;
         private IOfferRepository _offerRepository;
-        public OffersController(AuthContext context, IFileDataRepository fileRepository, IOfferRepository offerRepository)
+        private readonly IHubContext<NotificationHub> _notificationHubContext;
+
+        public OffersController(AuthContext context, IFileDataRepository fileRepository, IOfferRepository offerRepository, IHubContext<NotificationHub> notificationHubContext)
         {
             _context = context;
             _fileRepository = fileRepository;
             _offerRepository = offerRepository;
+            _notificationHubContext = notificationHubContext;
+
 
         }
 
@@ -120,6 +126,14 @@ namespace E_proc.Controllers
             {
 
                 //verify institute
+                Notification notification = new Notification();
+
+                notification.From = offer.SupplierId.ToString();
+                notification.To=offer.TenderId.ToString();
+                notification.message = "new offer";
+
+
+                await _notificationHubContext.Clients.All.SendAsync("Send", notification);
                 var offerAdded = await _offerRepository.CreateAsync(offer);
 
 
