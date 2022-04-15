@@ -98,7 +98,7 @@ namespace E_proc.Repositories.Implementations
         public async  Task<IEnumerable<Institute>> ReadAsync()
         {
 
-            var institutes = await _dbContext.Institute.Include(i=>i.Tender). ToListAsync();
+            var institutes = await _dbContext.Institute.Include(i=>i.Tender).ToListAsync();
          
 
             return institutes;

@@ -56,7 +56,9 @@ namespace E_proc.Models
         public DbSet<E_proc.Models.FileData> FileData { get; set; }
         public DbSet<E_proc.Models.Offer> Offer { get; set; }
         public DbSet<E_proc.Models.Licence> Licence { get; set; }
+        public DbSet<E_proc.Models.Connections> Connection { get; set; }
 
+        public DbSet<E_proc.Models.Notification> Notification { get; set; }
 
 
     }

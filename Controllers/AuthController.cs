@@ -56,7 +56,7 @@ namespace E_proc.Controllers
 
                 Citizen status = await _repos.SignupCitizen(user);
 
-                if (status == null) return new Success(false, "message.email already exsits", new { });
+                if (status == null) return new Success(false, "message.email already exsits");
 
                 //generate token string
                 var tokenString = _tokenService.GenerateTokenString(status);
@@ -196,6 +196,11 @@ namespace E_proc.Controllers
 
         public async Task<IActionResult> VerifyConfirmation(int id, string token)
         {
+
+            //send confirmation email
+            var message = new Mail(new string[] { "akremhammami@outlook.com" }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link");
+            _emailSender.SendEmail(message);
+
 
             var email = _tokenService.ValidateJwtToken(token);
             if (email != null)

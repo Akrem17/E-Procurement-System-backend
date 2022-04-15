@@ -4,7 +4,7 @@
 
 namespace E_proc.Migrations
 {
-    public partial class offer : Migration
+    public partial class mig : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
