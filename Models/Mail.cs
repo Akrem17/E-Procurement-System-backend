@@ -16,7 +16,7 @@ namespace E_proc.Models
         {
 
             To = new List<MailboxAddress>();
-            To.AddRange(to.Select(x => new MailboxAddress(x)));
+            To.AddRange(to.Select(x => new MailboxAddress(x,x)));
             Subject = subject;
             Content = content;
 

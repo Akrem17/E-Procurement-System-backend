@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_proc.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    [Migration("20220330110653_offer")]
-    partial class offer
+    [Migration("20220414133304_mig")]
+    partial class mig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,7 +37,6 @@ namespace E_proc.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("countryName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("postalCode")
@@ -49,12 +48,34 @@ namespace E_proc.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("street2")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Connections", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SignalrId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Connection");
                 });
 
             modelBuilder.Entity("E_proc.Models.FileData", b =>
@@ -74,6 +95,10 @@ namespace E_proc.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileSize")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -131,6 +156,31 @@ namespace E_proc.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Licence");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("FromId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ToUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notification");
                 });
 
             modelBuilder.Entity("E_proc.Models.Offer", b =>
@@ -407,9 +457,6 @@ namespace E_proc.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Institute_Fax");
 
-                    b.Property<int?>("InterlocutorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("NameAr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -431,17 +478,20 @@ namespace E_proc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("addressId")
+                    b.Property<int>("addressId")
                         .HasColumnType("int")
                         .HasColumnName("Institute_addressId");
+
+                    b.Property<int>("interlocutorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("representativeName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("InterlocutorId");
-
                     b.HasIndex("addressId");
+
+                    b.HasIndex("interlocutorId");
 
                     b.HasDiscriminator().HasValue("Institute");
                 });
@@ -590,13 +640,17 @@ namespace E_proc.Migrations
 
             modelBuilder.Entity("E_proc.Models.Institute", b =>
                 {
-                    b.HasOne("E_proc.Models.Representative", "Interlocutor")
-                        .WithMany()
-                        .HasForeignKey("InterlocutorId");
-
                     b.HasOne("E_proc.Models.Address", "address")
                         .WithMany()
-                        .HasForeignKey("addressId");
+                        .HasForeignKey("addressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_proc.Models.Representative", "Interlocutor")
+                        .WithMany()
+                        .HasForeignKey("interlocutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Interlocutor");
 

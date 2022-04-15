@@ -125,23 +125,31 @@ namespace E_proc.Controllers
             if (offer != null)
             {
 
-                //verify institute
-                Notification notification = new Notification();
-
-                notification.From = offer.SupplierId.ToString();
-                notification.To=offer.TenderId.ToString();
-                notification.message = "new offer";
 
 
-                await _notificationHubContext.Clients.All.SendAsync("Send", notification);
                 var offerAdded = await _offerRepository.CreateAsync(offer);
 
 
                 if (offerAdded != null)
+                {
+                    Notification n = new Notification();
+                    var tender  = await _context.Tender.Include(t => t.Institute).Where(t => t.Id == offer.TenderId).FirstOrDefaultAsync();
+                    var institute = await _context.Institute.FindAsync(tender.instituteId);
+                    var offerCompleted =  _context.Offer.Include(o => o.Supplier).Where(o => o.Id == offerAdded.Id).FirstOrDefaultAsync();
+                    n.OfferId = offerAdded.Id;
+                    n.Institute = institute;
+                    n.InstituteId =(int) tender.instituteId;
+                    n.message = "Offer";
+                    n.Offer = await offerCompleted;
+                    await _notificationHubContext.Clients.All.SendAsync("Send", n);
+                    await _context.Notification.AddAsync(n);
+                    await _context.SaveChangesAsync();
                     return new Success(true, "message.success", offerAdded);
 
+                }
             }
 
+            
 
             return new Success(false, "message.User is empty");
         }

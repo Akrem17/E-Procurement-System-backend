@@ -42,9 +42,20 @@ namespace E_proc.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Address>> GetAddress(int id)
         {
+            var offer = await _context.Offer.Include(o=>o.Supplier).Where(o=>o.Id==1).FirstOrDefaultAsync();
+            var institute = await _context.Institute.FindAsync(1);
 
-            await _notificationHubContext.Clients.All.SendAsync("Send","f");
 
+            Notification n = new Notification();
+            n.OfferId = 1;
+            n.InstituteId =1;
+            n.message = "Post offer";
+            n.Offer = offer;
+            n.Institute=institute;
+
+             await _notificationHubContext.Clients.All.SendAsync("Send",n);
+            await _context.Notification.AddAsync(n);
+            await _context.SaveChangesAsync();
             var address = await _context.Address.FindAsync(id);
            
             if (address == null)
