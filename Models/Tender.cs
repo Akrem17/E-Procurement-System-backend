@@ -67,11 +67,6 @@ namespace E_proc.Models
 
 
 
-        //crate specification model later
-        public string specificationURL { get; set; }
-
-
-
 
         [JsonIgnore]
         public string? createdAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();

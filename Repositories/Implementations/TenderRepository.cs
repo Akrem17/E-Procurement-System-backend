@@ -115,7 +115,7 @@ namespace E_proc.Repositories.Implementations
             if (oldUser != null)
             {
                 
-                oldUser.StartDate = tender.StartDate;oldUser.Financing = tender.Financing;oldUser.Budget=tender.Budget;oldUser.BusinessKind=tender.BusinessKind;oldUser.Departement=tender.Departement;oldUser.EvaluationMethod=tender.EvaluationMethod;oldUser.Name = tender.Name; oldUser.specificationURL = tender.specificationURL;
+                oldUser.StartDate = tender.StartDate;oldUser.Financing = tender.Financing;oldUser.Budget=tender.Budget;oldUser.BusinessKind=tender.BusinessKind;oldUser.Departement=tender.Departement;oldUser.EvaluationMethod=tender.EvaluationMethod;oldUser.Name = tender.Name;
                 oldUser.responsibleId = tender.responsibleId;   
                 oldUser.updatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
 
