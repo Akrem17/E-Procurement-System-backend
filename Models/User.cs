@@ -14,8 +14,6 @@ namespace E_proc.Models
        
         public int Id { get; set; }
 
- 
-
         [EmailAddress(ErrorMessage = "Please Validate the email")]
         public string Email { get; set; }
 
@@ -34,7 +32,7 @@ namespace E_proc.Models
 
 
         
-         
+
         
         public bool IsConfirmed()
         {
