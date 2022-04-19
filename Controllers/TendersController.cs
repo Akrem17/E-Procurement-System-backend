@@ -67,7 +67,8 @@ namespace E_proc.Controllers
         public async Task<IActionResult> GetTender(int id)
         {
             var tender = await _reposTender.ReadById(id);
-            
+       
+
             if (tender == null) return new Success(false, "message.Usernot found");
             return new Success(true, "message.success", tender);
         }
@@ -120,5 +121,36 @@ namespace E_proc.Controllers
         {
             return _context.Tender.Any(e => e.Id == id);
         }
+
+
+        
+
+        [HttpGet("{id}/extract")]
+        public async Task<IActionResult> ExtractResult(int id)
+        {
+
+        var tinder = _context.Tender.Where(o => o.Id == id).FirstOrDefault();
+            var date = "  2022 - 04 - 20T23: 00:00.000Z";
+            string[] st = date.Split("T");
+
+            string[] d = st[0].Split(" - ");
+
+            //if(Int16.Parse(d[1]) > new DateTimeOffset(DateTime.UtcNow).Month && (Int16.Parse(d[2]) > new DateTimeOffset(DateTime.UtcNow).Day))
+            //{
+            //    return new Success(false, "Tender is not closed yet");
+
+            //}
+            var notReviwedOffers=  _context.Offer.Where(o => o.TenderId == id && o.isAccepted==null).ToList();  
+            if(notReviwedOffers.Count()> 0)
+            {
+                return new Success(false, "There are offers not reviewd yet");
+
+            }
+            var offerWin=  _context.Offer.Where(o => o.TenderId == id && o.isAccepted==true).OrderBy(o=>o.TotalMontant).FirstOrDefault();
+
+            return new Success(true, "Tender not found", offerWin);
+
+        }
+
     }
 }
