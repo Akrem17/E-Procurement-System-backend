@@ -9,13 +9,9 @@ namespace E_proc.Models
     public class Tender
 
     {
-        Tender()
-        {
-
-        }
+       
 
         [Key]
-
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please enter name")]
@@ -35,7 +31,7 @@ namespace E_proc.Models
 
         [Required(ErrorMessage = "Please enter Deadline")]
         public string DeadLine { get; set; }
-        public bool activeStatus { get; set; } 
+      
 
         [Required(ErrorMessage = "Please enter Evaluation Method")]
         public string? EvaluationMethod { get; set; }

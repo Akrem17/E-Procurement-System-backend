@@ -19,7 +19,6 @@ namespace E_proc.Models
             optionsBuilder.UseSqlServer(config.GetConnectionString("EprocDB"));
 
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Tender>()
@@ -39,7 +38,7 @@ namespace E_proc.Models
             modelBuilder.Entity<Tender>()
                     .HasMany(t=>t.Offers).WithOne(o=>o.Tender).HasForeignKey(f => f.TenderId).IsRequired();
 
-
+            modelBuilder.Entity<OfferClassification>().HasOne(oc => oc.Offer).WithMany(o => o.OfferClassification).HasForeignKey(f => f.OfferId);
 
         }
         public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }   
@@ -59,6 +58,8 @@ namespace E_proc.Models
         public DbSet<E_proc.Models.Connections> Connection { get; set; }
 
         public DbSet<E_proc.Models.Notification> Notification { get; set; }
+        public DbSet<E_proc.Models.OfferClassification> OfferClassification { get; set; }
+
 
 
     }
