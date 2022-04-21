@@ -66,6 +66,7 @@ namespace E_proc.Controllers
         public async Task<IActionResult> GetOffer(int id)
 
         {
+
             var offer = await _offerRepository.ReadById(id);
             if (offer == null) return new Success(false, "message.user Not Found");
             return new Success(true, "message.success", offer);

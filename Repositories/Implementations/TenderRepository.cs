@@ -17,6 +17,8 @@ namespace E_proc.Repositories.Implementations
         }
         public async Task<Tender> CreateAsync(Tender tender)
         {
+
+            Console.WriteLine(tender);
           var  representative = _dbContext.Representative.Where(r=>r.SocialSecurityNumber==tender.Responsible.SocialSecurityNumber).FirstOrDefault();       
             if (representative!=null)
             {
@@ -25,7 +27,6 @@ namespace E_proc.Repositories.Implementations
             }
             var tenderResult = await _dbContext.Tender.AddAsync(tender);
             _dbContext.SaveChanges();
-
 
             return tender;
 

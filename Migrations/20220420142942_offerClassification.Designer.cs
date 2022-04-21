@@ -4,6 +4,7 @@ using E_proc.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_proc.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    partial class AuthContextModelSnapshot : ModelSnapshot
+    [Migration("20220420142942_offerClassification")]
+    partial class offerClassification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,9 +244,8 @@ namespace E_proc.Migrations
                     b.Property<int>("OfferId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Qte")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("TenderClassificationId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -652,7 +653,7 @@ namespace E_proc.Migrations
             modelBuilder.Entity("E_proc.Models.OfferClassification", b =>
                 {
                     b.HasOne("E_proc.Models.Offer", "Offer")
-                        .WithMany("OfferClassification")
+                        .WithMany()
                         .HasForeignKey("OfferId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -747,8 +748,6 @@ namespace E_proc.Migrations
             modelBuilder.Entity("E_proc.Models.Offer", b =>
                 {
                     b.Navigation("Files");
-
-                    b.Navigation("OfferClassification");
                 });
 
             modelBuilder.Entity("E_proc.Models.Tender", b =>

@@ -24,6 +24,7 @@ namespace E_proc.Repositories.Implementations
 
         public async Task<Offer> CreateAsync(Offer offer)
         {
+
             Offer off = new Offer();
             offer.Id = 0;
              off = offer.Copy();
@@ -110,7 +111,14 @@ namespace E_proc.Repositories.Implementations
 
         public async Task<Offer> ReadById(int id)
         {
-            return await _dbContext.Offer.Include(o => o.Files).Include(o => o.Supplier).ThenInclude(s => s.address).FirstOrDefaultAsync(ad => ad.Id == id);
+            
+            var offer= await _dbContext.Offer
+                .Include(o => o.Files)
+                .Include(o=>o.OfferClassification)
+                .Include(o => o.Supplier)
+                .ThenInclude(s => s.address)
+                .FirstOrDefaultAsync(ad => ad.Id == id);
+            return offer;
 
         }
 
