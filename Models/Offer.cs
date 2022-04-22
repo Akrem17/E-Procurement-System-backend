@@ -26,6 +26,11 @@ namespace E_proc.Models
         [NotMapped]
         public virtual Tender? TenderInfo { get; set; }
 
+        [ForeignKey("Representative")]
+
+        public virtual int? RepresentativeId { get; set; }
+
+        public virtual Representative? Representative { get; set; }
 
         [ForeignKey("Supplier")]
         public int SupplierId { get; set; }

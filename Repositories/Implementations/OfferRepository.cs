@@ -115,6 +115,7 @@ namespace E_proc.Repositories.Implementations
             var offer= await _dbContext.Offer
                 .Include(o => o.Files)
                 .Include(o=>o.OfferClassification)
+                .Include(o=>o.Representative)
                 .Include(o => o.Supplier)
                 .ThenInclude(s => s.address)
                 .FirstOrDefaultAsync(ad => ad.Id == id);
