@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace E_proc.Models
 {
@@ -13,12 +14,25 @@ namespace E_proc.Models
         public string Phone { get; set; }
 
         public string? CIN { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<AskForInfo>? AskForInfo { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public Citizen()
-        {
-
-         this.createdAt=   new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
-        }
+        {this.createdAt=   new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();}
 
     }
 }

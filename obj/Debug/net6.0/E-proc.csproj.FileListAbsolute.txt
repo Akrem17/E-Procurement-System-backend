@@ -286,3 +286,9 @@ C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\E-proc.staticwebasset
 C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\BitMiracle.Docotic.Pdf.dll
 C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\System.Net.WebSockets.WebSocketProtocol.dll
 C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\libman.json
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Portiflio\angular.json
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Portiflio\package-lock.json
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Portiflio\package.json
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Portiflio\tsconfig.app.json
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Portiflio\tsconfig.json
+C:\Users\akrem\source\repos\E-proc\E-proc\bin\Debug\net6.0\Portiflio\tsconfig.spec.json

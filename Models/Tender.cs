@@ -51,7 +51,11 @@ namespace E_proc.Models
         virtual public ICollection<TenderClassification>? TenderClassification { get; set; }
 
         public virtual ICollection<FileData>? Specifications { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Offer>? Offers { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<AskForInfo>? AskForInfo { get; set; }
 
         [JsonIgnore]
         public string? createdAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
