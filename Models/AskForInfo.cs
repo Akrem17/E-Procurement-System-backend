@@ -22,7 +22,13 @@ namespace E_proc.Models
         public Citizen? Citizen { get; set; }
         [ForeignKey("Tender")]
         public int TenderId { get; set; }
-        public Tender? Tender { get; set; }  
+        public Tender? Tender { get; set; }
+
+
+        [ForeignKey("AskForInfoAnswer")]
+        public int? AskForInfoAnswerId { get; set; }
+        public AskForInfoAnswer? AskForInfoAnswer { get; set; }
+
 
     }
 }

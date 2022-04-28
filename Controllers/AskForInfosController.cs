@@ -18,23 +18,52 @@ namespace E_proc.Controllers
         }
         // GET: api/<ValuesController>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string? instituteId = null, bool? confirmed = null, string? phone = null, DateTime? date = null)
         {
-      
+
+            if (instituteId == null && confirmed == null && phone == null && date == null)
+            {
                 var askForInfos = await authContext.AskForInfo.ToListAsync();
 
-          
-            return new Success(true, "message.sucess", askForInfos);
+
+                return new Success(true, "message.sucess", askForInfos);
+
+
+            }
+            else
+            {
+
+                var askForInfos = await authContext.AskForInfo
+                         .Where(s => !string.IsNullOrEmpty(instituteId) ? s.Tender.instituteId.ToString() == instituteId : true)
+                         .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
+                         .Where(s => confirmed.HasValue ? s.SendToChat == confirmed : true)
+                        // .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
+                         .ToListAsync();
+                return new Success(true, "message.sucess", askForInfos);
+
+
+            }
+
         }
 
+
         [HttpGet("{id}")]
+        
         public async Task<IActionResult> Get(int id)
         {
 
             var askForInfo = await authContext.AskForInfo.Where(o=>o.Id==id).FirstOrDefaultAsync();
+            var askForInfoanswer = await authContext.AskForInfoAnswer.Where(o => o.AskForInfoId == id).FirstOrDefaultAsync();
+            if(askForInfoanswer!=null)
+            {
+                askForInfo.AskForInfoAnswer= askForInfoanswer;
+                askForInfo.AskForInfoAnswerId = askForInfoanswer.Id;
 
+            }
             return new Success(true, "message.success", askForInfo);
         }
+
+
 
         // POST api/<ValuesController>
         [HttpPost]
