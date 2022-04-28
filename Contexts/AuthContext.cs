@@ -58,6 +58,10 @@ namespace E_proc.Models
                 .WithMany(o => o.AskForInfo)
                 .HasForeignKey(o => o.TenderId);
 
+            modelBuilder.Entity<AskForInfo>()
+                .HasOne(o => o.AskForInfoAnswer)
+                .WithOne(o => o.AskForInfo);
+
 
 
         }
@@ -80,6 +84,7 @@ namespace E_proc.Models
         public DbSet<E_proc.Models.Notification> Notification { get; set; }
         public DbSet<E_proc.Models.OfferClassification> OfferClassification { get; set; }
         public DbSet<E_proc.Models.AskForInfo> AskForInfo { get; set; }
+        public DbSet<E_proc.Models.AskForInfoAnswer> AskForInfoAnswer { get; set; }
 
 
 
