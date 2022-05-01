@@ -35,7 +35,6 @@ namespace E_proc.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("countryName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("postalCode")
@@ -47,12 +46,170 @@ namespace E_proc.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("street2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Address");
+                });
+
+            modelBuilder.Entity("E_proc.Models.AskForInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("AskForInfoAnswerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CitizenId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Fax")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Information")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("SendToAddress")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SendToChat")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SendToEmail")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TenderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AskForInfoAnswerId")
+                        .IsUnique()
+                        .HasFilter("[AskForInfoAnswerId] IS NOT NULL");
+
+                    b.HasIndex("CitizenId");
+
+                    b.HasIndex("TenderId");
+
+                    b.ToTable("AskForInfo");
+                });
+
+            modelBuilder.Entity("E_proc.Models.AskForInfoAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AskForInfoId")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("CreatedAt")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Seen")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address", (string)null);
+                    b.ToTable("AskForInfoAnswer");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Connections", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SignalrId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Connection");
+                });
+
+            modelBuilder.Entity("E_proc.Models.FileData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("FileExtention")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileSize")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MimeType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("OfferId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OfferId");
+
+                    b.HasIndex("TenderId");
+
+                    b.ToTable("FileData");
                 });
 
             modelBuilder.Entity("E_proc.Models.Licence", b =>
@@ -89,7 +246,109 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Licence", (string)null);
+                    b.ToTable("Licence");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("InstituteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OfferId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstituteId");
+
+                    b.HasIndex("OfferId");
+
+                    b.ToTable("Notification");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Offer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("FinalTotalMontant")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RepresentativeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TenderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalMontant")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("isAccepted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RepresentativeId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("TenderId");
+
+                    b.ToTable("Offer");
+                });
+
+            modelBuilder.Entity("E_proc.Models.OfferClassification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Amount")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OfferId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Qte")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OfferId");
+
+                    b.ToTable("OfferClassification");
                 });
 
             modelBuilder.Entity("E_proc.Models.Representative", b =>
@@ -126,7 +385,7 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Representative", (string)null);
+                    b.ToTable("Representative");
                 });
 
             modelBuilder.Entity("E_proc.Models.Tender", b =>
@@ -137,14 +396,15 @@ namespace E_proc.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AddressReceiptId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Budget")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BusinessKind")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeadLine")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -160,43 +420,39 @@ namespace E_proc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("GuaranteeType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("InstituteId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ResponsibleId")
-                        .HasColumnType("int");
 
                     b.Property<string>("StartDate")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("addressReceiptId")
+                        .HasColumnType("int");
+
                     b.Property<string>("createdAt")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("specificationURL")
+                    b.Property<int?>("instituteId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
+
+                    b.Property<int>("responsibleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("updatedAt")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressReceiptId");
+                    b.HasIndex("addressReceiptId");
 
-                    b.HasIndex("InstituteId");
+                    b.HasIndex("instituteId");
 
-                    b.HasIndex("ResponsibleId");
+                    b.HasIndex("responsibleId");
 
-                    b.ToTable("Tender", (string)null);
+                    b.ToTable("Tender");
                 });
 
             modelBuilder.Entity("E_proc.Models.TenderClassification", b =>
@@ -219,14 +475,14 @@ namespace E_proc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TenderId")
+                    b.Property<int>("tenderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenderId");
+                    b.HasIndex("tenderId");
 
-                    b.ToTable("TenderClassification", (string)null);
+                    b.ToTable("TenderClassification");
                 });
 
             modelBuilder.Entity("E_proc.Models.User", b =>
@@ -248,14 +504,6 @@ namespace E_proc.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -273,7 +521,7 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
@@ -297,7 +545,7 @@ namespace E_proc.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsersLogin", (string)null);
+                    b.ToTable("UsersLogin");
                 });
 
             modelBuilder.Entity("E_proc.Models.Citizen", b =>
@@ -305,6 +553,14 @@ namespace E_proc.Migrations
                     b.HasBaseType("E_proc.Models.User");
 
                     b.Property<string>("CIN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -329,9 +585,6 @@ namespace E_proc.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Institute_Fax");
 
-                    b.Property<int?>("InterlocutorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("NameAr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -353,17 +606,20 @@ namespace E_proc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("addressId")
+                    b.Property<int>("addressId")
                         .HasColumnType("int")
                         .HasColumnName("Institute_addressId");
+
+                    b.Property<int>("interlocutorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("representativeName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("InterlocutorId");
-
                     b.HasIndex("addressId");
+
+                    b.HasIndex("interlocutorId");
 
                     b.HasDiscriminator().HasValue("Institute");
                 });
@@ -438,23 +694,118 @@ namespace E_proc.Migrations
                     b.HasDiscriminator().HasValue("Supplier");
                 });
 
-            modelBuilder.Entity("E_proc.Models.Tender", b =>
+            modelBuilder.Entity("E_proc.Models.AskForInfo", b =>
                 {
-                    b.HasOne("E_proc.Models.Address", "AddressReceipt")
-                        .WithMany()
-                        .HasForeignKey("AddressReceiptId")
+                    b.HasOne("E_proc.Models.AskForInfoAnswer", "AskForInfoAnswer")
+                        .WithOne("AskForInfo")
+                        .HasForeignKey("E_proc.Models.AskForInfo", "AskForInfoAnswerId");
+
+                    b.HasOne("E_proc.Models.Citizen", "Citizen")
+                        .WithMany("AskForInfo")
+                        .HasForeignKey("CitizenId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("E_proc.Models.Tender", "Tender")
+                        .WithMany("AskForInfo")
+                        .HasForeignKey("TenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AskForInfoAnswer");
+
+                    b.Navigation("Citizen");
+
+                    b.Navigation("Tender");
+                });
+
+            modelBuilder.Entity("E_proc.Models.FileData", b =>
+                {
+                    b.HasOne("E_proc.Models.Offer", "Offer")
+                        .WithMany("Files")
+                        .HasForeignKey("OfferId");
+
+                    b.HasOne("E_proc.Models.Tender", "Tender")
+                        .WithMany("Specifications")
+                        .HasForeignKey("TenderId");
+
+                    b.Navigation("Offer");
+
+                    b.Navigation("Tender");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Notification", b =>
+                {
                     b.HasOne("E_proc.Models.Institute", "Institute")
                         .WithMany()
                         .HasForeignKey("InstituteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("E_proc.Models.Offer", "Offer")
+                        .WithMany()
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Institute");
+
+                    b.Navigation("Offer");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Offer", b =>
+                {
+                    b.HasOne("E_proc.Models.Representative", "Representative")
+                        .WithMany()
+                        .HasForeignKey("RepresentativeId");
+
+                    b.HasOne("E_proc.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_proc.Models.Tender", "Tender")
+                        .WithMany("Offers")
+                        .HasForeignKey("TenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Representative");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("Tender");
+                });
+
+            modelBuilder.Entity("E_proc.Models.OfferClassification", b =>
+                {
+                    b.HasOne("E_proc.Models.Offer", "Offer")
+                        .WithMany("OfferClassification")
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Offer");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Tender", b =>
+                {
+                    b.HasOne("E_proc.Models.Address", "AddressReceipt")
+                        .WithMany()
+                        .HasForeignKey("addressReceiptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_proc.Models.Institute", "Institute")
+                        .WithMany("Tender")
+                        .HasForeignKey("instituteId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("E_proc.Models.Representative", "Responsible")
                         .WithMany()
-                        .HasForeignKey("ResponsibleId")
+                        .HasForeignKey("responsibleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -469,7 +820,7 @@ namespace E_proc.Migrations
                 {
                     b.HasOne("E_proc.Models.Tender", "Tender")
                         .WithMany("TenderClassification")
-                        .HasForeignKey("TenderId")
+                        .HasForeignKey("tenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -478,13 +829,17 @@ namespace E_proc.Migrations
 
             modelBuilder.Entity("E_proc.Models.Institute", b =>
                 {
-                    b.HasOne("E_proc.Models.Representative", "Interlocutor")
-                        .WithMany()
-                        .HasForeignKey("InterlocutorId");
-
                     b.HasOne("E_proc.Models.Address", "address")
                         .WithMany()
-                        .HasForeignKey("addressId");
+                        .HasForeignKey("addressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("E_proc.Models.Representative", "Interlocutor")
+                        .WithMany()
+                        .HasForeignKey("interlocutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Interlocutor");
 
@@ -518,9 +873,37 @@ namespace E_proc.Migrations
                     b.Navigation("representative");
                 });
 
+            modelBuilder.Entity("E_proc.Models.AskForInfoAnswer", b =>
+                {
+                    b.Navigation("AskForInfo");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Offer", b =>
+                {
+                    b.Navigation("Files");
+
+                    b.Navigation("OfferClassification");
+                });
+
             modelBuilder.Entity("E_proc.Models.Tender", b =>
                 {
+                    b.Navigation("AskForInfo");
+
+                    b.Navigation("Offers");
+
+                    b.Navigation("Specifications");
+
                     b.Navigation("TenderClassification");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Citizen", b =>
+                {
+                    b.Navigation("AskForInfo");
+                });
+
+            modelBuilder.Entity("E_proc.Models.Institute", b =>
+                {
+                    b.Navigation("Tender");
                 });
 #pragma warning restore 612, 618
         }

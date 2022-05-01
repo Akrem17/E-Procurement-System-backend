@@ -12,9 +12,24 @@ namespace E_proc.Repositories.Implementations
             _dbContext = dbContext;
 
         }
-        public Task<Representative> CreateAsync(Representative representative)
+        public async Task<Representative> CreateAsync(Representative representative)
         {
-            throw new NotImplementedException();
+
+            var foundedRepresentative = await _dbContext.Representative.FirstOrDefaultAsync(u => u.SocialSecurityNumber == representative.SocialSecurityNumber);
+            if (foundedRepresentative == null)
+            {
+
+
+                var repre = await _dbContext.Representative.AddAsync(representative);
+                _dbContext.SaveChanges();
+
+                return representative;
+
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public Task<int> Delete(int id)
@@ -39,14 +54,25 @@ namespace E_proc.Repositories.Implementations
             return representative;
         }
 
-        public Task<Representative> ReadById(int id)
+        public async Task<Representative> ReadById(int id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.Representative.FirstOrDefaultAsync(ad => ad.Id == id);
         }
 
-        public Task<Representative> UpdateAsync(int id, Representative representative)
+        public async Task<Representative> UpdateAsync(int id, Representative representative)
         {
-            throw new NotImplementedException();
+            var oldRepresentative = await ReadById(id);
+            if (oldRepresentative == null) return null;
+            oldRepresentative.Email = representative.Email;
+            oldRepresentative.Phone = representative.Phone;
+            oldRepresentative.Position = representative.Position;
+            oldRepresentative.Name = representative.Name; 
+            oldRepresentative.SocialSecurityNumber = representative.SocialSecurityNumber;
+            oldRepresentative.SocialSecurityNumberDate = representative.SocialSecurityNumberDate;
+
+            var res = await _dbContext.SaveChangesAsync();
+
+            return oldRepresentative;
         }
     }
 }

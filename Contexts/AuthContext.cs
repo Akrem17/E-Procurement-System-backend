@@ -3,11 +3,12 @@ using E_proc.Models;
 
 namespace E_proc.Models
 {
-    public class AuthContext:DbContext
+    public class AuthContext : DbContext
     {
 
-        public AuthContext() {
-        
+        public AuthContext()
+        {
+
 
         }
 
@@ -19,24 +20,56 @@ namespace E_proc.Models
             optionsBuilder.UseSqlServer(config.GetConnectionString("EprocDB"));
 
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Tender>()
                 .HasOne(t => t.Institute)
-                .WithMany(i => i.Tender).
-                OnDelete(DeleteBehavior.Restrict);
-            if (false)
-            {
+                .WithMany(i => i.Tender)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<FileData>()
+                .HasOne(t => t.Tender).WithMany(t => t.Specifications).HasForeignKey(fk => fk.TenderId);
 
-           
-                modelBuilder.Entity<Institute>().Ignore(c => c.Tender);
-            }
+            //if (false)
+            //{
+            //    modelBuilder.Entity<Institute>().Ignore(c => c.Tender);
+            //}
+
+            modelBuilder.Entity<FileData>()
+                .HasOne(f => f.Offer)
+                .WithMany(o => o.Files);
+            modelBuilder.Entity<Tender>()
+                    .HasMany(t => t.Offers)
+                    .WithOne(o => o.Tender)
+                    .HasForeignKey(f => f.TenderId)
+                    .IsRequired();
+
+            modelBuilder.Entity<OfferClassification>()
+                .HasOne(oc => oc.Offer)
+                .WithMany(o => o.OfferClassification)
+                .HasForeignKey(f => f.OfferId);
+            modelBuilder.Entity<AskForInfo>()
+                .HasOne(o => o.Citizen)
+                .WithMany(o=>o.AskForInfo)
+                .HasForeignKey(o => o.CitizenId);
+
+            modelBuilder.Entity<AskForInfo>()
+                .HasOne(o => o.Tender)
+                .WithMany(o => o.AskForInfo)
+                .HasForeignKey(o => o.TenderId);
+
+            modelBuilder.Entity<AskForInfo>()
+                .HasOne(o => o.AskForInfoAnswer)
+                .WithOne(o => o.AskForInfo);
+
+            modelBuilder.Entity<AskForInfoAnswer>()
+                .HasOne(o => o.AskForInfo)
+                .WithOne(o => o.AskForInfoAnswer);
 
 
 
         }
-        public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }   
+        public AuthContext(DbContextOptions<AuthContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserLogin> UsersLogin { get; set; }
@@ -45,6 +78,18 @@ namespace E_proc.Models
         public DbSet<E_proc.Models.Institute> Institute { get; set; }
         public DbSet<E_proc.Models.Tender> Tender { get; set; }
         public DbSet<E_proc.Models.Representative> Representative { get; set; }
+        public DbSet<E_proc.Models.Address> Address { get; set; }
+        public DbSet<E_proc.Models.TenderClassification> TenderClassification { get; set; }
+        public DbSet<E_proc.Models.FileData> FileData { get; set; }
+        public DbSet<E_proc.Models.Offer> Offer { get; set; }
+        public DbSet<E_proc.Models.Licence> Licence { get; set; }
+        public DbSet<E_proc.Models.Connections> Connection { get; set; }
+
+        public DbSet<E_proc.Models.Notification> Notification { get; set; }
+        public DbSet<E_proc.Models.OfferClassification> OfferClassification { get; set; }
+        public DbSet<E_proc.Models.AskForInfo> AskForInfo { get; set; }
+        public DbSet<E_proc.Models.AskForInfoAnswer> AskForInfoAnswer { get; set; }
+
 
 
     }

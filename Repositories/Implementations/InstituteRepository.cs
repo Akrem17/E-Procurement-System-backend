@@ -104,10 +104,19 @@ namespace E_proc.Repositories.Implementations
             return institutes;
         }
 
-        public async Task<IEnumerable<Tender>> getTendersOfInstitute(int id)
+        
+        public async Task<IEnumerable<Tender>> getTendersOfInstitute(int id, int skip, int take)
         {
 
-            var institutes = await _dbContext.Tender.Where(t=>t.instituteId==id).ToArrayAsync();
+            Console.WriteLine(skip.ToString(),take.ToString());
+
+            var institutes = await _dbContext.Tender
+                .Where(t=>t.instituteId==id)
+                .Include(t=>t.Institute)
+
+                .Skip(skip)
+                .Take(take) 
+                .ToArrayAsync();
 
 
             return institutes;
@@ -123,7 +132,7 @@ namespace E_proc.Repositories.Implementations
         //get insitute by id
         public async Task<Institute> ReadById(int id)
         {
-            return await _dbContext.Institute.FirstOrDefaultAsync(user => user.Id == id);
+            return await _dbContext.Institute.Include(i=>i.address).Include(i=>i.Interlocutor) .FirstOrDefaultAsync(user => user.Id == id);
         }
 
 
@@ -136,28 +145,28 @@ namespace E_proc.Repositories.Implementations
 
             if (oldUser != null)
             {
-                var foundedUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == institute.Email);
 
-                if (foundedUser?.Id == id || foundedUser == null)
-                {
 
-                    institute.Password = _encryptionService.Encrypt(institute.Password);
+                oldUser.AreaType = institute.AreaType; oldUser.Fax = institute.Fax; oldUser.NameAr = institute.NameAr; oldUser.NameFr = institute.NameFr; oldUser.NotificationEmail = institute.NotificationEmail; oldUser.Phone = institute.Phone; oldUser.representativeName = institute.representativeName;
+                oldUser.TypeOfInstitute = institute.TypeOfInstitute;
+                oldUser.updatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+                await _dbContext.SaveChangesAsync();
+                return oldUser;
+            }
+            else
+            {
+                return null;
 
-                    oldUser.address.countryName = institute.address.countryName; oldUser.address.city = institute.address.city; oldUser.address.postalCode = institute.address.postalCode; oldUser.address.street1 = institute.address.street1; oldUser.address.street2 = institute.address.street2;
-                    oldUser.Interlocutor.Name = institute.Interlocutor.Name; oldUser.Interlocutor.Phone = institute.Interlocutor.Phone; oldUser.Interlocutor.Position = institute.Interlocutor.Position; oldUser.Interlocutor.SocialSecurityNumber = institute.Interlocutor.SocialSecurityNumber; oldUser.Interlocutor.SocialSecurityNumberDate = institute.Interlocutor.SocialSecurityNumberDate; oldUser.Interlocutor.Email = institute.Interlocutor.Email;
-                    oldUser.Email = institute.Email;  oldUser.Password = institute.Password; oldUser.Type = institute.Type; oldUser.AreaType = institute.AreaType; oldUser.Fax = institute.Fax; oldUser.NameAr = institute.NameAr; oldUser.NameFr = institute.NameFr; oldUser.NotificationEmail = institute.NotificationEmail; oldUser.Phone = institute.Phone; oldUser.representativeName = institute.representativeName;
-                    oldUser.updatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+            }
 
-                    await _dbContext.SaveChangesAsync();
-                    return oldUser;
-                }
-                else
-                {
-                    return null;
 
-                }
-            };
-            return oldUser;
+
         }
+
+        public async Task<int> getTendersOfInstituteCountData(int id)
+        {
+            return await _dbContext.Tender.Where(t => t.instituteId == id).CountAsync();
+        }
+     
     }
 }
