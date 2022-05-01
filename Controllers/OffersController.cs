@@ -142,7 +142,7 @@ namespace E_proc.Controllers
                     n.InstituteId =(int) tender.instituteId;
                     n.message = "Offer";
                     n.Offer = await offerCompleted;
-                    await _notificationHubContext.Clients.All.SendAsync("Send", n);
+                    await _notificationHubContext.Clients.Group("instituteNotificationCenter").SendAsync("Send", n);
                     await _context.Notification.AddAsync(n);
                     await _context.SaveChangesAsync();
                     return new Success(true, "message.success", offerAdded);
