@@ -22,5 +22,25 @@ namespace E_proc.MyHub
 
             await Clients.All.SendAsync("Send", tempString);
         }
+
+
+        public async Task joinInstituteNotificationCenter()
+        {
+
+           await Groups.AddToGroupAsync(Context.ConnectionId, "instituteNotificationCenter");
+
+        }
+        public async Task joinAskInfoChat(string askInfoId)
+        {
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, "AskInfoChat"+askInfoId);
+
+        }
+        public async Task joinAskInfoNotificationCitizen()
+        {
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, "AskInfoNotificationCitizen");
+
+        }
     }
 }

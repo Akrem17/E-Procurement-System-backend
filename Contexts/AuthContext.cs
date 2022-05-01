@@ -62,6 +62,10 @@ namespace E_proc.Models
                 .HasOne(o => o.AskForInfoAnswer)
                 .WithOne(o => o.AskForInfo);
 
+            modelBuilder.Entity<AskForInfoAnswer>()
+                .HasOne(o => o.AskForInfo)
+                .WithOne(o => o.AskForInfoAnswer);
+
 
 
         }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "15okrCJK7yNSRdh1VxLAoCV/tx/52Em8qUw//KWIe+s=",
+  "Hash": "w1aiCq+tWunfm08hnTyljja0lThL6gER3EKTNiRQFxg=",
   "Source": "E-proc",
   "BasePath": "_content/E-proc",
   "Mode": "Default",
@@ -5523,6 +5523,57 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\637862361388580833.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\wwwroot\\637870107809937236.pdf",
+      "SourceId": "E-proc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\wwwroot\\",
+      "BasePath": "_content/E-proc",
+      "RelativePath": "637870107809937236.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\637870107809937236.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\wwwroot\\637870107809988122.pdf",
+      "SourceId": "E-proc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\wwwroot\\",
+      "BasePath": "_content/E-proc",
+      "RelativePath": "637870107809988122.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\637870107809988122.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\wwwroot\\637870107810015649.pdf",
+      "SourceId": "E-proc",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\akrem\\source\\repos\\E-proc\\E-proc\\wwwroot\\",
+      "BasePath": "_content/E-proc",
+      "RelativePath": "637870107810015649.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\637870107810015649.pdf"
     }
   ]
 }

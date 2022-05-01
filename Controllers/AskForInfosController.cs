@@ -18,15 +18,15 @@ namespace E_proc.Controllers
         }
         // GET: api/<ValuesController>
         [HttpGet]
-        public async Task<IActionResult> Get(string? instituteId = null, bool? confirmed = null, string? phone = null, DateTime? date = null)
+        public async Task<IActionResult> Get(string? instituteId = null, string? citizenId = null, string? phone = null, DateTime? date = null)
         {
 
-            if (instituteId == null && confirmed == null && phone == null && date == null)
+            if (instituteId == null && citizenId == null && phone == null && date == null)
             {
-                var askForInfos = await authContext.AskForInfo.ToListAsync();
+                var askForInfos = await authContext.AskForInfo.Include(o=>o.AskForInfoAnswer).ToListAsync();
 
 
-                return new Success(true, "message.sucess", askForInfos);
+                    return new Success(true, "message.sucess", askForInfos);
 
 
             }
@@ -34,10 +34,14 @@ namespace E_proc.Controllers
             {
 
                 var askForInfos = await authContext.AskForInfo
+                    .Include(o => o.AskForInfoAnswer)
+
                          .Where(s => !string.IsNullOrEmpty(instituteId) ? s.Tender.instituteId.ToString() == instituteId : true)
                          .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
-                         .Where(s => confirmed.HasValue ? s.SendToChat == confirmed : true)
-                        // .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
+                         .Where(s => !string.IsNullOrEmpty(citizenId) ? s.CitizenId.ToString() == citizenId : true)
+                         // .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
+                         .OrderBy(o => o.AskForInfoAnswer.CreatedAt)
+                         .Reverse()
                          .ToListAsync();
                 return new Success(true, "message.sucess", askForInfos);
 
@@ -75,10 +79,17 @@ namespace E_proc.Controllers
 
         }
 
+
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put( AskForInfo askForInfo)
         {
+
+           var askInfo = await authContext.AskForInfo.Where(o=>o.Id==askForInfo.Id).FirstOrDefaultAsync();
+            askInfo = askForInfo;
+            await authContext.SaveChangesAsync();
+            return new Success(true, "message.success");
+
         }
 
         // DELETE api/<ValuesController>/5

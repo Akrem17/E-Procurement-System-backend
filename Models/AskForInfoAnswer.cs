@@ -15,6 +15,14 @@ namespace E_proc.Models
 
         [JsonIgnore]
         public AskForInfo? AskForInfo { get; set; }
+        
+        public string From { get; set; }
+
+        public bool Seen    { get; set; }=false;
+
+        public long? CreatedAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+
+        
 
 
     }
