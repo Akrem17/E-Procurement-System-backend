@@ -14,6 +14,8 @@ namespace E_proc.Models
         public string? Phone { get; set; }
         public string? Fax { get; set; }
         public string? Email { get; set; }
+        public bool Seen { get; set; }=false;
+
         public bool SendToEmail { get; set; }=false;
         public bool SendToAddress { get; set; }=false;
         public bool SendToChat { get; set; } = true;
@@ -28,6 +30,9 @@ namespace E_proc.Models
         [ForeignKey("AskForInfoAnswer")]
         public int? AskForInfoAnswerId { get; set; }
         public AskForInfoAnswer? AskForInfoAnswer { get; set; }
+        public string? createdAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+
+
 
 
     }

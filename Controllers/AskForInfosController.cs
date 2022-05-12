@@ -1,6 +1,8 @@
 ﻿using E_proc.Models;
 using E_proc.Models.StatusModel;
+using E_proc.MyHub;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -12,9 +14,12 @@ namespace E_proc.Controllers
     public class AskForInfosController : ControllerBase
     {
         private readonly AuthContext authContext;
-        public AskForInfosController(AuthContext authContext)
+        private readonly IHubContext<NotificationHub> _notificationHubContext;
+
+        public AskForInfosController(AuthContext authContext, IHubContext<NotificationHub> notificationHubContext)
         {
                 this.authContext = authContext;
+            this._notificationHubContext = notificationHubContext;
         }
         // GET: api/<ValuesController>
         [HttpGet]
@@ -39,9 +44,12 @@ namespace E_proc.Controllers
                          .Where(s => !string.IsNullOrEmpty(instituteId) ? s.Tender.instituteId.ToString() == instituteId : true)
                          .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
                          .Where(s => !string.IsNullOrEmpty(citizenId) ? s.CitizenId.ToString() == citizenId : true)
-                         // .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
-                         .OrderBy(o => o.AskForInfoAnswer.CreatedAt)
+                                                  // .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
+                        .OrderBy(s => !string.IsNullOrEmpty(citizenId) ? s.AskForInfoAnswer.CreatedAt : Convert.ToInt64(s.createdAt))
+
+                         //.OrderBy(o => o.AskForInfoAnswer.CreatedAt)
                          .Reverse()
+                         
                          .ToListAsync();
                 return new Success(true, "message.sucess", askForInfos);
 
@@ -73,8 +81,14 @@ namespace E_proc.Controllers
         [HttpPost]
         public async Task<IActionResult> Post( AskForInfo askForInfo)
         {
+
+           // var id = authContext.AskForInfo.Ma;
             var added=  await authContext.AskForInfo.AddAsync(askForInfo);
             await authContext.SaveChangesAsync();
+            
+
+            await _notificationHubContext.Clients.Group("askInfoNotificationInstitute").SendAsync("NewAsk", askForInfo);
+            //lezm tshouf kifesh trajaa id de askForInfo whekek tnajem tfiltrihom fl front
             return new Success(true, "message.success");
 
         }
@@ -86,7 +100,7 @@ namespace E_proc.Controllers
         {
 
            var askInfo = await authContext.AskForInfo.Where(o=>o.Id==askForInfo.Id).FirstOrDefaultAsync();
-            askInfo = askForInfo;
+            askInfo.Seen = askForInfo.Seen;
             await authContext.SaveChangesAsync();
             return new Success(true, "message.success");
 

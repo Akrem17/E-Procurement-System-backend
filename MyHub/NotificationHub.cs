@@ -42,5 +42,18 @@ namespace E_proc.MyHub
             await Groups.AddToGroupAsync(Context.ConnectionId, "AskInfoNotificationCitizen");
 
         }
+        public async Task joinCitizenNotificationCenter()
+        {
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, "citizenNotificationCenter");
+
+        }
+
+        public async Task joinAskInfoNotificationInstitute()
+        {
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, "askInfoNotificationInstitute");
+
+        }
     }
 }
