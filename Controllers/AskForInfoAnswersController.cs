@@ -42,7 +42,13 @@ namespace E_proc.Controllers
             await _notificationHubContext.Clients.Group("AskInfoChat"+askForInfoAnswer.AskForInfoId).SendAsync("SendMessage", askForInfoAnswer);
             await _notificationHubContext.Clients.Group("AskInfoNotificationCitizen").SendAsync("NewAnswer", askForInfoAnswer);
 
-           var answer= await authContext.AskForInfoAnswer.AddAsync(askForInfoAnswer);
+
+            await _notificationHubContext.Clients.Group("citizenNotificationCenter").SendAsync("aswerAskInfoNotification", askForInfoAnswer);
+
+
+
+
+            var answer = await authContext.AskForInfoAnswer.AddAsync(askForInfoAnswer);
         
            var askInfo= await authContext.AskForInfo.Where(o => o.Id == askForInfoAnswer.AskForInfoId).FirstOrDefaultAsync();
             askInfo.AskForInfoAnswer = askForInfoAnswer;

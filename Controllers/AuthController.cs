@@ -249,11 +249,10 @@ namespace E_proc.Controllers
             var verificationCode = rnd.Next((int)Math.Pow(10, (NoDigits - 1)), (int)Math.Pow(10, NoDigits) - 1).ToString();
 
             //send code to email
-
             var message = new Mail(new string[] { model.Email }, $"Reset Password E-PROC", $"Welcome to E-proc. \n Your  code is {verificationCode} ");
             _emailSender.SendEmail(message);
-            //store the code
 
+            //store the code
             _memoryCache.Set(model.Email, verificationCode, TimeSpan.FromSeconds(30));
 
             var code = _memoryCache.Get(model.Email);

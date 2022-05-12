@@ -4,6 +4,7 @@ using E_proc.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_proc.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    partial class AuthContextModelSnapshot : ModelSnapshot
+    [Migration("20220506150429_createdAtAsk")]
+    partial class createdAtAsk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,9 +92,6 @@ namespace E_proc.Migrations
 
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Seen")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("SendToAddress")
                         .HasColumnType("bit");
@@ -704,8 +703,7 @@ namespace E_proc.Migrations
                 {
                     b.HasOne("E_proc.Models.AskForInfoAnswer", "AskForInfoAnswer")
                         .WithOne("AskForInfo")
-                        .HasForeignKey("E_proc.Models.AskForInfo", "AskForInfoAnswerId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("E_proc.Models.AskForInfo", "AskForInfoAnswerId");
 
                     b.HasOne("E_proc.Models.Citizen", "Citizen")
                         .WithMany("AskForInfo")

@@ -60,11 +60,12 @@ namespace E_proc.Models
 
             modelBuilder.Entity<AskForInfo>()
                 .HasOne(o => o.AskForInfoAnswer)
-                .WithOne(o => o.AskForInfo);
-
+                .WithOne(o => o.AskForInfo)
+                .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<AskForInfoAnswer>()
                 .HasOne(o => o.AskForInfo)
-                .WithOne(o => o.AskForInfoAnswer);
+                .WithOne(o => o.AskForInfoAnswer)
+                .OnDelete(DeleteBehavior.SetNull);
 
 
 
