@@ -2,9 +2,6 @@
 using E_proc.Models.StatusModel;
 using E_proc.Services.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace E_proc.Controllers
 {

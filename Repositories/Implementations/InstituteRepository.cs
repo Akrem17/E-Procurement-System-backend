@@ -2,8 +2,6 @@
 using E_proc.Repositories.Interfaces;
 using E_proc.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace E_proc.Repositories.Implementations
 {

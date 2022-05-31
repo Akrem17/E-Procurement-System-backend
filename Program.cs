@@ -2,7 +2,6 @@ using E_proc.Models;
 using E_proc.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 
 using System.Text;
 using Microsoft.OpenApi.Models;
@@ -11,14 +10,11 @@ using System.Text.Json.Serialization;
 using E_proc;
 
 using E_proc.Repositories;
-using Microsoft.AspNetCore.Mvc;
 using E_proc.Repositories.Interfaces;
 using E_proc.Services.Repositories;
 using E_proc.Repositories.Implementations;
 using E_proc.Services.Interfaces;
 using E_proc.Services.Implementations;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using E_proc.MyHub;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -144,7 +140,7 @@ db.Database.EnsureCreated();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
-
+     
 
     options.TokenValidationParameters = new TokenValidationParameters()
     {

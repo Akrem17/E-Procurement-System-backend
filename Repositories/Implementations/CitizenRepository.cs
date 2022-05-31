@@ -80,7 +80,7 @@ namespace E_proc.Repositories
 
                 if (foundedUser?.Id == id || foundedUser == null)
                 {
-                    user.Password = _encryptionService.Encrypt(user.Password);
+                   // user.Password = _encryptionService.Encrypt(user.Password);
 
 
                     oldUser.Email = user.Email;

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using E_proc.Models;
 
 namespace E_proc.Models
 {

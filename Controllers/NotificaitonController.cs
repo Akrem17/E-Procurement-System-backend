@@ -3,11 +3,10 @@ using E_proc.Models;
 using E_proc.Models.StatusModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
 
 namespace E_proc.Controllers
-    {
-        [Route("api/[controller]")]
+{
+    [Route("api/[controller]")]
         [ApiController]
         public class NotificaitonController : ControllerBase
         {

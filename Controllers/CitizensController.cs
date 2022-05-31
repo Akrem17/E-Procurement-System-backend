@@ -1,22 +1,13 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using E_proc.Models;
 using E_proc.Repositories;
 using E_proc.Models.StatusModel;
 using E_proc.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.SignalR;
 
 namespace E_proc.Controllers
 {
-   // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "citizen")]
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "citizen")]
     [Route("api/[controller]")]
     [ApiController]
     public class CitizensController : ControllerBase
@@ -63,7 +54,7 @@ namespace E_proc.Controllers
 
             var citizen = await _reposCitizen.ReadById(id);
             if (citizen == null) return new Success(false, "message.user Not Found");
-            return new Success(true, "message.success", new { citizen });
+            return new Success(true, "message.success",citizen);
         }
 
 

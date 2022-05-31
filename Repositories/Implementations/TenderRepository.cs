@@ -89,7 +89,7 @@ namespace E_proc.Repositories.Implementations
             var tender = new List<Tender>();
 
 
-
+          
             
               tender = await _dbContext.Tender
                      .Where(s => !string.IsNullOrEmpty(bidNumber) ? EF.Functions.Like(s.Id.ToString(), bidNumber+ "%") : true)
@@ -108,7 +108,7 @@ namespace E_proc.Repositories.Implementations
 
             return await _dbContext.Tender.Include(t => t.AddressReceipt).Include(t => t.Institute).Include(t=>t.Offers).ThenInclude(o=>o.Supplier).Include(t=>t.TenderClassification).Include(t => t.Responsible).Include(t=>t.Specifications).FirstOrDefaultAsync(user => user.Id == id);
         }
-
+         
         public async Task<Tender> UpdateAsync(int id, Tender tender)
         {
             var oldUser = await ReadById(id);

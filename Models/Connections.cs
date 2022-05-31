@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace E_proc.Models
 {
-    
 
-        public partial class Connections
+
+    public partial class Connections
         {   
             [Key]
             public int Id { get; set; }

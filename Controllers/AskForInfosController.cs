@@ -4,7 +4,6 @@ using E_proc.MyHub;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace E_proc.Controllers
 {

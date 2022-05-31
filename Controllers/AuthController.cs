@@ -3,14 +3,9 @@ using E_proc.Models.StatusModel;
 using E_proc.Repositories;
 using E_proc.Repositories.Interfaces;
 using E_proc.Services;
-using E_proc.Services.Interfaces;
 using E_proc.Services.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 
 namespace E_proc.Controllers
@@ -254,7 +249,7 @@ namespace E_proc.Controllers
 
             //store the code
             _memoryCache.Set(model.Email, verificationCode, TimeSpan.FromSeconds(30));
-
+            
             var code = _memoryCache.Get(model.Email);
             return new Success(true, "message.success", new { code = code });
         }
