@@ -1,7 +1,4 @@
-﻿using E_proc.Models;
-using E_proc.Repositories.Implementations;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 namespace E_proc.Models

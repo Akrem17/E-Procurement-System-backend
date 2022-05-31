@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -14,7 +13,7 @@ namespace E_proc.Models
         public int? FinalTotalMontant { get; set; }
 
         public bool? isAccepted { get; set; }
-
+         
         public virtual ICollection<FileData>? Files { get; set; }
 
 
@@ -27,7 +26,7 @@ namespace E_proc.Models
         public virtual Tender? TenderInfo { get; set; }
 
         [ForeignKey("Representative")]
-
+       
         public virtual int? RepresentativeId { get; set; }
 
         public virtual Representative? Representative { get; set; }
