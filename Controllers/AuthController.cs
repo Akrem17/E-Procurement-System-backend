@@ -58,7 +58,7 @@ namespace E_proc.Controllers
 
 
                 //send confirmation email
-                var message = new Mail(new string[] { status.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n https://localhost:7260/verify/" + status.Id + "/" + tokenString);
+                var message = new Mail(new string[] { status.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n http://localhost:4200/verify/" + status.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
 
 
@@ -90,7 +90,7 @@ namespace E_proc.Controllers
 
 
                 //send confirmation email
-                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n https://localhost:7260/verify/" + supplier.Id + "/" + tokenString);
+                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \nhttp://localhost:4200/verify/" + supplier.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
 
                 return new Success(true, "message.sucess", new { tokenString, supplier });
@@ -120,7 +120,7 @@ namespace E_proc.Controllers
                 var tokenString = _tokenService.GenerateTokenString(supplier);
 
                 //send confirmation email
-                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n https://localhost:7260/verify-account/" + supplier.Id + "/" + tokenString);
+                var message = new Mail(new string[] { supplier.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n http://localhost:4200/verify/" + supplier.Id + "/" + tokenString);
                 _emailSender.SendEmail(message);
 
                 return new Success(true, "message.sucess", new { tokenString, supplier });
@@ -170,7 +170,7 @@ namespace E_proc.Controllers
                     else
                     {
                         //send confirmation email
-                        var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n https://localhost:7260/verify-account/" + loggedUser.Id + "/" + tokenString);
+                        var message = new Mail(new string[] { loggedUser.Email }, "Email Confirmation E-PROC", "Welcome to E-proc. \n Your Confirmation Link is \n http://localhost:4200/verify/" + loggedUser.Id + "/" + tokenString);
                         _emailSender.SendEmail(message);
 
                         return new Forbidden(false, "message.account not verified, check your email");
