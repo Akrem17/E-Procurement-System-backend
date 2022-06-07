@@ -274,8 +274,6 @@ namespace E_proc.Controllers
 
 
 
-
-
         //verify the code and generate token
         [HttpPost("verify-code")]
 

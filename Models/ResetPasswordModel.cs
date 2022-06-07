@@ -6,7 +6,6 @@ namespace E_proc.Models
     {
 
         [Required]
-        [EmailAddress]
         public string Email { get; set; }
         [Required(ErrorMessage = "New Password is required")]
 

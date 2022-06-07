@@ -25,9 +25,9 @@ namespace E_proc.Controllers
 
         // GET: api/Tenders
         [HttpGet]
-        public async Task<IActionResult> GetTenders(int? skip = 0, int? take = 10, string? bidNumber = null, string? bidName = null)
+        public async Task<IActionResult> GetTenders(int? skip = 0, int? take = 10, string? bidNumber = null, string? bidName = null,string? city =null,string? postDate=null)
         {
-            if (bidNumber == null && bidName == null)
+            if (bidNumber == null && bidName == null && city == null && postDate == null)
             {
 
             
@@ -44,7 +44,7 @@ namespace E_proc.Controllers
         }
             else
             {
-                var institutes = await _reposTender.FindBy(bidNumber, bidName);
+                var institutes = await _reposTender.FindBy(bidNumber, bidName,city, postDate);
                 if (institutes.Count() != 0)
                 {
                     return new Success(true, "message.sucess", institutes);
