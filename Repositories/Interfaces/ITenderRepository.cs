@@ -11,7 +11,7 @@ namespace E_proc.Repositories.Interfaces
         Task<Tender> ReadById(int id);
 
         Task<Tender> UpdateAsync(int id, Tender tender);
-        Task<List<Tender>> FindBy(string? bidNumber, string? bidName);
+        Task<List<Tender>> FindBy(string? bidNumber, string? bidName,string? city,string? postDate);
 
         Task<int> Delete(int id);
         public int CountData();

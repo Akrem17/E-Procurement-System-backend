@@ -84,16 +84,20 @@ namespace E_proc.Repositories.Implementations
 
 
         //filter insitutes by params
-        public async Task<List<Tender>> FindBy(string? bidNumber, string? bidName)
+        public async Task<List<Tender>> FindBy(string? bidNumber, string? bidName,string? city, string? postDate)
         {
             var tender = new List<Tender>();
 
 
-          
-            
+            var test = postDate;
+
+
               tender = await _dbContext.Tender
                      .Where(s => !string.IsNullOrEmpty(bidNumber) ? EF.Functions.Like(s.Id.ToString(), bidNumber+ "%") : true)
                      .Where(s => !string.IsNullOrEmpty(bidName) ? EF.Functions.Like(s.Name, bidName + "%") : true)
+                     .Where(s => !string.IsNullOrEmpty(city) ? EF.Functions.Like(s.AddressReceipt.city, city + "%") : true)
+                     .Where(s => !string.IsNullOrEmpty(postDate) ? EF.Functions.Like(s.DeadLine, postDate + "%") : true)
+
                       .Include(t=>t.Institute)
                      .ToListAsync();
 
