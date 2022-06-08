@@ -44,6 +44,7 @@ namespace E_proc.Controllers
         }
             else
             {
+                var date = Convert.ToDateTime(postDate).ToUniversalTime();
                 var institutes = await _reposTender.FindBy(bidNumber, bidName,city, postDate);
                 if (institutes.Count() != 0)
                 {
@@ -63,7 +64,7 @@ namespace E_proc.Controllers
        
 
             if (tender == null) return new Success(false, "message.Usernot found");
-            return new Success(true, "message.success", tender);
+            return new Success(true, "message.success",  new { tender, tender.Offers });
         }
 
         // PUT: api/Tenders/5
