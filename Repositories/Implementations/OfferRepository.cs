@@ -63,11 +63,13 @@ namespace E_proc.Repositories.Implementations
 
         public async Task<List<Offer>> FindBy(int skip, int take,string? supplierId, string? supplierEmail, string? offerNumber = null, string? tenderName = null, string? city = null, string? postDate = null)
         {
+            Console.WriteLine(supplierEmail);
             var offers = await _dbContext.Offer
                                 .Where(s => !string.IsNullOrEmpty(supplierId) ? s.SupplierId.ToString() == supplierId : true)
-                                .Where(s => !string.IsNullOrEmpty(supplierEmail) ? s.Supplier.Email == supplierEmail : true)
+                                .Where(s => !string.IsNullOrEmpty(city) ? EF.Functions.Like(s.Representative.SocialSecurityNumber, city + "%") : true)
+
                                 .Where(s => !string.IsNullOrEmpty(offerNumber) ? EF.Functions.Like(s.Id.ToString(), offerNumber + "%") : true)
-                                .Where(s => !string.IsNullOrEmpty(tenderName) ? EF.Functions.Like(s.Name, tenderName + "%") : true)
+                                .Where(s => !string.IsNullOrEmpty(tenderName) ? EF.Functions.Like(s.Tender.Name, tenderName + "%") : true)
                                
                             
 
@@ -102,7 +104,7 @@ namespace E_proc.Repositories.Implementations
 
         public async Task<IEnumerable<Offer>> ReadAsync(int skip, int take)
         {
-            var offers = await _dbContext.Offer.Include(o => o.Supplier).Include(o => o.Tender).Include(o => o.Files).Skip(skip).Take(take).ToArrayAsync();
+            var offers = await _dbContext.Offer.Include(o => o.Supplier).Include(s=>s.Representative). Include(o => o.Tender).Include(o => o.Files).Skip(skip).Take(take).ToArrayAsync();
 
 
 
