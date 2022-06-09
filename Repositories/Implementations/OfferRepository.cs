@@ -63,11 +63,11 @@ namespace E_proc.Repositories.Implementations
 
         public async Task<List<Offer>> FindBy(int skip, int take,string? supplierId, string? supplierEmail, string? offerNumber = null, string? tenderName = null, string? city = null, string? postDate = null)
         {
-            Console.WriteLine(supplierEmail);
+            Console.WriteLine(postDate);    
             var offers = await _dbContext.Offer
                                 .Where(s => !string.IsNullOrEmpty(supplierId) ? s.SupplierId.ToString() == supplierId : true)
                                 .Where(s => !string.IsNullOrEmpty(city) ? EF.Functions.Like(s.Representative.SocialSecurityNumber, city + "%") : true)
-
+                                .Where(s => !string.IsNullOrEmpty(postDate) ? EF.Functions.Like(s.Tender.DeadLine, postDate + "%") : true)
                                 .Where(s => !string.IsNullOrEmpty(offerNumber) ? EF.Functions.Like(s.Id.ToString(), offerNumber + "%") : true)
                                 .Where(s => !string.IsNullOrEmpty(tenderName) ? EF.Functions.Like(s.Tender.Name, tenderName + "%") : true)
                                
