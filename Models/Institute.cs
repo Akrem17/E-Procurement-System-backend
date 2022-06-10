@@ -7,8 +7,7 @@ namespace E_proc.Models
 
     public class Institute : User
     {
-        [Key]
-        public int Id { get; set; }
+ 
         public string NameFr { get; set; }
         public string NameAr { get; set; }
         public string TypeOfInstitute { get; set; }
@@ -18,6 +17,7 @@ namespace E_proc.Models
         public string NotificationEmail { get; set; }
 
         public int addressId { get; set; }
+
         [ForeignKey("addressId")]
         public virtual Address? address { get; set; }
         public string Phone { get; set; }
@@ -31,17 +31,12 @@ namespace E_proc.Models
         public virtual ICollection<Tender>? Tender { get;set;}
         [NotMapped]
         public ICollection<Tender>? Tenders
-        {
-            get;
-
-
-
-            set;
-        }
+        { get; set; }
         public bool ShouldSerializeTender()
         {
             return false;
         }
+
         //[NotMapped]
         //public bool isFromInstitute { get; set; } = false;
 

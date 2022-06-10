@@ -25,6 +25,8 @@ namespace E_proc.Models
 
         [DefaultValue(false)]
         public bool EmailConfirmed { get; set; }
+        [DefaultValue(false)]
+        public bool? status { get; set; }
 
         public string? createdAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
    
