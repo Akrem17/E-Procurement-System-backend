@@ -31,6 +31,7 @@ namespace E_proc.Models
         public int? AskForInfoAnswerId { get; set; }
         public AskForInfoAnswer? AskForInfoAnswer { get; set; }
         public string? createdAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
+        public string? updatedAt { get; set; } = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
 
 
 
