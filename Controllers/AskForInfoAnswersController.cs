@@ -52,6 +52,7 @@ namespace E_proc.Controllers
         
            var askInfo= await authContext.AskForInfo.Where(o => o.Id == askForInfoAnswer.AskForInfoId).FirstOrDefaultAsync();
             askInfo.AskForInfoAnswer = askForInfoAnswer;
+            askInfo.updatedAt= new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
             await authContext.SaveChangesAsync();
 
             return new Success(true, "message.sucess", askForInfoAnswer);

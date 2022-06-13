@@ -29,22 +29,21 @@ namespace E_proc.Controllers
             {
                 var askForInfos = await authContext.AskForInfo.Include(o=>o.AskForInfoAnswer).ToListAsync();
 
-
                     return new Success(true, "message.sucess", askForInfos);
-
 
             }
             else
             {
-
+              
                 var askForInfos = await authContext.AskForInfo
                     .Include(o => o.AskForInfoAnswer)
 
-                         .Where(s => !string.IsNullOrEmpty(instituteId) ? s.Tender.instituteId.ToString() == instituteId : true)
+                         .Where(s => !string.IsNullOrEmpty(instituteId) ? s.Tender.instituteId.ToString() == instituteId  : true)
                          .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
                          .Where(s => !string.IsNullOrEmpty(citizenId) ? s.CitizenId.ToString() == citizenId : true)
-                                                  // .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
-                        .OrderBy(s => !string.IsNullOrEmpty(citizenId) ? s.AskForInfoAnswer.CreatedAt : Convert.ToInt64(s.createdAt))
+                          
+                        // .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
+                        .OrderBy(s => !string.IsNullOrEmpty(citizenId) ? s.AskForInfoAnswer.CreatedAt :  Convert.ToInt64(s.updatedAt))
 
                          //.OrderBy(o => o.AskForInfoAnswer.CreatedAt)
                          .Reverse()
@@ -56,7 +55,7 @@ namespace E_proc.Controllers
             }
 
         }
-
+      
 
         [HttpGet("{id}")]
         
