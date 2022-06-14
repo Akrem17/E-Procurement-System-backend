@@ -132,7 +132,7 @@ namespace E_proc.Repositories.Implementations
 
             if (oldOffer != null)
             {
-                oldOffer.Name = offer.Name;oldOffer.TotalMontant = offer.TotalMontant;offer.FinalTotalMontant = offer.FinalTotalMontant;offer.isAccepted = offer.isAccepted; offer.SupplierId = offer.SupplierId;
+                oldOffer.isAccepted = offer.isAccepted;  oldOffer.Name = offer.Name;oldOffer.TotalMontant = offer.TotalMontant;offer.FinalTotalMontant = offer.FinalTotalMontant;offer.isAccepted = offer.isAccepted; offer.SupplierId = offer.SupplierId;
                 
                 await _dbContext.SaveChangesAsync();
                 return oldOffer;
