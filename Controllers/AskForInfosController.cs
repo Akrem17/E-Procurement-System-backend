@@ -36,15 +36,13 @@ namespace E_proc.Controllers
             {
               
                 var askForInfos = await authContext.AskForInfo
-                    .Include(o => o.AskForInfoAnswer)
+                    .Include(o => o.AskForInfoAnswer).Include(o=>o.Tender).ThenInclude(p=>p.Institute)
 
                          .Where(s => !string.IsNullOrEmpty(instituteId) ? s.Tender.instituteId.ToString() == instituteId  : true)
                          .Where(s => !string.IsNullOrEmpty(phone) ? s.Phone == phone : true)
                          .Where(s => !string.IsNullOrEmpty(citizenId) ? s.CitizenId.ToString() == citizenId : true)
-                          
                         // .Where(s => date.HasValue ? Convert.ToInt64(s.createdAt) > dateFromStamp && Convert.ToInt64(s.createdAt) < dateToStamp : true)
                         .OrderBy(s => !string.IsNullOrEmpty(citizenId) ? s.AskForInfoAnswer.CreatedAt :  Convert.ToInt64(s.updatedAt))
-
                          //.OrderBy(o => o.AskForInfoAnswer.CreatedAt)
                          .Reverse()
                          
@@ -62,7 +60,7 @@ namespace E_proc.Controllers
         public async Task<IActionResult> Get(int id)
         {
 
-            var askForInfo = await authContext.AskForInfo.Where(o=>o.Id==id).FirstOrDefaultAsync();
+            var askForInfo = await authContext.AskForInfo.Where(o=>o.Id==id).Include(o => o.Tender).ThenInclude(p => p.Institute).FirstOrDefaultAsync();
             var askForInfoanswer = await authContext.AskForInfoAnswer.Where(o => o.AskForInfoId == id).FirstOrDefaultAsync();
             if(askForInfoanswer!=null)
             {
