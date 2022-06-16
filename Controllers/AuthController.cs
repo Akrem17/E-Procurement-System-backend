@@ -273,7 +273,7 @@ namespace E_proc.Controllers
         //Verify token
         [HttpPost("password")]
 
-        public async Task<IActionResult> ChangePassword([FromBody] string email ,string password)
+        public async Task<IActionResult> ChangePassword( string email ,string password)
         {
             var  user =await _Userrepos.FindBy(email);
 
