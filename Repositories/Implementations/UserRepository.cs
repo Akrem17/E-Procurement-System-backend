@@ -89,9 +89,9 @@ namespace E_proc.Services.Repositories
 
 
                     oldUser.Email = user.Email;
-                  
+
                    
-                    oldUser.Password = user.Password;
+                    oldUser.Password = _encryptionService.Encrypt(user.Password);
                     oldUser.Type = user.Type;
                     oldUser.updatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
                     await _dbContext.SaveChangesAsync();
