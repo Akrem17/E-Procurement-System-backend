@@ -113,14 +113,18 @@ namespace E_proc.Repositories.Implementations
 
         public async Task<Offer> ReadById(int id)
         {
-            
-            var offer= await _dbContext.Offer
+
+            var offer = await _dbContext.Offer
                 .Include(o => o.Files)
-                .Include(o=>o.OfferClassification)
-                .Include(o=>o.Representative)
+                .Include(o => o.OfferClassification)
+                .Include(o => o.Representative)
+                .Include(o => o.Tender)
+                .ThenInclude(t => t.Institute)
                 .Include(o => o.Supplier)
                 .ThenInclude(s => s.address)
                 .FirstOrDefaultAsync(ad => ad.Id == id);
+            offer.TenderInfo = offer.Tender;
+
             return offer;
 
         }
