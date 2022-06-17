@@ -145,7 +145,7 @@ namespace E_proc.Repositories.Implementations
             {
 
 
-                oldUser.AreaType = institute.AreaType; oldUser.Fax = institute.Fax; oldUser.NameAr = institute.NameAr; oldUser.NameFr = institute.NameFr; oldUser.NotificationEmail = institute.NotificationEmail; oldUser.Phone = institute.Phone; oldUser.representativeName = institute.representativeName;
+               oldUser.status= institute.status; oldUser.AreaType = institute.AreaType; oldUser.Fax = institute.Fax; oldUser.NameAr = institute.NameAr; oldUser.NameFr = institute.NameFr; oldUser.NotificationEmail = institute.NotificationEmail; oldUser.Phone = institute.Phone; oldUser.representativeName = institute.representativeName;
                 oldUser.TypeOfInstitute = institute.TypeOfInstitute;
                 oldUser.updatedAt = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString();
                 await _dbContext.SaveChangesAsync();
