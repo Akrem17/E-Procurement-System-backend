@@ -361,9 +361,6 @@ namespace E_proc.Controllers
         }
 
 
-
-
-        
         //get the connected user
         [HttpPost("connected-user")]
 

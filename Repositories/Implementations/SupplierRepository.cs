@@ -35,7 +35,7 @@ namespace E_proc.Repositories.Implementations
             {
                 
                 supplier.Password = _encryptionService.Encrypt(supplier.Password);
-
+                Console.WriteLine(supplier);
 
 
                 //Representative representative = new Representative
